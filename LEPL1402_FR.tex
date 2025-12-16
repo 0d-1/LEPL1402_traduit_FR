@@ -43,7 +43,8 @@
 }
 
 \title{Concepts de Programmation avec Java}
-\author{Sébastien Jodogne \and Ramin Sadre \and Pierre Schaus}
+\author{Sébastien Jodogne \and Ramin Sadre \and Pierre Schaus\\
+\large traduit de l'anglais par Odin De Baerdemaker}
 \date{10 janvier 2025}
 
 \begin{document}
@@ -4023,10 +4024,3138 @@ public class LinkedStack<T> implements Stack<T> {
 Toute modification structurale de la pile après création de l’itérateur provoque une
 \texttt{ConcurrentModificationException} au prochain \texttt{hasNext()} / \texttt{next()}.
 
-% Fin du chapitre 4
-\chapter{Programmation parallèle}
-\label{chap:parallel}
 
+
+\chapter{Programmation parallèle}
+% :contentReference[oaicite:0]{index=0}
+
+La programmation parallèle est une technique de calcul dans laquelle plusieurs tâches sont exécutées simultanément afin d'obtenir des temps d'exécution plus rapides et d'améliorer l'utilisation des ressources, par rapport à une exécution séquentielle.
+% :contentReference[oaicite:1]{index=1}
+
+La programmation parallèle consiste à décomposer une tâche en sous-tâches plus petites qui peuvent être exécutées de manière indépendante et en concurrence sur plusieurs processeurs, tels que des CPU (unités centrales de traitement), des GPU (unités de traitement graphique), ou des ressources de calcul distribuées.
+% :contentReference[oaicite:2]{index=2}
+
+La programmation parallèle est souvent introduite comme un moyen de tirer parti de manière optimale des multiples unités de calcul qui sont embarquées dans les ordinateurs modernes, afin d'accélérer un calcul qui prend beaucoup de temps.
+% :contentReference[oaicite:3]{index=3}
+
+Cependant, au-delà de cette exploitation de multiples unités de calcul pour accélérer les calculs, la programmation parallèle permet aussi la conception d'interfaces utilisateur réactives. En effet, la plupart des frameworks GUI (graphical user interface) sont construits au-dessus d'une « boucle d'événements principale » (\emph{main event loop}) qui surveille en continu les interactions utilisateur et qui appelle du code applicatif pour réagir à ces événements. Si le code applicatif met trop de temps à s'exécuter, l'interface utilisateur semble « figer ». La programmation parallèle permet d'exécuter cette logique applicative en arrière-plan, préservant ainsi une expérience utilisateur optimale.
+% :contentReference[oaicite:4]{index=4}
+
+Ce concept de « boucle d'événements principale » peut aussi être rencontré dans des applications réseau, où un logiciel doit simultanément servir des requêtes émises par différents clients. Grâce à la programmation parallèle, chaque connexion avec un client peut être gérée en arrière-plan, laissant le serveur principal capable d'écouter de nouvelles connexions.
+% :contentReference[oaicite:5]{index=5}
+
+Enfin, il peut aussi arriver que la conception d'un logiciel entier puisse être modélisée plus naturellement en utilisant la programmation parallèle plutôt que la programmation séquentielle. Pensez à votre agenda personnel de la semaine : vous avez un certain nombre de tâches distinctes de natures différentes à accomplir pendant la semaine, et ces tâches n'ont entre elles que de faibles dépendances. Un logiciel à grande échelle est similaire : il peut généralement être décomposé en un ensemble de tâches pour la plupart découplées, où chacune des tâches individuelles a un objectif différent et peut être résolue en utilisant la programmation séquentielle. La programmation séquentielle a en effet l'avantage d'être plus facile à écrire, à tester, et à corriger. Néanmoins, développer l'ensemble du logiciel en utilisant la programmation séquentielle introduirait des dépendances inutiles et arbitraires entre les tâches individuelles, réduisant ainsi les performances et augmentant la complexité de la conception. La programmation parallèle peut être une solution pour améliorer de telles conceptions.
+% :contentReference[oaicite:6]{index=6}
+
+
+\section{GPUs vs.\ CPUs}
+% :contentReference[oaicite:7]{index=7}
+
+Ces dernières années, on observe un intérêt croissant pour l'exploitation des GPU afin d'effectuer des calculs qui ne sont pas liés à l'infographie. En effet, les GPU sont constitués d'un nombre massif d'unités de traitement travaillant en parallèle, hautement optimisées pour certains types de calculs, en particulier ceux impliquant le rendu graphique, de lourdes opérations matricielles, des simulations numériques, et l'apprentissage profond.
+% :contentReference[oaicite:8]{index=8}
+
+Cependant, bien que les GPU soient incroyablement puissants pour certains types de calculs parallèles, ils ne constituent pas un remplacement universel des CPU. En effet, les CPU sont beaucoup plus polyvalents, car ils sont conçus pour gérer un large éventail de tâches, incluant le calcul généraliste, l'exécution des systèmes d'exploitation, la gestion des opérations d'entrée/sortie, l'exécution d'applications monothread, et la gestion de charges de travail diverses. En contraste, les unités de traitement des GPU se concentrent sur des tâches plus simples et identiques qui peuvent être dupliquées un grand nombre de fois. De plus, certains types de tâches, en particulier celles avec des dépendances séquentielles ou nécessitant un accès fréquent à des données partagées, pourraient ne pas bénéficier significativement d'une accélération par GPU. Enfin, écrire du code pour les GPU nécessite souvent l'utilisation de langages de programmation ou de bibliothèques spécialisés et la compréhension de l'architecture matérielle sous-jacente.
+% :contentReference[oaicite:9]{index=9}
+
+Par conséquent, dans ce cours, nous nous concentrerons uniquement sur la programmation parallèle sur CPU. Il est en effet essentiel de remarquer que, grâce à l'évolution matérielle, tout ordinateur grand public est aujourd'hui équipé de plusieurs cœurs CPU (même s'ils sont moins nombreux que les unités de traitement à l'intérieur d'un GPU), comme illustré par l'image suivante :
+% :contentReference[oaicite:10]{index=10}
+
+\begin{center}
+\includegraphics[width=0.9\linewidth]{figures/ch5_cpu_cores}
+\end{center}
+
+La programmation parallèle sur CPU cherche à exploiter les multiples cœurs CPU disponibles à l'intérieur d'un seul ordinateur afin d'exécuter simultanément plusieurs tâches ou portions d'une tâche unique.
+% :contentReference[oaicite:11]{index=11}
+
+
+\section{Multiprocessing vs.\ multithreading}
+% :contentReference[oaicite:12]{index=12}
+
+En informatique, un processus correspond à un programme qui s'exécute activement sur le CPU d'un ordinateur, avec son état courant. Un système d'exploitation typique permet à plusieurs processus indépendants de s'exécuter concurremment sur les cœurs CPU disponibles, fournissant ainsi un environnement pour atteindre le parallélisme qui est appelé \emph{multiprocessing}.
+% :contentReference[oaicite:13]{index=13}
+
+Un processus possède son propre espace mémoire (incluant le code, les données, la pile, et les registres CPU) et ses propres ressources, qui sont isolées des autres processus afin d'empêcher les accès non autorisés et les interférences. Des processus distincts peuvent néanmoins communiquer entre eux via les mécanismes dits de « communication inter-processus » (\emph{interprocess communication}, IPC) fournis par le système d'exploitation. Les IPC incluent les fichiers, les tubes (\emph{pipes}), l'échange de messages, la mémoire partagée, et les communications réseau (sockets).
+% :contentReference[oaicite:14]{index=14}
+
+Le multiprocessing a deux inconvénients principaux. Premièrement, créer de nouveaux processus entraîne un surcoût élevé en raison de la nécessité d'allouer une mémoire séparée et de mettre en place la configuration pour chaque processus. Deuxièmement, parce que les différents processus sont isolés les uns des autres, les communications inter-processus sont relativement complexes et ont un coût non négligeable.
+% :contentReference[oaicite:15]{index=15}
+
+Cela motive l'introduction du concept de thread. Un thread désigne la plus petite unité d'exécution au sein d'un processus : un thread correspond à une séquence d'instructions qui peut être planifiée et exécutée indépendamment par un cœur CPU. Un seul processus peut exécuter plusieurs threads, comme illustré ci-dessous :
+% :contentReference[oaicite:16]{index=16}
+
+\begin{center}
+\includegraphics[width=0.9\linewidth]{figures/ch5_process_threads}
+\end{center}
+
+Dans cette image, les blocs bleus indiquent à quel moment les différents threads sont actifs (c.-à-d.\ exécutent quelque chose) à l'intérieur du processus. Un thread peut en effet « s'endormir » en attendant des données supplémentaires à traiter, en attendant une interaction utilisateur, ou en attendant le résultat d'un calcul effectué par un autre thread.
+% :contentReference[oaicite:17]{index=17}
+
+En conséquence, le multithreading est une technique de programmation dans laquelle un seul processus est divisé en plusieurs threads d'exécution. Les threads peuvent effectuer différentes opérations concurremment, telles que faire un calcul en arrière-plan ou gérer différentes parties de l'application (p.\ ex.\ garder l'interface utilisateur réactive ou servir des requêtes provenant de multiples clients).
+% :contentReference[oaicite:18]{index=18}
+
+Point important : contrairement aux processus, les threads au sein d'un même processus ne sont pas isolés : ils partagent le même espace mémoire et les mêmes ressources, ce qui permet à des threads distincts d'accéder directement aux mêmes variables et structures de données. Les threads sont parfois appelés processus légers, car créer des threads au sein d'un processus entraîne moins de surcoût que créer des processus séparés.
+% :contentReference[oaicite:19]{index=19}
+
+En résumé, le multithreading tend à être plus simple et plus léger que le multiprocessing. Cela explique pourquoi ce cours ne couvrira que les bases du multithreading en Java.
+% :contentReference[oaicite:20]{index=20}
+
+Il vaut toujours la peine de se rappeler que le fait que différents threads ne vivent pas dans l'isolation peut être source d'erreurs. Le multithreading requiert notamment l'introduction de mécanismes appropriés de synchronisation et de coordination entre threads lors de l'accès à des variables partagées. S'ils ne sont pas correctement implémentés, des conditions de course, des interblocages (\emph{deadlocks}) et des problèmes de synchronisation peuvent émerger, ce qui peut être extrêmement difficile à identifier et à résoudre.
+% :contentReference[oaicite:21]{index=21}
+
+Notez aussi que tous les programmeurs sont constamment confrontés aux threads. En effet, même si vous ne créez jamais explicitement un thread par vous-même, la grande majorité des frameworks logiciels (tels que les frameworks GUI et des bibliothèques logicielles qui traitent de programmation réseau ou de calculs scientifiques) créeront des threads en votre nom. Par exemple, dans le contexte d'une GUI basée sur Java, les frameworks AWT (Abstract Window Toolkit) et Swing créeront de manière transparente des threads pour gérer les interactions avec l'utilisateur. Par conséquent, la programmation parallèle ne devrait jamais être considérée comme une « fonctionnalité avancée » d'un langage de programmation, parce que presque tout développement logiciel doit traiter avec des threads. Autrement dit, même si vous ne créez pas vos propres threads, il est important de comprendre comment concevoir des applications sûres vis-à-vis des threads (\emph{thread-safe}) qui coordonnent correctement les accès à l'espace mémoire partagé.
+% :contentReference[oaicite:22]{index=22}
+
+
+\section{Threads en Java}
+% :contentReference[oaicite:23]{index=23}
+
+Java fournit un support étendu du multithreading.
+% :contentReference[oaicite:24]{index=24}
+
+Lorsqu'un programme Java démarre son exécution, la Java Virtual Machine (JVM) démarre un thread initial. Ce thread initial est appelé le thread principal (\emph{main thread}) et est responsable de l'exécution de la méthode \texttt{main()}, qui est le point d'entrée de la plupart des applications Java. Aux côtés du thread principal, la JVM démarre aussi quelques threads privés en arrière-plan pour sa propre maintenance (\emph{housekeeping}) (notamment le ramasse-miettes, \emph{garbage collector}).
+% :contentReference[oaicite:25]{index=25}
+
+Des threads additionnels peuvent ensuite être créés par les développeurs de deux manières différentes :
+% :contentReference[oaicite:26]{index=26}
+\begin{itemize}
+  \item En étendant la classe standard \texttt{Thread}. Notez que puisque \texttt{Thread} appartient au package \texttt{java.lang}, aucune directive \texttt{import} n'est nécessaire. Voici la documentation de la classe \texttt{Thread} : \url{https://docs.oracle.com/javase/8/docs/api/java/lang/Thread.html}
+  % :contentReference[oaicite:27]{index=27}
+  \item En implémentant l'interface standard \texttt{Runnable} qui fait aussi partie du package \texttt{java.lang} : \url{https://docs.oracle.com/javase/8/docs/api/java/lang/Runnable.html}
+  % :contentReference[oaicite:28]{index=28}
+\end{itemize}
+
+Dans ce cours, nous utiliserons la seconde approche. L'interface \texttt{Runnable} est assez intuitive :
+% :contentReference[oaicite:29]{index=29}
+
+\begin{lstlisting}[language=Java]
+public interface Runnable {
+    public void run();
+}
+\end{lstlisting}
+
+Cet extrait indique que pour créer un thread, nous devons d'abord définir une classe fournissant une méthode \texttt{run()} qui prendra en charge les calculs. Une fois qu'une classe concrète implémentant cette interface \texttt{Runnable} est disponible, elle peut être exécutée comme un thread en instanciant un objet de la classe \texttt{Thread}.
+% :contentReference[oaicite:30]{index=30}
+
+
+\subsection{Utiliser un thread pour calculer le minimum}
+% :contentReference[oaicite:31]{index=31}
+
+Comme illustration, considérons la tâche consistant à calculer la valeur minimale d'un tableau de nombres à virgule flottante. Il est simple d'implémenter une méthode séquentielle pour effectuer ce calcul :
+% :contentReference[oaicite:32]{index=32}
+
+\begin{lstlisting}[language=Java]
+static public void computeMinValue(float values[]) {
+    if (values.length == 0) {
+        System.out.println("This is an empty array");
+    } else {
+        float minValue = values[0];
+        for (int i = 1; i < values.length; i++) {
+            if (values[i] < minValue) {
+                minValue = values[i];
+                // One could have written more compactly: minValue = Math.min(minValue, values[i]);
+            }
+        }
+        System.out.println("Minimum value: " + minValue);
+    }
+}
+\end{lstlisting}
+
+Comme expliqué ci-dessus, si l'on souhaite exécuter ce calcul comme un thread d'arrière-plan, la méthode \texttt{computeMinValue()} doit être encapsulée dans une implémentation de l'interface \texttt{Runnable}. Mais la méthode \texttt{run()} de l'interface \texttt{Runnable} n'accepte aucun paramètre, donc nous ne pouvons pas donner directement le tableau \texttt{values} en argument à \texttt{run()}. L'astuce consiste à stocker une référence vers le tableau \texttt{values} à l'intérieur de la classe qui implémente \texttt{Runnable} :
+% 
+
+\begin{lstlisting}[language=Java]
+class MinComputation implements Runnable {
+    private float values[];
+    public MinComputation(float values[]) {
+        this.values = values;
+    }
+    @Override
+    public void run() {
+        computeMinValue(values);
+    }
+}
+\end{lstlisting}
+
+Notre classe \texttt{MinComputation} spécifie comment calculer le minimum d'un tableau. On peut évidemment exécuter ce calcul de manière purement séquentielle comme suit :
+% :contentReference[oaicite:34]{index=34}
+
+\begin{lstlisting}[language=Java]
+public static void main(String[] args) {
+    float values[] = new float[] { -2, -5, 4 };
+    Runnable r = new MinComputation(values);
+    r.run();
+    // This prints: "Minimum value: -5.0"
+}
+\end{lstlisting}
+
+Dans cet exemple, aucun thread additionnel n'a été créé en dehors du thread principal Java. Grâce au fait que \texttt{MinComputation} implémente \texttt{Runnable}, il est maintenant possible de calculer le minimum dans un thread séparé :
+% :contentReference[oaicite:35]{index=35}
+
+\begin{lstlisting}[language=Java]
+public static void main(String[] args) {
+    float values[] = new float[] { -2, -5, 4 };
+    // First, create a thread that specifies the computation to be done
+    Thread t = new Thread(new MinComputation(values));
+    // Secondly, start the thread
+    t.start();
+    // At this point, the main thread can do other stuff.
+    System.out.println("This is the main thread");
+    // Thirdly, wait for the thread to complete its computation
+    try {
+        t.join();
+    } catch (InterruptedException e) {
+        throw new RuntimeException("Unexpected interrupt", e);
+    }
+    System.out.println("All threads have finished");
+}
+\end{lstlisting}
+
+Comme on peut le voir dans cet exemple, effectuer un calcul dans un thread d'arrière-plan implique trois étapes principales :
+% :contentReference[oaicite:36]{index=36}
+\begin{enumerate}
+  \item Construire un objet de la classe \texttt{Thread} à partir d'un objet qui implémente l'interface \texttt{Runnable}.
+  \item Lancer le thread en utilisant la méthode \texttt{start()} de \texttt{Thread}. Le constructeur de \texttt{Thread} ne démarre pas automatiquement le thread, donc nous devons le faire manuellement.
+  \item Attendre la complétion du thread en appelant la méthode \texttt{join()} de \texttt{Thread}. Notez que \texttt{join()} peut lever une \texttt{InterruptedException}, ce qui arrive si le thread est interrompu par quelque chose.
+\end{enumerate}
+
+Le diagramme de séquence suivant (librement inspiré d'UML) représente cette séquence d'appels :
+% 
+
+\begin{center}
+\includegraphics[width=0.9\linewidth]{figures/ch5_thread_sequence}
+\end{center}
+
+Dans ce diagramme, les bandes blanches indiquent les moments où les différents objets exécutent du code. On peut voir qu'entre les deux appels \texttt{t.start()} et \texttt{t.join()}, deux threads sont simultanément actifs : le thread principal et le thread de calcul. Notez qu'une fois que le thread principal appelle \texttt{t.join()}, il s'endort jusqu'à ce que le thread de calcul termine son travail.
+% :contentReference[oaicite:38]{index=38}
+
+Autrement dit, l'appel \texttt{t.join()} est une forme de synchronisation entre threads. C'est toujours une bonne idée pour le thread principal Java d'attendre tous ses threads enfants en appelant \texttt{join()} sur chacun d'eux. Si un thread enfant lance son propre ensemble de sous-threads, il est fortement conseillé pour ce thread enfant d'appeler \texttt{join()} sur chacun de ses sous-threads avant de se terminer. Le processus Java se terminera si tous ses threads se sont terminés, y compris le thread principal.
+% :contentReference[oaicite:39]{index=39}
+
+
+\subsection{Garder les interfaces utilisateur réactives}
+% :contentReference[oaicite:40]{index=40}
+
+L'exemple \texttt{MinComputation} crée un thread d'arrière-plan pour exécuter un calcul sur un tableau. Comme expliqué dans l'introduction, cette architecture logicielle peut avoir un intérêt pour garder l'interface utilisateur réactive pendant un long calcul. Pour illustrer cet intérêt, considérons une application GUI avec trois boutons utilisant Swing :
+% :contentReference[oaicite:41]{index=41}
+
+\begin{center}
+\includegraphics[width=0.7\linewidth]{figures/ch5_swing_buttons}
+\end{center}
+
+Le code source correspondant est :
+% 
+
+\begin{lstlisting}[language=Java]
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
+class SayHello implements ActionListener {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        JOptionPane.showMessageDialog(null, "Hello world!");
+    }
+}
+
+public class ButtonThread {
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Hello");
+        frame.setSize(400,200);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(3, 1));
+        frame.add(panel);
+
+        JButton button1 = new JButton("Say hello!");
+        button1.addActionListener(new SayHello());
+        panel.add(button1);
+
+        JButton button2 = new JButton("Run the computation without a thread");
+        button2.addActionListener(new RunWithoutThread());
+        panel.add(button2);
+
+        JButton button3 = new JButton("Run the computation using a thread");
+        button3.addActionListener(new RunUsingThread());
+        panel.add(button3);
+
+        frame.setVisible(true);
+    }
+}
+\end{lstlisting}
+
+Une fois que l'utilisateur clique sur le bouton « Say hello! », une boîte de message apparaît indiquant « Hello world! ». Implémentons maintenant le bouton intitulé « Run the computation without a thread ». Dans l'observateur \texttt{ActionListener} associé à ce bouton, un long calcul est émulé en attendant 3 secondes :
+% :contentReference[oaicite:43]{index=43}
+
+\begin{lstlisting}[language=Java]
+static public void expensiveComputation() {
+    try {
+        Thread.sleep(3000);
+    } catch (InterruptedException e) {
+    }
+    JOptionPane.showMessageDialog(null, "Phew! I've finished my hard computation!");
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=Java]
+class RunWithoutThread implements ActionListener {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        expensiveComputation();
+    }
+}
+\end{lstlisting}
+% :contentReference[oaicite:44]{index=44}
+
+Si vous essayez et exécutez cet exemple, en cliquant sur ce second bouton, il devient impossible d'effectuer toute autre interaction avec le bouton « Say hello! ». L'interface utilisateur est totalement figée jusqu'à ce que la méthode \texttt{expensiveComputation()} termine son travail.
+% :contentReference[oaicite:45]{index=45}
+
+Afin de transformer cette application non réactive en une application réactive, on peut simplement démarrer un thread qui exécute la méthode \texttt{expensiveComputation()} :
+% :contentReference[oaicite:46]{index=46}
+
+\begin{lstlisting}[language=Java]
+class Computation implements Runnable {
+    @Override
+    public void run() {
+        expensiveComputation();
+    }
+}
+
+class RunUsingThread implements ActionListener {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        Thread t = new Thread(new Computation());
+        t.start();
+    }
+}
+\end{lstlisting}
+
+De cette manière, même lorsque le calcul est en cours d'exécution, il est toujours possible de cliquer sur « Say hello! ».
+% :contentReference[oaicite:47]{index=47}
+
+
+\subsection{Accélérer le calcul}
+% :contentReference[oaicite:48]{index=48}
+
+Même si démarrer un thread d'arrière-plan peut être intéressant pour améliorer la réactivité d'une application (comme illustré ci-dessus), cela n'accélère pas le calcul. Par exemple, le temps nécessaire pour calculer la valeur minimale en utilisant \texttt{MinComputation} est toujours le même que l'implémentation purement séquentielle de la méthode \texttt{computeMinValue()}. Afin de réduire le temps de calcul, il est nécessaire de modifier l'algorithme séquentiel de sorte qu'il puisse exploiter plusieurs cœurs CPU.
+% :contentReference[oaicite:49]{index=49}
+
+Pour des algorithmes travaillant sur un tableau, l'idée de base est de diviser le tableau en deux parties, puis de traiter chacune de ces parties par deux threads distincts :
+% 
+
+\begin{center}
+\includegraphics[width=0.85\linewidth]{figures/ch5_split_array_two_threads}
+\end{center}
+
+Une fois que les deux threads ont terminé leur travail, nous devons combiner leurs résultats pour obtenir le résultat final. Dans notre exemple, le minimum du tableau entier est le minimum des deux minimums calculés sur les deux parties.
+% :contentReference[oaicite:51]{index=51}
+
+Pour implémenter cette solution, la classe qui implémente l'interface \texttt{Runnable} doit non seulement recevoir le tableau \texttt{values}, mais elle doit aussi recevoir l'indice de début et l'indice de fin du bloc d'intérêt dans le tableau. En outre, la classe ne doit pas afficher le minimum, mais doit fournir un accès à la valeur minimale calculée dans l'un ou l'autre bloc. Ceci est implémenté dans le code suivant :
+% :contentReference[oaicite:52]{index=52}
+
+\begin{lstlisting}[language=Java]
+class MinBlockComputation implements Runnable {
+    private float values[];
+    private int startIndex;
+    private int endIndex;
+    private float minValue;
+
+    public MinBlockComputation(float values[],
+                               int startIndex,
+                               int endIndex) {
+        if (startIndex >= endIndex) {
+            throw new IllegalArgumentException("Empty array");
+        }
+        this.values = values;
+        this.startIndex = startIndex;
+        this.endIndex = endIndex;
+    }
+
+    @Override
+    public void run() {
+        minValue = values[startIndex];
+        for (int i = startIndex + 1; i < endIndex; i++) {
+            minValue = Math.min(values[i], minValue);
+        }
+    }
+
+    float getMinValue() {
+        return minValue;
+    }
+}
+\end{lstlisting}
+
+Notez que nous devons maintenant lever une exception si le tableau est vide, parce que le minimum n'est pas défini dans ce cas. Dans l'implémentation précédente, nous affichions simplement l'information. Ce n'est plus une solution appropriée, car nous devons fournir un accès à la valeur minimale calculée.
+% :contentReference[oaicite:53]{index=53}
+
+Grâce à cette nouvelle conception, il est maintenant possible d'accélérer le calcul du minimum en utilisant deux threads :
+% :contentReference[oaicite:54]{index=54}
+
+\begin{lstlisting}[language=Java]
+public static void main(String[] args) throws InterruptedException {
+    float values[] = new float[] { -2, -5, 4 };
+    MinBlockComputation c1 = new MinBlockComputation(values, 0, values.length / 2);
+    MinBlockComputation c2 = new MinBlockComputation(values, values.length / 2, values.length);
+    Thread t1 = new Thread(c1);
+    Thread t2 = new Thread(c2);
+    t1.start();
+    t2.start();
+    t1.join();
+    t2.join();
+    System.out.println("Minimum is: " + Math.min(c1.getMinValue(), c2.getMinValue()));
+}
+\end{lstlisting}
+
+L'implémentation fonctionne comme suit :
+% :contentReference[oaicite:55]{index=55}
+\begin{enumerate}
+  \item Nous définissons les deux calculs \texttt{c1} et \texttt{c2} qui doivent être effectués sur les deux parties du tableau complet. Important : les calculs sont seulement définis, le minimum n'est pas calculé à ce stade.
+  \item Nous créons et lançons deux threads \texttt{t1} et \texttt{t2} qui seront respectivement chargés d'appeler les méthodes \texttt{c1.run()} et \texttt{c2.run()}. Autrement dit, c'est seulement après les appels à \texttt{t1.start()} et \texttt{t2.start()} que la recherche du minimum commence.
+  \item Une fois que les deux threads ont terminé leur travail, le thread principal collecte les résultats partiels de \texttt{c1} et \texttt{c2}, puis combine ces résultats partiels afin d'afficher le résultat final.
+\end{enumerate}
+
+Notez aussi que cette version n'intercepte pas la possible \texttt{InterruptedException}, mais la rapporte à l'appelant.
+% :contentReference[oaicite:56]{index=56}
+
+
+\subsection{Gérer les parties vides}
+% :contentReference[oaicite:57]{index=57}
+
+Même si l'implémentation de la section précédente fonctionne bien sur des tableaux contenant au moins 2 éléments, elle échoue si le tableau \texttt{values} est vide ou ne contient qu'un seul élément. En effet, dans ce cas, \texttt{values.length / 2 == 0}, ce qui déclenche la \texttt{IllegalArgumentException} dans le constructeur de \texttt{c1}. En outre, si \texttt{values.length == 0}, le constructeur de \texttt{c2} lèverait la même exception.
+% :contentReference[oaicite:58]{index=58}
+
+On pourrait résoudre ce problème en conditionnant la création de \texttt{c1}, \texttt{c2}, \texttt{t1}, et \texttt{t2} selon la valeur de \texttt{values.length}. Cela nécessiterait toutefois de gérer plusieurs cas difficiles à écrire et à maintenir. Ce problème serait aussi aggravé si nous décidons de diviser le tableau en plus de 2 parties afin de mieux exploiter les cœurs CPU disponibles.
+% :contentReference[oaicite:59]{index=59}
+
+Une solution plus simple et plus scalable consiste à introduire un drapeau booléen qui indique si un résultat est présent pour chaque partie du tableau. Au lieu de lever la \texttt{IllegalArgumentException} dans le constructeur, ce drapeau serait mis à \texttt{false} si la recherche du minimum est lancée sur un bloc vide.
+% :contentReference[oaicite:60]{index=60}
+
+Pour illustrer cette idée, considérons le problème légèrement plus complexe de calculer à la fois les valeurs minimale et maximale d'un tableau. La première étape est de définir une classe qui contiendra le résultat d'un calcul :
+% :contentReference[oaicite:61]{index=61}
+
+\begin{lstlisting}[language=Java]
+class MinMaxResult {
+    private boolean isPresent;
+    private float minValue;
+    private float maxValue;
+
+    private MinMaxResult(boolean isPresent,
+                         float minValue,
+                         float maxValue) {
+        this.isPresent = isPresent;
+        this.minValue = minValue;
+        this.maxValue = maxValue;
+    }
+
+    public MinMaxResult(float minValue,
+                        float maxValue) {
+        this(true /* present */, minValue, maxValue);
+    }
+
+    static public MinMaxResult empty() {
+        return new MinMaxResult(false /* not present */, 0 /* dummy min */, 0 /* dummy max */);
+    }
+
+    public boolean isPresent() {
+        return isPresent;
+    }
+
+    public float getMinValue() {
+        if (isPresent()) {
+            return minValue;
+        } else {
+            throw new IllegalStateException();
+        }
+    }
+
+    public float getMaxValue() {
+        if (isPresent()) {
+            return maxValue;
+        } else {
+            throw new IllegalStateException();
+        }
+    }
+
+    public void print() {
+        if (isPresent()) {
+            System.out.println(getMinValue() + " " + getMaxValue());
+        } else {
+            System.out.println("Empty array");
+        }
+    }
+
+    public void combine(MinMaxResult with) {
+        if (with.isPresent) {
+            if (isPresent) {
+                // Combine the results from two non-empty blocks
+                minValue = Math.min(minValue, with.minValue);
+                maxValue = Math.max(maxValue, with.maxValue);
+            } else {
+                // Replace the currently absent result by the provided result
+                isPresent = true;
+                minValue = with.minValue;
+                maxValue = with.maxValue;
+            }
+        } else {
+            // Do nothing if the other result is absent
+        }
+    }
+}
+\end{lstlisting}
+
+Introduire la classe \texttt{MinMaxResult} nous permet de séparer proprement deux concepts distincts : « l'algorithme pour effectuer un calcul » et « les résultats du calcul ». Cette séparation est un autre exemple de patron de conception.
+% :contentReference[oaicite:62]{index=62}
+
+Comme on peut le voir dans le code source, il y a deux manières possibles de créer un objet de la classe \texttt{MinMaxResult} :
+% :contentReference[oaicite:63]{index=63}
+\begin{itemize}
+  \item soit en utilisant le constructeur \texttt{MinMaxResult(minValue, maxValue)}, qui met le drapeau \texttt{isPresent} à \texttt{true} afin d'indiquer la présence d'un résultat,
+  \item soit en utilisant la méthode statique \texttt{MinMaxResult.empty()}, qui crée un objet \texttt{MinMaxResult} avec le drapeau \texttt{isPresent} mis à \texttt{false} afin d'indiquer l'absence d'un résultat (c'est le cas d'un bloc vide).
+\end{itemize}
+
+L'objet lève une exception si l'on tente d'accéder aux valeurs minimale ou maximale lorsque le résultat est absent. Il appartient à l'appelant de vérifier la présence d'un résultat en utilisant la méthode \texttt{isPresent()}, avant d'appeler \texttt{getMinValue()} ou \texttt{getMaxValue()}.
+% :contentReference[oaicite:64]{index=64}
+
+Enfin, notez la présence de la méthode \texttt{combine()}. Cette méthode met à jour les valeurs minimale/maximale actuellement disponibles avec les résultats obtenus depuis un bloc différent. Le \texttt{combine()} implémente la combinaison de deux résultats partiels.
+% 
+
+Il est maintenant possible de créer une implémentation de l'interface \texttt{Runnable} qui s'appuie sur \texttt{MinMaxResult} :
+% 
+
+\begin{lstlisting}[language=Java]
+class MinMaxBlockComputation implements Runnable {
+    private float[] values;
+    private int startIndex;
+    private int endIndex;
+    private MinMaxResult result;
+
+    public MinMaxBlockComputation(float[] values,
+                                  int startIndex,
+                                  int endIndex) {
+        this.values = values;
+        this.startIndex = startIndex;
+        this.endIndex = endIndex;
+    }
+
+    @Override
+    public void run() {
+        if (startIndex >= endIndex) {
+            result = MinMaxResult.empty();
+        } else {
+            float minValue = values[startIndex];
+            float maxValue = values[startIndex];
+            for (int i = startIndex + 1; i < endIndex; i++) {
+                minValue = Math.min(minValue, values[i]);
+                maxValue = Math.max(maxValue, values[i]);
+            }
+            result = new MinMaxResult(minValue, maxValue);
+        }
+    }
+
+    MinMaxResult getResult() {
+        return result;
+    }
+}
+\end{lstlisting}
+
+La classe \texttt{MinMaxBlockComputation} est essentiellement la même que la classe \texttt{MinBlockComputation} définie plus tôt. Elle ne diffère que dans la manière dont le résultat est stocké : \texttt{MinBlockComputation} utilise un \texttt{float} pour contenir le résultat du calcul sur un bloc, alors que \texttt{MinMaxBlockComputation} utilise un objet de la classe \texttt{MinMaxResult}. Cela permet à \texttt{MinMaxBlockComputation} non seulement de rapporter les valeurs minimale et maximale d'une partie d'un tableau, mais aussi d'indiquer si cette partie était vide ou non vide.
+% :contentReference[oaicite:67]{index=67}
+
+Il est maintenant facile d'exécuter le calcul en utilisant deux threads d'une manière qui est aussi correcte lorsque le tableau \texttt{values} contient 0 ou 1 élément :
+% :contentReference[oaicite:68]{index=68}
+
+\begin{lstlisting}[language=Java]
+public static void main(String[] args) throws InterruptedException {
+    float values[] = new float[1024];
+    // Fill the array
+    MinMaxBlockComputation c1 = new MinMaxBlockComputation(values, 0, values.length / 2);
+    MinMaxBlockComputation c2 = new MinMaxBlockComputation(values, values.length / 2, values.length);
+    Thread t1 = new Thread(c1);
+    Thread t2 = new Thread(c2);
+    t1.start();
+    t2.start();
+    t1.join();
+    t2.join();
+    MinMaxResult result = c1.getResult();
+    result.combine(c2.getResult());
+    result.print();
+}
+\end{lstlisting}
+
+
+\subsection{Résultats optionnels}
+% 
+
+La classe \texttt{MinMaxResult} a été précédemment introduite comme un moyen de gérer l'absence d'un résultat dans le cas d'une partie vide d'un tableau. Plus généralement, gérer l'absence d'une valeur est un patron courant dans les architectures logicielles. Pour cette raison, Java introduit la classe générique \texttt{Optional<T>} : \url{https://docs.oracle.com/javase/8/docs/api/java/util/Optional.html}
+% :contentReference[oaicite:70]{index=70}
+
+La classe \texttt{Optional<T>} fait exactement la même chose que le drapeau booléen \texttt{isPresent} que nous avons introduit manuellement dans la classe \texttt{MinMaxResult}. Les quatre opérations principales de \texttt{Optional<T>} sont :
+% :contentReference[oaicite:71]{index=71}
+\begin{itemize}
+  \item \texttt{of(T t)} est une méthode statique qui construit un objet \texttt{Optional<T>} en encapsulant l'objet donné \texttt{t} de classe \texttt{T}.
+  \item \texttt{empty()} est une méthode statique qui construit un objet \texttt{Optional<T>} indiquant l'absence d'un objet de classe \texttt{T}.
+  \item \texttt{isPresent()} est une méthode qui indique si l'objet \texttt{Optional<T>} contient un objet.
+  \item \texttt{get()} renvoie l'objet encapsulé de classe \texttt{T}. Si \texttt{Optional<T>} ne contient pas d'objet, une exception est levée.
+\end{itemize}
+
+Par conséquent, nous aurions pu définir une version simplifiée de \texttt{MinMaxResult} sans le drapeau booléen \texttt{isPresent} comme suit :
+% :contentReference[oaicite:72]{index=72}
+
+\begin{lstlisting}[language=Java]
+class MinMaxResult2 {
+    private float minValue;
+    private float maxValue;
+
+    public MinMaxResult2(float minValue,
+                         float maxValue) {
+        this.minValue = minValue;
+        this.maxValue = maxValue;
+    }
+
+    public float getMinValue() {
+        return minValue;
+    }
+
+    public float getMaxValue() {
+        return maxValue;
+    }
+}
+\end{lstlisting}
+
+En combinant \texttt{MinMaxResult2} avec \texttt{Optional<T>}, l'algorithme séquentiel à intégrer dans la méthode \texttt{run()} de la classe \texttt{Runnable} aurait pu être réécrit comme suit :
+% 
+
+\begin{lstlisting}[language=Java]
+import java.util.Optional;
+
+public static Optional<MinMaxResult2> computeMinMaxSequential(float values[],
+                                                              int startIndex,
+                                                              int stopIndex) {
+    if (startIndex >= stopIndex) {
+        return Optional.empty();
+    } else {
+        float minValue = values[startIndex];
+        float maxValue = values[startIndex];
+        for (int i = startIndex + 1; i < stopIndex; i++) {
+            minValue = Math.min(minValue, values[i]);
+            maxValue = Math.max(maxValue, values[i]);
+        }
+        return Optional.of(new MinMaxResult2(minValue, maxValue));
+    }
+}
+
+public static void main(String[] args) {
+    float values[] = new float[] { -2, -5, 4 };
+    Optional<MinMaxResult2> result = computeMinMaxSequential(values, 0, values.length);
+    if (result.isPresent()) {
+        System.out.println(result.get().getMinValue() + " " + result.get().getMaxValue());
+    } else {
+        System.out.println("Empty array");
+    }
+}
+\end{lstlisting}
+
+Cette implémentation alternative aurait été légèrement plus courte et aurait évité tout bug possible dans notre implémentation manuelle du drapeau \texttt{isPresent}.
+% :contentReference[oaicite:74]{index=74}
+
+\paragraph{Exercice}
+Réimplémentez la classe \texttt{MinMaxBlockComputation} en remplaçant \texttt{MinMaxResult} par \texttt{Optional<MinMaxResult2>}, et lancez des threads sur la base de cette nouvelle classe.
+% :contentReference[oaicite:75]{index=75}
+
+
+\section{Pools de threads}
+
+Jusqu’ici, nous n’avons créé que deux threads, mais un CPU moderne aura typiquement au moins 4 cœurs. On pourrait lancer davantage de threads afin de bénéficier de ces cœurs supplémentaires. Par exemple, le code suivant utiliserait 4 threads en divisant le tableau en 4 parties :
+
+\begin{lstlisting}[language=Java]
+public static void main(String[] args) throws InterruptedException {
+    float values[] = new float[1024];
+    // Fill the array
+
+    int blockSize = values.length / 4;
+    MinMaxBlockComputation c1 = new MinMaxBlockComputation(values, 0, blockSize);
+    MinMaxBlockComputation c2 = new MinMaxBlockComputation(values, blockSize, 2 * blockSize);
+    MinMaxBlockComputation c3 = new MinMaxBlockComputation(values, 2 * blockSize, 3 * blockSize);
+    MinMaxBlockComputation c4 = new MinMaxBlockComputation(values, 3 * blockSize, values.length);
+
+    Thread t1 = new Thread(c1);
+    Thread t2 = new Thread(c2);
+    Thread t3 = new Thread(c3);
+    Thread t4 = new Thread(c4);
+
+    t1.start();
+    t2.start();
+    t3.start();
+    t4.start();
+
+    t1.join();
+    t2.join();
+    t3.join();
+    t4.join();
+
+    MinMaxResult result = MinMaxResult.empty();
+    result.combine(c1.getResult());
+    result.combine(c2.getResult());
+    result.combine(c3.getResult());
+    result.combine(c4.getResult());
+    result.print();
+}
+\end{lstlisting}
+
+Notez que la définition de \texttt{c4} utilise la taille du tableau (c.-à-d. \texttt{values.length}) comme index de fin, au lieu de \texttt{4 * blockSize}, afin d’être sûr que les derniers éléments du tableau soient traités si la taille du tableau n’est pas un multiple de 4.
+
+Nous pourrions continuer à ajouter davantage de threads de cette manière (par exemple, 8, 16, 32.\ldots). Mais si nous utilisons, disons, 100 threads, cela signifie-t-il que notre programme s’exécutera 100 fois plus vite ? La réponse est non, pour au moins deux raisons :
+\begin{itemize}
+    \item Évidemment, le niveau de parallélisme est limité par le nombre de cœurs CPU disponibles. Si l’on utilise un CPU avec 4 cœurs, on ne peut pas s’attendre à une accélération de plus de 4.
+    \item Même si les threads sont légers, il existe tout de même une surcharge associée à la création et à la gestion d’un thread. Sur un ordinateur moderne, créer un thread simple (sans aucun objet supplémentaire) prend environ 0.05--0.1 ms. C’est approximativement le temps nécessaire pour calculer la somme de 1 à 100\,000.
+\end{itemize}
+
+Nous pouvons conclure que les threads n’améliorent la vitesse d’un programme que si les tâches des threads sont plus longues que la surcharge nécessaire pour les créer et les gérer. Ceci motive l’introduction des pools de threads. Un pool de threads est un groupe de threads qui sont prêts à travailler :
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.75\linewidth]{figures/ch5_thread_pool}
+\end{figure}
+
+Dans ce dessin, nous avons un pool de threads qui est constitué de 2 threads. Ces threads surveillent continuellement une file de tâches en attente. Dès qu’une tâche est mise dans la file et dès qu’un thread devient disponible, le thread disponible s’occupe de cette tâche. Une fois la tâche terminée, le thread informe l’appelant que le résultat de la tâche est disponible, puis il retourne à l’écoute de la file, en attendant qu’une nouvelle tâche soit traitée.
+
+Les pools de threads sont un moyen efficace d’éviter la surcharge associée à l’initialisation et à la finalisation des threads. Ils permettent aussi d’écrire du code utilisateur qui est découplé du nombre de threads ou du nombre de cœurs CPU.
+
+\subsection{Pools de threads en Java}
+
+En Java, trois interfaces différentes sont généralement combinées pour créer un pool de threads :
+\begin{itemize}
+    \item \texttt{java.util.concurrent.ExecutorService} implémente le pool de threads lui-même, y compris la file des requêtes et ses threads en arrière-plan : \texttt{https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ExecutorService.html}.
+    \item \texttt{java.util.concurrent.Callable<T>} est une interface générique qui représente la tâche à exécuter. La tâche doit renvoyer un objet de type \texttt{T} : \texttt{https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/Callable.html}.
+    \item \texttt{java.util.concurrent.Future<T>} est une interface générique qui représente le résultat d’une tâche qui est en cours de calcul : \texttt{https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/Future.html}.
+\end{itemize}
+
+Le Java Development Kit (JDK) fournit des implémentations concrètes de \texttt{ExecutorService} et \texttt{Future}, donc nous (heureusement !) n’avons pas à les implémenter nous-mêmes. Un pool de threads concret peut être créé comme suit :
+\begin{lstlisting}[language=Java]
+ExecutorService executor = Executors.newFixedThreadPool(4 /* numberOfThreads */);
+\end{lstlisting}
+
+En tant que développeurs, notre seule responsabilité consiste à choisir le type générique \texttt{T} et à fournir une implémentation de l’interface \texttt{Callable<T>} qui décrit la tâche à accomplir. L’interface \texttt{Callable<T>} ressemble à ceci :
+\begin{lstlisting}[language=Java]
+public interface Callable<T> {
+    public T call();
+}
+\end{lstlisting}
+
+Cela ressemble extrêmement à l’interface \texttt{Runnable} que nous avons utilisée jusqu’ici ! La différence entre les interfaces \texttt{Runnable} et \texttt{Callable<T>} est que la première n’a pas de valeur de retour, alors que la seconde renvoie un résultat de type \texttt{T}.
+
+Une fois qu’une implémentation concrète de \texttt{Callable<T>} est disponible, des tâches peuvent être soumises au pool de threads. Le patron est le suivant :
+\begin{lstlisting}[language=Java]
+Future<T> future1 = executor.submit(new MyCallable(...));
+\end{lstlisting}
+
+Les threads dans un pool de threads sont comme des chefs dans la cuisine d’un restaurant attendant des commandes. Si vous soumettez une tâche au pool en utilisant l’appel ci-dessus, l’un des chefs prendra la tâche et il commencera immédiatement à travailler dessus. Vous pouvez soumettre davantage de tâches, mais elles pourraient devoir attendre jusqu’à ce qu’un chef ait fini de traiter sa tâche courante :
+\begin{lstlisting}[language=Java]
+Future<T> future2 = executor.submit(new MyCallable(...));
+Future<T> future3 = executor.submit(new MyCallable(...));
+Future<T> future4 = executor.submit(new MyCallable(...));
+// ...
+\end{lstlisting}
+
+Vous pouvez obtenir le résultat des futures avec leur méthode \texttt{get()} :
+\begin{lstlisting}[language=Java]
+T result1 = future1.get();
+T result2 = future2.get();
+T result3 = future3.get();
+T result4 = future4.get();
+// ...
+\end{lstlisting}
+
+Si la tâche n’est pas encore finie, la méthode \texttt{get()} attendra. Cela contraste avec la méthode \texttt{executor.submit()} qui renvoie toujours immédiatement.
+
+À la fin du programme ou lorsque vous n’avez plus besoin du pool de threads, vous devez l’arrêter explicitement pour stopper tous ses threads, sinon le logiciel pourrait ne pas se terminer correctement :
+\begin{lstlisting}[language=Java]
+executor.shutdown();
+\end{lstlisting}
+
+\subsection{Pool de threads pour calculer le minimum et le maximum}
+
+Il est simple de transformer le runnable \texttt{MinMaxBlockComputation} qui a été défini ci-dessus en un callable :
+\begin{lstlisting}[language=Java]
+class MinMaxBlockCallable implements Callable<MinMaxResult> {
+    private float[] values;
+    private int startIndex;
+    private int endIndex;
+    // Removed member: MinMaxResult result;
+
+    public MinMaxBlockCallable(float[] values,
+                               int startIndex,
+                               int endIndex) {
+        this.values = values;
+        this.startIndex = startIndex;
+        this.endIndex = endIndex;
+    }
+
+    @Override
+    public MinMaxResult call() {
+        if (startIndex >= endIndex) {
+            return MinMaxResult.empty();
+        } else {
+            float minValue = values[startIndex];
+            float maxValue = values[startIndex];
+            for (int i = startIndex + 1; i < endIndex; i++) {
+                minValue = Math.min(minValue, values[i]);
+                maxValue = Math.max(maxValue, values[i]);
+            }
+            return new MinMaxResult(minValue, maxValue);
+        }
+    }
+}
+\end{lstlisting}
+
+Les seules différences sont :
+\begin{itemize}
+    \item L’interface \texttt{Runnable} est remplacée par l’interface \texttt{Callable<MinMaxResult>}.
+    \item La méthode \texttt{run()} est remplacée par la méthode \texttt{call()}.
+    \item La variable membre \texttt{result} et la méthode \texttt{getResult()} sont supprimées. Ces éléments sont remplacés par la valeur de retour de \texttt{call()}.
+\end{itemize}
+
+Grâce à la classe \texttt{MinMaxBlockCallable} nouvellement définie, il est désormais possible d’utiliser un pool de threads :
+\begin{lstlisting}[language=Java]
+public static void main(String[] args) throws InterruptedException, ExecutionException {
+    // Create a thread pool with 4 threads (the thread pool could be shared with other methods)
+    ExecutorService executor = Executors.newFixedThreadPool(4);
+
+    float values[] = new float[1024];
+    // Fill the array
+
+    // Create two tasks that work on two distinct parts of the whole array
+    Future<MinMaxResult> partialResult1 =
+        executor.submit(new MinMaxBlockCallable(values, 0, values.length / 2));
+    Future<MinMaxResult> partialResult2 =
+        executor.submit(new MinMaxBlockCallable(values, values.length / 2, values.length));
+
+    // Combine the partial results on the two parts to get the final result
+    MinMaxResult finalResult = MinMaxResult.empty();
+    finalResult.combine(partialResult1.get()); // This call blocks the main thread until the first part is processed
+    finalResult.combine(partialResult2.get()); // This call blocks the main thread until the second part is processed
+    finalResult.print();
+
+    // Do not forget to shut down the thread pool
+    executor.shutdown();
+}
+\end{lstlisting}
+
+Cette solution ressemble extrêmement à la solution précédente utilisant \texttt{Runnable} et \texttt{Thread}. Toutefois, dans ce code, nous n’avons pas à gérer les threads par nous-mêmes, et le pool de threads pourrait être partagé avec d’autres parties du logiciel.
+
+La construction \texttt{throws} est nécessaire parce que la méthode \texttt{get()} des futures peut éventuellement lancer une \texttt{InterruptedException} (si le future a été interrompu pendant l’attente) ou une \texttt{ExecutionException} (s’il y a eu un problème pendant le calcul).
+
+\subsection{Diviser le tableau en plusieurs blocs}
+
+Jusqu’ici, nous avons divisé le tableau \texttt{values} en 2 ou 4 blocs, parce que nous étions guidés par le nombre de cœurs CPU. En pratique, c’est une meilleure idée de diviser le tableau en blocs d’une taille fixe afin d’être agnostique du nombre sous-jacent de cœurs. Un pool de threads peut être utilisé dans cette situation pour gérer les calculs, tout en empêchant le nombre de threads de dépasser la capacité du CPU.
+
+À cette fin, nous pouvons créer une structure de données séparée (par ex., une pile ou une liste) qui garde la trace des calculs en attente en stockant les objets \texttt{Future<MinMaxResult>} :
+\begin{lstlisting}[language=Java]
+public static void main(String[] args) throws InterruptedException, ExecutionException {
+    ExecutorService executor = Executors.newFixedThreadPool(4);
+
+    float values[] = new float[1024];
+    // Fill the array
+
+    int blockSize = 128;
+    Stack<Future<MinMaxResult>> pendingComputations = new Stack<>();
+
+    for (int block = 0; block < numberOfBlocks; block++) {
+        int startIndex = block * blockSize;
+        int endIndex;
+        if (block == numberOfBlocks - 1) {
+            endIndex = values.length;
+        } else {
+            endIndex = (block + 1) * blockSize;
+        }
+        pendingComputations.add(executor.submit(new MinMaxBlockCallable(values, startIndex, endIndex)));
+    }
+
+    MinMaxResult result = MinMaxResult.empty();
+    while (!pendingComputations.empty()) {
+        Future<MinMaxResult> partialResult = pendingComputations.pop();
+        result.combine(partialResult.get());
+    }
+
+    result.print();
+    executor.shutdown();
+}
+\end{lstlisting}
+
+Notez que l’index de fin du dernier bloc est traité spécifiquement, parce que \texttt{values.length} pourrait ne pas être un multiple entier de \texttt{blockSize}.
+
+\subsection{Calculer la moyenne d’un tableau}
+
+Jusqu’ici, ce chapitre a été presque entièrement consacré à la tâche de trouver les valeurs minimale et maximale dans un tableau. Nous avons expliqué comment l’introduction de la classe séparée \texttt{MinMaxResult} dédiée au stockage des résultats partiels conduit à une utilisation naturelle des pools de threads en implémentant l’interface \texttt{Callable<MinMaxResult>}. Une astuce importante était de définir la méthode \texttt{combine()} qui est responsable de la combinaison des résultats partiels obtenus depuis différentes parties du tableau.
+
+Comment pourrions-nous calculer la moyenne du tableau en utilisant une approche similaire ?
+
+La première chose est de définir une classe qui stocke le résultat partiel sur un bloc du tableau. On pourrait décider de ne stocker que la valeur moyenne elle-même. Malheureusement, ce choix ne donnerait pas assez d’informations pour implémenter la méthode \texttt{combine()}. En effet, afin de combiner deux moyennes, il est nécessaire de connaître le nombre d’éléments sur lesquels les moyennes individuelles ont été calculées.
+
+La solution consiste à stocker la somme et le nombre d’éléments dans une classe dédiée :
+\begin{lstlisting}[language=Java]
+class MeanResult {
+    private double sum; // We use doubles as we might be summing a large number of floats
+    private int count;
+
+    public MeanResult() {
+        sum = 0;
+        count = 0;
+    }
+
+    public void addValue(float value) {
+        sum += value;
+        count++;
+    }
+
+    public boolean isPresent() {
+        return count > 0;
+    }
+
+    public float getMean() {
+        if (isPresent()) {
+            return (float) (sum / (double) count);
+        } else {
+            throw new IllegalStateException();
+        }
+    }
+
+    public void combine(MeanResult with) {
+        sum += with.sum;
+        count += with.count;
+    }
+
+    public void print() {
+        if (isPresent()) {
+            System.out.println(getMean());
+        } else {
+            System.out.println("Empty array");
+        }
+    }
+}
+\end{lstlisting}
+
+Grâce à la classe \texttt{MeanResult}, le code source de \texttt{MinMaxBlockCallable} peut être adapté afin de définir un callable qui calcule la moyenne d’un bloc d’un tableau :
+\begin{lstlisting}[language=Java]
+class MeanUsingCallable implements Callable<MeanResult> {
+    private float[] values;
+    private int startIndex;
+    private int endIndex;
+
+    public MeanUsingCallable(float[] values,
+                             int startIndex,
+                             int endIndex) {
+        this.values = values;
+        this.startIndex = startIndex;
+        this.endIndex = endIndex;
+    }
+
+    @Override
+    public MeanResult call() {
+        MeanResult result = new MeanResult();
+        for (int i = startIndex; i < endIndex; i++) {
+            result.addValue(values[i]);
+        }
+        return result;
+    }
+}
+\end{lstlisting}
+
+Ce callable peut être utilisé comme un remplacement direct dans le code source pour calculer le minimum/le maximum.
+
+\paragraph{Exercice}
+Les classes \texttt{MinMaxBlockCallable} et \texttt{MeanUsingCallable} partagent beaucoup de similarités : elles représentent toutes les deux un calcul qui peut être fait sur une partie d’un tableau, elles utilisent toutes les deux une classe dédiée pour stocker leurs résultats, et elles supportent toutes les deux l’opération \texttt{combine()} pour fusionner les résultats partiels. Cependant, le code source pour calculer le minimum/le maximum doit être adapté pour chacune d’elles.
+
+Implémentez une hiérarchie de classes/interfaces qui peut être utilisée pour implémenter un code source unique compatible avec \texttt{MinMaxBlockCallable} et \texttt{MeanUsingCallable}. En outre, validez votre approche en démontrant sa compatibilité avec le calcul de l’écart-type.
+
+\paragraph{Indication}
+L’écart-type peut être dérivé de la variance, qui peut être calculée à partir du nombre d’éléments dans le bloc, de la somme des éléments dans le bloc, et de la somme des carrés des éléments dans le bloc : \texttt{https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance} (cf. algorithme naïf).
+
+\section{Mémoire partagée}
+
+Dans les solutions présentées jusqu’ici, la stratégie était de rendre \texttt{Runnable} ou \texttt{Callable<T>} responsables du calcul des résultats partiels, puis de rendre le thread Java principal responsable de la combinaison de ces résultats partiels. Mais, comme expliqué plus haut, les threads qui appartiennent au même processus partagent le même espace mémoire. Cela signifie que les threads peuvent accéder aux mêmes variables.
+
+\subsection{Utiliser une variable partagée pour collecter les résultats partiels}
+
+Selon cette discussion, il devrait être possible de faire fusionner directement les résultats partiels par les threads dans une variable partagée, libérant le thread principal de cette tâche de combinaison. C’est une idée parfaitement valide, qui est implémentée dans le runnable suivant :
+\begin{lstlisting}[language=Java]
+class SharedMinMaxComputation implements Runnable {
+    private SharedMinMaxResult target;
+    private float[] values;
+    private int startIndex;
+    private int endIndex;
+
+    public SharedMinMaxComputation(SharedMinMaxResult target,
+                                   float[] values,
+                                   int startIndex,
+                                   int endIndex) {
+        this.target = target;
+        this.values = values;
+        this.startIndex = startIndex;
+        this.endIndex = endIndex;
+    }
+
+    @Override
+    public void run() {
+        if (startIndex < endIndex) {
+            float minValue = values[startIndex];
+            float maxValue = values[startIndex];
+            for (int i = startIndex + 1; i < endIndex; i++) {
+                minValue = Math.min(minValue, values[i]);
+                maxValue = Math.max(maxValue, values[i]);
+            }
+            target.combine(new SharedMinMaxResult(minValue, maxValue));
+        }
+    }
+}
+\end{lstlisting}
+
+\texttt{SharedMinMaxComputation} peut être exécuté exactement de la même manière que \texttt{MinMaxBlockComputation} (cf. plus haut), excepté que le thread Java principal doit créer la variable cible et la fournir aux \texttt{Runnable} individuels :
+\begin{lstlisting}[language=Java]
+public static void main(String[] args) throws InterruptedException {
+    float values[] = new float[1024];
+    // Fill the array
+
+    SharedMinMaxResult result = SharedMinMaxResult.empty();
+
+    SharedMinMaxComputation c1 = new SharedMinMaxComputation(result, values, 0, values.length / 2);
+    SharedMinMaxComputation c2 = new SharedMinMaxComputation(result, values, values.length / 2, values.length);
+
+    Thread t1 = new Thread(c1);
+    Thread t2 = new Thread(c2);
+
+    t1.start();
+    t2.start();
+
+    t1.join();
+    t2.join();
+
+    // No more call to "combine()" here!
+    result.print();
+}
+\end{lstlisting}
+
+Notez qu’il n’a pas beaucoup de sens d’utiliser un \texttt{Callable<T>} dans cette approche. En effet, parce que les calculs individuels fusionnent directement leurs résultats partiels avec une variable partagée, ils n’ont jamais à rapporter un résultat à leur appelant.
+
+Cependant, il est toujours très pertinent d’utiliser un pool de threads afin d’éviter de manipuler directement les threads.
+
+C’est pourquoi l’interface standard \texttt{ExecutorService} qui implémente les pools de threads accepte non seulement des implémentations de l’interface \texttt{Callable<T>} dans sa méthode \texttt{submit()}, mais aussi des implémentations de l’interface \texttt{Runnable}. Dans ce cas, les futures ne véhiculent aucun résultat, donc \texttt{Future<T>} doit simplement être remplacé par \texttt{Future}. Ceci est illustré dans le code suivant :
+\begin{lstlisting}[language=Java]
+public static void main(String[] args) throws InterruptedException, ExecutionException {
+    float values[] = new float[1024];
+    // Fill the array
+
+    ExecutorService executor = Executors.newFixedThreadPool(4);
+
+    SharedMinMaxResult result = SharedMinMaxResult.empty();
+
+    SharedMinMaxComputation c1 = new SharedMinMaxComputation(result, values, 0, values.length / 2);
+    SharedMinMaxComputation c2 = new SharedMinMaxComputation(result, values, values.length / 2, values.length);
+
+    Future future1 = executor.submit(c1);
+    Future future2 = executor.submit(c2);
+
+    future1.get(); // The "Future" does not convey any result, so we just wait here
+    future2.get();
+
+    executor.shutdown();
+}
+\end{lstlisting}
+
+\subsection{Conditions de compétition, exclusion mutuelle et moniteurs}
+
+Il existe cependant un danger important dans l’utilisation de variables partagées ! Considérons le code suivant, dans lequel deux threads incrémentent le même compteur :
+\begin{lstlisting}[language=Java]
+public class BadCounter {
+    private static int counter = 0; // Both threads use the same counter
+
+    private static void incrementCounter() {
+        counter++;
+    }
+
+    private static class Counter implements Runnable {
+        @Override
+        public void run() {
+            for (int i = 0; i < 100000; i++) {
+                incrementCounter();
+            }
+        }
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        Thread t1 = new Thread(new Counter());
+        Thread t2 = new Thread(new Counter());
+
+        t1.start();
+        t2.start();
+
+        t1.join();
+        t2.join();
+
+        System.out.println(counter);
+    }
+}
+\end{lstlisting}
+
+On s’attendrait à ce qu’à la fin du calcul, le logiciel affiche 200000 : Les deux threads comptent de 0 à 100000, donc le résultat devrait être $2 * 100000$. Cependant, si vous exécutez ce logiciel, le résultat affiché est différent à chaque exécution et n’est jamais égal à 200000 (il est même plus proche de 100000 que de 200000). Pourquoi ?
+
+C’est à cause des conditions de compétition. La ligne \texttt{counter++} correspond en fait à 3 instructions de bas niveau :
+\begin{enumerate}
+    \item Lire la valeur de la variable \texttt{counter},
+    \item Ajouter 1 à la valeur lue,
+    \item Stocker la valeur incrémentée dans la variable \texttt{counter}.
+\end{enumerate}
+
+Cette décomposition implique que la séquence suivante d’instructions de bas niveau peut se produire :
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.75\linewidth]{figures/ch5_race_condition}
+\end{figure}
+
+Dans une telle séquence, le premier thread écraserait la modification faite par le second thread sur \texttt{counter} : Il y a une interférence entre les deux threads ! Les conditions de compétition dépendent de la façon dont les instructions sont distribuées et ordonnées entre les différents cœurs CPU.
+
+Heureusement, les systèmes d’exploitation et les bibliothèques de threads offrent des primitives pour empêcher de telles conditions de compétition de se produire. L’idée est de définir des sections critiques dans le code source, dans lesquelles au plus un thread peut être présent à tout instant. Dans notre exemple, la méthode \texttt{incrementCounter()} devrait correspondre à une section critique : le thread 1 aurait dû attendre que le thread 2 écrive son résultat dans la variable partagée avant de commencer son calcul.
+
+En Java, les sections critiques peuvent être définies en ajoutant le mot-clé \texttt{synchronized} aux méthodes associées à un objet partagé. Notre exemple peut être rendu correct simplement en remplaçant :
+\begin{lstlisting}[language=Java]
+public void incrementCounter() {
+    counter++;
+}
+\end{lstlisting}
+par :
+\begin{lstlisting}[language=Java]
+public synchronized void incrementCounter() {
+    counter++;
+}
+\end{lstlisting}
+
+Intuitivement, ajouter le mot-clé \texttt{synchronized} signifie qu’un thread entrant dans la méthode « verrouille un cadenas ». En conséquence, tout autre thread arrivant plus tard ne peut pas entrer dans la méthode, parce que le cadenas est verrouillé. Une fois que le premier thread sort de la méthode, il « déverrouille le cadenas », laissant l’opportunité à l’un des threads en attente d’entrer dans la méthode à son tour.
+
+En interne, chaque objet Java est automatiquement équipé d’un cadenas qui est partagé entre toutes les méthodes de l’objet. Ce cadenas est appelé le moniteur de l’objet. Le processus de verrouillage/déverrouillage du moniteur est appelé exécution en exclusion mutuelle.
+
+Une autre raison d’utiliser \texttt{synchronized} consiste à assurer la visibilité des modifications de variables faites par un thread pour les autres threads. Par exemple, considérons le code source suivant :
+\begin{lstlisting}[language=Java]
+public class Visibility {
+    private static boolean ready;
+    private static String name = "Hello";
+
+    private static class MyRunnable implements Runnable {
+        public void run() {
+            while (!ready) {
+                // Wait for "ready" to become "true"
+            }
+            System.out.println(name);
+        }
+    }
+
+    public static void main(String[] args) {
+        Runnable r = new MyRunnable();
+        Thread t = new Thread(r);
+        t.start();
+
+        name = "World";
+        ready = true;
+    }
+}
+\end{lstlisting}
+
+Même s’il peut sembler évident que le logiciel affichera \texttt{World}, il est en fait possible qu’il affiche \texttt{Hello}, ou ne se termine jamais du tout ! Le problème est que la spécification Java ne garantit pas qu’un thread voit les modifications faites par un autre thread, à moins que les deux threads ne se synchronisent (par exemple avec une instruction \texttt{synchronized}). En d’autres termes, le mot-clé \texttt{synchronized} implique aussi que les threads publient leurs changements aux autres threads.
+
+Dans le programme ci-dessus, la boucle \texttt{while (!ready)} pourrait continuer indéfiniment parce que la modification \texttt{ready = true} faite par le thread principal pourrait ne jamais devenir visible pour \texttt{MyRunnable}. Pire encore, la JVM pourrait décider d’échanger les instructions \texttt{name = "World"} et \texttt{ready = true} dans le thread principal afin d’appliquer une optimisation matérielle de bas niveau : la spécification Java autorise de tels réordonnancements, tant que le réordonnancement ne change pas la sémantique du code au sein de ce thread. Comme notre code source n’impose pas la visibilité des changements sur \texttt{ready}, la JVM remarquera que le réordonnancement n’a aucun effet de bord sur le thread principal et pourrait décider d’exécuter d’abord \texttt{ready = true}, ce qui fera afficher \texttt{Hello} par \texttt{MyRunnable} au lieu de \texttt{World}.
+
+La solution est de s’assurer que les deux threads accèdent aux variables partagées uniquement via des méthodes \texttt{synchronized}, comme dans le code source suivant :
+\begin{lstlisting}[language=Java]
+public class FixedVisibility {
+    private static boolean ready;
+    private static String name = "Hello";
+
+    public static synchronized void start(String newName) {
+        ready = true;
+        name = newName;
+    }
+
+    public static synchronized boolean isReady() {
+        return ready;
+    }
+
+    public static synchronized String getName() {
+        return name;
+    }
+
+    private static class MyRunnable implements Runnable {
+        public void run() {
+            while (!isReady()) {
+                // Wait for "ready" to become "true"
+            }
+            System.out.println(getName());
+        }
+    }
+
+    public static void main(String[] args) {
+        Runnable r = new MyRunnable();
+        Thread t = new Thread(r);
+        t.start();
+        start("World");
+    }
+}
+\end{lstlisting}
+
+En résumé, comme règle générale dans ce cours, assurez-vous que les variables partagées ne sont accédées qu’au travers de méthodes \texttt{synchronized}. Cela évitera à la fois les conditions de compétition et assurera la visibilité des changements.
+
+Il y a une principale mise en garde associée au mot-clé \texttt{synchronized} : parce que les méthodes \texttt{synchronized} limitent la concurrence entre threads, elles réduisent aussi la performance globale d’un logiciel multithreadé. En d’autres termes, les méthodes \texttt{synchronized} représentent un goulot d’étranglement dans l’exécution d’un logiciel multithreadé. Par exemple, vous devriez essayer d’éviter de faire un calcul complexe dans une méthode \texttt{synchronized}, si possible. Néanmoins, souvenez-vous toujours qu’il est moins important d’avoir un programme rapide qu’un programme qui fonctionne correctement ! La correction est toujours plus importante que la vitesse.
+
+Enfin, notez que le mot-clé \texttt{synchronized} n’est que le plus basique des multiples mécanismes de synchronisation pour le multithreading offerts par Java. C’est cependant le plus important, car il permet de développer des logiciels sûrs vis-à-vis des threads sans plonger trop profondément dans la complexité de la programmation parallèle. En tant que tel, \texttt{synchronized} devrait être maîtrisé par tout développeur Java. Comme ce cours porte sur les bases du multithreading, des constructions plus avancées ne seront pas couvertes.
+
+\subsection{Objet partagé pour calculer le minimum et le maximum}
+
+Nous appliquons maintenant l’exclusion mutuelle à notre exemple du calcul du minimum et du maximum en utilisant une variable partagée. Notez que dans la version qui utilise la variable de résultat partagée, la classe originale \texttt{MinMaxResult} a été remplacée par la classe \texttt{SharedMinMaxResult}. Cette dernière classe est exactement la même que \texttt{MinMaxResult}, mais avec l’ajout du mot-clé \texttt{synchronized} dans chacune de ses méthodes :
+\begin{lstlisting}[language=Java]
+class SharedMinMaxResult {
+    private boolean isPresent;
+    private float minValue;
+    private float maxValue;
+
+    private SharedMinMaxResult(boolean isPresent,
+                               float minValue,
+                               float maxValue) {
+        this.isPresent = isPresent;
+        this.minValue = minValue;
+        this.maxValue = maxValue;
+    }
+
+    public SharedMinMaxResult(float minValue,
+                              float maxValue) {
+        this(true /* present */, minValue, maxValue);
+    }
+
+    static public SharedMinMaxResult empty() {
+        return new SharedMinMaxResult(false /* not present */, 0 /* dummy min */, 0 /* dummy max */);
+    }
+
+    public synchronized boolean isPresent() {
+        return isPresent;
+    }
+
+    public synchronized float getMinValue() {
+        if (isPresent()) {
+            return minValue;
+        } else {
+            throw new IllegalStateException();
+        }
+    }
+
+    public synchronized float getMaxValue() {
+        if (isPresent()) {
+            return maxValue;
+        } else {
+            throw new IllegalStateException();
+        }
+    }
+
+    public synchronized void print() {
+        if (isPresent()) {
+            System.out.println(getMinValue() + " " + getMaxValue());
+        } else {
+            System.out.println("Empty array");
+        }
+    }
+
+    public synchronized void combine(SharedMinMaxResult with) {
+        if (with.isPresent) {
+            if (isPresent) {
+                // Combine the results from two non-empty blocks
+                minValue = Math.min(minValue, with.minValue);
+                maxValue = Math.max(maxValue, with.maxValue);
+            } else {
+                // Replace the currently absent result by the provided result
+                isPresent = true;
+                minValue = with.minValue;
+                maxValue = with.maxValue;
+            }
+        } else {
+            // Do nothing if the other result is absent
+        }
+    }
+}
+\end{lstlisting}
+
+L’ajout de \texttt{synchronized} empêche toute condition de compétition entre les threads lorsqu’ils combinent leurs résultats partiels avec le résultat final. Notez aussi que les méthodes \texttt{synchronized} ne font partie que de la classe contenant le résultat final : les threads effectuent toujours leur calcul en plein parallélisme. Ce n’est que lorsque les résultats partiels sont combinés que l’exclusion mutuelle se produit, ce qui ne représente pas un gros goulot d’étranglement.
+
+L’inconvénient de ce code source est que les classes \texttt{MinMaxResult} et \texttt{SharedMinMaxResult} partagent presque tout leur code source, ce qui est hautement redondant. On pourrait éviter cette redondance en encapsulant un objet de classe \texttt{MinMaxResult} à l’intérieur d’une classe avec le même ensemble de méthodes, mais avec le mot-clé \texttt{synchronized} ajouté :
+\begin{lstlisting}[language=Java]
+class SharedMinMaxResult {
+    private MinMaxResult wrapped;
+
+    private SharedMinMaxResult(MinMaxResult wrapped) {
+        this.wrapped = wrapped;
+    }
+
+    public SharedMinMaxResult(float minValue,
+                              float maxValue) {
+        this(new MinMaxResult(minValue, maxValue));
+    }
+
+    static public SharedMinMaxResult empty() {
+        return new SharedMinMaxResult(MinMaxResult.empty());
+    }
+
+    public synchronized boolean isPresent() {
+        return wrapped.isPresent();
+    }
+
+    public synchronized float getMinValue() {
+        return wrapped.getMinValue();
+    }
+
+    public synchronized float getMaxValue() {
+        return wrapped.getMaxValue();
+    }
+
+    public synchronized void print() {
+        wrapped.print();
+    }
+
+    public synchronized void combine(SharedMinMaxResult with) {
+        wrapped.combine(with.wrapped);
+    }
+}
+\end{lstlisting}
+
+\subsection{Application à la multiplication matricielle}
+
+L’algèbre linéaire est un domaine mathématique qui peut grandement bénéficier de la programmation parallèle. Cette section donne un exemple de la façon dont le multithreading peut être utilisé pour implémenter la multiplication matricielle.
+
+Considérons l’implémentation de base suivante d’une matrice en Java :
+\begin{lstlisting}[language=Java]
+public class SynchronizedMatrix {
+    private float values[][];
+
+    private void checkPosition(int row,
+                               int column) {
+        if (row >= getRows() ||
+            column >= getColumns()) {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    public SynchronizedMatrix(int rows,
+                              int columns) {
+        if (rows <= 0 ||
+            columns <= 0) {
+            throw new IllegalArgumentException();
+        } else {
+            values = new float[rows][columns];
+        }
+    }
+
+    public synchronized int getRows() {
+        return values.length;
+    }
+
+    public synchronized int getColumns() {
+        // "values[0]" is guaranteed to exist, because "columns > 0" in the constructor
+        return values[0].length;
+    }
+
+    public synchronized float getValue(int row,
+                                       int column) {
+        checkPosition(row, column);
+        return values[row][column];
+    }
+
+    public synchronized void setValue(int row,
+                                      int column,
+                                      float value) {
+        checkPosition(row, column);
+        values[row][column] = value;
+    }
+}
+\end{lstlisting}
+
+Notez que la classe \texttt{SynchronizedMatrix} a chacune de ses méthodes marquée avec le mot-clé \texttt{synchronized}, donc elle convient pour être utilisée comme variable partagée entre plusieurs threads.
+
+Nous nous intéressons à la tâche de calculer le produit $C \in \mathbb{R}^{m \times p}$ de deux matrices $A \in \mathbb{R}^{m \times n}$ et $B \in \mathbb{R}^{n \times p}$ de dimensions compatibles. Rappelez-vous la définition de la multiplication matricielle : $c_{ij} = \sum_{k=1}^{n} a_{ik} b_{kj}$. Cette définition peut directement être transformée en un algorithme séquentiel :
+\begin{lstlisting}[language=Java]
+public static void main(String args[]) {
+    SynchronizedMatrix a = new SynchronizedMatrix(..., ...);
+    SynchronizedMatrix b = new SynchronizedMatrix(..., ...);
+    // Fill a and b
+
+    SynchronizedMatrix c = new SynchronizedMatrix(a.getRows(), b.getColumns());
+
+    for (int row = 0; row < c.getRows(); row++) {
+        for (int column = 0; column < c.getColumns(); column++) {
+            float accumulator = 0;
+            for (int k = 0; k < a.getColumns(); k++) {
+                accumulator += a.getValue(row, k) * b.getValue(k, column);
+            }
+            c.setValue(row, column, accumulator);
+        }
+    }
+}
+\end{lstlisting}
+
+Comment pourrions-nous exploiter le multithreading pour accélérer ce calcul ? L’observation principale est que la boucle la plus interne sur \texttt{k} est exécutée pour chaque entrée de $C$. Par conséquent, une solution possible consiste à créer $m \times p$ tâches qui seront traitées par un pool de threads, chacune de ces tâches implémentant la boucle la plus interne avec l’accumulateur.
+
+Une première implémentation possible consiste à créer une structure de données « résultat » qui stockera la valeur d’une cellule du produit matriciel :
+\begin{lstlisting}[language=Java]
+class ProductAtCellResult {
+    private int row;
+    private int column;
+    private float value;
+
+    ProductAtCellResult(int row,
+                        int column,
+                        float value) {
+        this.row = row;
+        this.column = column;
+        this.value = value;
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public int getColumn() {
+        return column;
+    }
+
+    public float getValue() {
+        return value;
+    }
+}
+\end{lstlisting}
+
+Nous pouvons alors implémenter l’interface \texttt{Callable<T>} pour utiliser cette structure de données dans un pool de threads :
+\begin{lstlisting}[language=Java]
+static class ComputeProductAtCell implements Callable<ProductAtCellResult> {
+    private SynchronizedMatrix a;
+    private SynchronizedMatrix b;
+    private int row;
+    private int column;
+
+    public ComputeProductAtCell(SynchronizedMatrix a,
+                                SynchronizedMatrix b,
+                                int row,
+                                int column) {
+        this.a = a;
+        this.b = b;
+        this.row = row;
+        this.column = column;
+    }
+
+    public ProductAtCellResult call() {
+        float accumulator = 0;
+        for (int k = 0; k < a.getColumns(); k++) {
+            accumulator += a.getValue(row, k) * b.getValue(k, column);
+        }
+        return new ProductAtCellResult(row, column, accumulator);
+    }
+}
+\end{lstlisting}
+
+Le pool de threads serait alors utilisé comme suit :
+\begin{lstlisting}[language=Java]
+public static void main(String args[]) throws ExecutionException, InterruptedException {
+    SynchronizedMatrix a = new SynchronizedMatrix(. .);
+    SynchronizedMatrix b = new SynchronizedMatrix(. .);
+    // Fill a and b
+
+    ExecutorService executor = Executors.newFixedThreadPool(10);
+    Stack<Future<ProductAtCellResult>> pendingComputations = new Stack<>();
+
+    for (int row = 0; row < a.getRows(); row++) {
+        for (int column = 0; column < b.getColumns(); column++) {
+            pendingComputations.add(executor.submit(new ComputeProductAtCell(a, b, row, column)));
+        }
+    }
+
+    SynchronizedMatrix c = new SynchronizedMatrix(a.getRows(), b.getColumns());
+
+    while (!pendingComputations.empty()) {
+        Future<ProductAtCellResult> future = pendingComputations.pop();
+        c.setValue(future.get().getRow(), future.get().getColumn(), future.get().getValue());
+    }
+
+    executor.shutdown();
+}
+\end{lstlisting}
+
+Notez que cette implémentation fonctionnerait aussi très bien s’il n’y avait pas de mot-clé \texttt{synchronized} dans la classe implémentant les matrices, parce que les threads n’appliquent pas de modifications à des variables partagées. Même si cette solution fonctionne bien, elle est exigeante en termes de mémoire. En effet, la ligne, la colonne et la valeur de chaque cellule du produit seront d’abord stockées dans une structure de données séparée (la pile de futures référant des objets \texttt{ProductAtCellResult}), avant d’être copiées dans la matrice cible \texttt{c}. Les résultats ne pourraient-ils pas être écrits directement dans \texttt{c} ?
+
+La réponse est évidemment « oui » : grâce au fait que \texttt{SynchronizedMatrix} implémente le mot-clé \texttt{synchronized}, elle est thread-safe et elle peut être utilisée comme variable partagée dans laquelle les différents threads peuvent directement écrire leurs résultats.
+
+Selon cette discussion, voici une seconde implémentation possible qui remplace \texttt{Callable<ProductAtCellResult>} par un ensemble d’objets \texttt{Runnable}, chacun de ces objets écrivant une cellule de la matrice cible :
+\begin{lstlisting}[language=Java]
+static class StoreProductAtCell implements Runnable {
+    private SynchronizedMatrix a;
+    private SynchronizedMatrix b;
+    private SynchronizedMatrix c;
+    private int row;
+    private int column;
+
+    public StoreProductAtCell(SynchronizedMatrix a,
+                              SynchronizedMatrix b,
+                              SynchronizedMatrix c,
+                              int row,
+                              int column) {
+        this.a = a;
+        this.b = b;
+        this.c = c;
+        this.row = row;
+        this.column = column;
+    }
+
+    public void run() {
+        float accumulator = 0;
+        for (int k = 0; k < a.getColumns(); k++) {
+            accumulator += a.getValue(row, k) * b.getValue(k, column);
+        }
+        c.setValue(row, column, accumulator);
+    }
+}
+\end{lstlisting}
+
+Grâce à la classe \texttt{StoreProductAtCell}, la multiplication matricielle peut être calculée par un pool de threads comme suit :
+\begin{lstlisting}[language=Java]
+public static void main(String args[]) throws ExecutionException, InterruptedException {
+    SynchronizedMatrix a = new SynchronizedMatrix(. .);
+    SynchronizedMatrix b = new SynchronizedMatrix(. .);
+    // Fill a and b
+
+    ExecutorService executor = Executors.newFixedThreadPool(10);
+    Stack<Future> pendingComputations = new Stack<>();
+    SynchronizedMatrix c = new SynchronizedMatrix(a.getRows(), b.getColumns());
+
+    for (int row = 0; row < a.getRows(); row++) {
+        for (int column = 0; column < b.getColumns(); column++) {
+            pendingComputations.add(executor.submit(new StoreProductAtCell(a, b, c, row, column)));
+        }
+    }
+
+    while (!pendingComputations.empty()) {
+        Future future = pendingComputations.pop();
+        future.get();
+    }
+
+    executor.shutdown();
+}
+\end{lstlisting}
+
+Notez que, dans l’exemple spécifique de la multiplication matricielle, la solution basée sur \texttt{Runnable} est à la fois plus simple et plus efficace en mémoire, puisqu’elle ne requiert pas l’utilisation d’une classe intermédiaire telle que \texttt{ProductAtCellResult} pour stocker les résultats partiels avant de les écrire dans la matrice cible.
+
+\paragraph{Remarque}
+En pratique, l’implémentation parallèle de la multiplication matricielle proposée ci-dessus aura probablement de très mauvaises performances, possiblement même pires qu’un algorithme purement séquentiel. En effet, cette implémentation néglige totalement le cache processeur : comme les différents threads travaillent sur différentes zones des matrices, le CPU devra continuellement accéder à la RAM, ce qui ralentit le calcul. Les bibliothèques logicielles réelles pour l’algèbre linéaire optimisée implémentent des algorithmes qui présentent de la localité dans leurs schémas d’accès à la RAM. Comme les cœurs CPU incluent une mémoire cache qui est beaucoup plus rapide que la RAM, exploiter la localité peut augmenter dramatiquement la performance d’un algorithme. De tels algorithmes optimisés tireront typiquement parti de la multiplication matricielle par blocs et des instructions SIMD, en plus du multithreading.
+
+\chapter{Programmation fonctionnelle}
+
+La programmation fonctionnelle désigne un paradigme de programmation qui met l’accent sur l’utilisation de fonctions et de données immuables pour créer des applications. Ce paradigme favorise l’écriture d’un code plus facile à raisonner, et qui permet une meilleure gestion de la concurrence.
+
+Bien que Java ne soit pas un langage purement fonctionnel comme Haskell, il offre de nombreuses fonctionnalités qui peuvent être utilisées pour écrire du code dans un style plus fonctionnel. La programmation fonctionnelle en Java encourage l’utilisation de fonctions pures qui n’ont pas d’effet de bord, c.-à-d. qui évitent de modifier l’état du programme. Java 8 a introduit des fonctionnalités pour supporter la programmation fonctionnelle, principalement via l’ajout d’interfaces fonctionnelles, d’expressions lambda et de l’API Stream.
+
+\section{Imbrication des classes}
+
+Pour commencer notre étude de la programmation fonctionnelle, nous allons d’abord revenir au concept des classes imbriquées qui a déjà été brièvement rencontré. Une classe imbriquée est simplement une classe qui est définie à l’intérieur d’une autre classe. Notez qu’une classe imbriquée peut aussi définir ses propres classes imbriquées, comme des poupées Matriochka.
+
+Considérons la tâche de créer une application de tableur. Un document de tableur est composé d’un certain nombre de lignes. Chaque ligne est constituée de plusieurs colonnes avec des valeurs de type chaîne de caractères. Une structure de données pour représenter une seule ligne peut être modélisée comme suit :
+
+\begin{lstlisting}[language=Java]
+import java.util.HashMap;
+import java.util.Map;
+
+class Row {
+    private Map<Integer, String> columns = new HashMap<>();
+
+    public void put(int column,
+                    String value) {
+        columns.put(column, value);
+    }
+
+    public String get(int column) {
+        return columns.getOrDefault(column, "" /* valeur par defaut si absente */);
+    }
+}
+\end{lstlisting}
+
+La classe \texttt{Row} utilise un tableau associatif qui associe des entiers (l’index des colonnes) à des chaînes (la valeur des colonnes). L’utilisation d’un tableau associatif permet de prendre en compte des colonnes avec une valeur manquante. La classe standard \texttt{HashMap<K,V>} est utilisée à cette fin : \url{https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html}
+
+Une application de tableur basique peut ensuite être créée au-dessus de cette classe \texttt{Row}. Définissons un document de tableur comme une liste ordonnée de lignes :
+
+\begin{lstlisting}[language=Java]
+import java.util.ArrayList;
+import java.util.List;
+
+public class Spreadsheet {
+    private List<Row> rows;
+    private int sortOnColumn;
+
+    public Spreadsheet() {
+        this.rows = new ArrayList<>();
+        this.sortOnColumn = 0;
+    }
+
+    public void add(Row row) {
+        rows.add(row);
+        sort();
+    }
+
+    public void setSortOnColumn(int sortOnColumn) {
+        this.sortOnColumn = sortOnColumn;
+        sort();
+    }
+
+    private void sort() {
+        // Nous implementerons ceci plus tard
+    }
+
+    static private void fillWithSongs(Spreadsheet spreadsheet) {
+        Row row = new Row();
+        row.put(0, "Pink Floyd");
+        row.put(1, "The Dark Side of the Moon");
+        row.put(2, "Money");
+        spreadsheet.add(row);
+
+        row = new Row();
+        row.put(0, "The Beatles");
+        row.put(1, "Abbey Road");
+        row.put(2, "Come Together");
+        spreadsheet.add(row);
+
+        row = new Row();
+        row.put(0, "Queen");
+        row.put(1, "A Night at the Opera");
+        row.put(2, "Bohemian Rhapsody");
+        spreadsheet.add(row);
+    }
+
+    static public void main(String[] args) {
+        Spreadsheet spreadsheet = new Spreadsheet();
+        fillWithSongs(spreadsheet);
+    }
+}
+\end{lstlisting}
+
+Cette application Java crée un tableur avec 3 lignes et 3 colonnes qui sont remplies avec des informations sur 3 chansons. Si exporté vers une application de tableur du monde réel comme LibreOffice Calc, il serait rendu comme suit :
+
+\subsection{Classes imbriquées statiques}
+
+Nous nous intéressons maintenant à la tâche de trier continuellement les lignes selon les valeurs présentes dans les colonnes, à mesure que de nouvelles lignes sont ajoutées au tableur en utilisant la méthode \texttt{addRow()}.
+
+À cette fin, la classe \texttt{Spreadsheet} contient la variable membre \texttt{sortOnColumn} qui spécifie sur quelle colonne le tri doit être appliqué. Ce paramètre peut être fixé en utilisant la méthode setter \texttt{setSortOnColumn()}. Nous savons déjà que la tâche de trier les lignes peut être résolue par délégation à un comparateur dédié :
+
+\begin{lstlisting}[language=Java]
+class RowComparator1 implements Comparator<Row> {
+    private int column;
+
+    RowComparator1(int column) {
+        this.column = column;
+    }
+
+    @Override
+    public int compare(Row a, Row b) {
+        return a.get(column).compareTo(b.get(column));
+    }
+}
+
+public class Spreadsheet {
+    private List<Row> rows;
+    private int sortOnColumn;
+    // ...
+
+    private void sort() {
+        Collections.sort(rows, new RowComparator1(sortOnColumn));
+    }
+}
+\end{lstlisting}
+
+La classe \texttt{RowComparator1} est appelée une classe externe parce qu’elle est située en dehors de la classe \texttt{Spreadsheet}. Ce n’est pas un problème parce que cet exemple de code est assez court. Mais dans du vrai code, il peut être important pour la lisibilité de rapprocher la classe du comparateur de la méthode qui l’utilise (dans ce cas, \texttt{sort()}). C’est pourquoi Java propose les classes imbriquées statiques. Cette construction permet de définir une classe au niveau membre d’une autre classe :
+
+\begin{lstlisting}[language=Java]
+public class Spreadsheet {
+    private List<Row> rows;
+    private int sortOnColumn;
+    // ...
+
+    private static class RowComparator2 implements Comparator<Row> {
+        private int column;
+
+        RowComparator2(int column) {
+            this.column = column;
+        }
+
+        @Override
+        public int compare(Row a, Row b) {
+            return a.get(column).compareTo(b.get(column));
+        }
+    }
+
+    private void sort() {
+        Collections.sort(rows, new RowComparator2(sortOnColumn));
+    }
+}
+\end{lstlisting}
+
+Dans ce code, \texttt{RowComparator2} est la classe imbriquée statique, et \texttt{Spreadsheet} est appelée sa classe externe. Notez que \texttt{RowComparator2} aurait pu être taguée avec une visibilité \texttt{public} pour la rendre accessible en dehors de \texttt{Spreadsheet}, dans le cas où le développeur estimait que trier des collections d’objets \texttt{Row} pouvait avoir du sens dans d’autres parties de l’application.
+
+Les classes imbriquées statiques sont une manière de regrouper logiquement des classes, d’améliorer l’organisation du code, et d’encapsuler des fonctionnalités au sein d’une classe plus large. Cela favorise une conception plus modulaire et structurée, d’une manière similaire aux packages, mais à une granularité plus fine. Notez qu’il est permis à deux classes différentes d’utiliser le même nom pour une classe imbriquée, ce qui peut éviter des collisions entre noms de classes dans de grandes applications.
+
+Fait important, les classes imbriquées statiques ont accès aux membres \texttt{private static} de la classe externe, ce qui n’était pas le cas de la classe externe \texttt{RowComparator1} : cela peut par exemple être utile pour tirer parti d’énumérations privées ou de constantes qui seraient définies à l’intérieur de la classe externe.
+
+\subsection{Classes internes}
+
+Le code précédent a toutefois une redondance : La valeur de \texttt{sortOnColumn} doit être copiée manuellement dans une variable \texttt{column} privée de \texttt{RowComparator2} afin qu’elle puisse être utilisée dans la méthode \texttt{compare()}. Peut-on faire mieux ? La réponse est « oui », grâce au concept des classes imbriquées non statiques, qui sont formellement connues sous le nom de classes internes. Java permet d’écrire :
+
+\begin{lstlisting}[language=Java]
+public class Spreadsheet {
+    private List<Row> rows;
+    private int sortOnColumn;
+    // ...
+
+    private class RowComparator3 implements Comparator<Row> {
+        @Override
+        public int compare(Row a, Row b) {
+            return a.get(column).compareTo(b.get(sortOnColumn));
+        }
+    }
+
+    private void sort() {
+        Collections.sort(rows, new RowComparator3());
+    }
+}
+\end{lstlisting}
+
+C’est beaucoup plus compact ! Dans ce code, \texttt{private static class} a simplement été remplacé par \texttt{private class}. Grâce à cette modification, \texttt{RowComparator3} devient une classe interne de la classe externe \texttt{Spreadsheet}, ce qui donne à sa méthode \texttt{compare()} un accès direct à la variable membre \texttt{sortOnColumn}.
+
+Les classes internes ressemblent beaucoup aux classes imbriquées statiques, mais elles n’ont pas le mot-clé \texttt{static}. Comme on peut le voir, les méthodes des classes internes peuvent non seulement accéder aux variables membres statiques de la classe externe, mais elles peuvent aussi accéder de manière transparente à n’importe quel membre de l’objet qui les a construites (variables et méthodes, y compris les membres privés).
+
+Notez que des classes internes avaient déjà été rencontrées dans ce cours lorsque l’implémentation d’itérateurs personnalisés a été discutée.
+
+Il est tentant d’utiliser systématiquement des classes internes au lieu de classes imbriquées statiques. Mais faites attention au fait que les classes internes induisent un couplage beaucoup plus étroit avec leurs classes externes, ce qui peut rendre difficile la refactorisation de l’application, et ce qui peut rapidement mener à la soi-disant « odeur de code » Feature Envy (c.-à-d. l’opposé d’un bon patron de conception). N’utilisez une classe interne que lorsque vous avez besoin d’accéder aux membres d’instance de la classe externe. Utilisez une classe imbriquée statique lorsqu’il n’y a pas besoin d’accès direct à l’instance de la classe externe ou lorsque vous voulez un espace de noms plus clair et une meilleure organisation du code.
+
+\subsection{Sucre syntaxique}
+
+Le fait que \texttt{compare()} ait accès à \texttt{sortOnColumn} peut sembler magique. C’est en réalité un exemple de sucre syntaxique. Le sucre syntaxique désigne des fonctionnalités ou des constructions de langage qui n’introduisent pas de nouvelle fonctionnalité mais fournissent une manière plus pratique ou plus expressive d’écrire du code. Ces fonctionnalités rendent le code plus lisible ou plus concis sans changer fondamentalement son fonctionnement. En essence, le sucre syntaxique est un raccourci ou une syntaxe plus conviviale pour exprimer quelque chose qui pourrait être écrit d’une manière plus longue ou plus explicite.
+
+Des constructions de sucre syntaxique avaient déjà été rencontrées dans ce cours. L’autoboxing est un tel sucre syntaxique. En effet, le code :
+
+\begin{lstlisting}[language=Java]
+Integer num = 42;  // Autoboxing (du type primitif vers le wrapper)
+int value = num;   // Auto-deboxing (du wrapper vers le type primitif)
+\end{lstlisting}
+
+est sémantiquement équivalent au code plus explicite :
+
+\begin{lstlisting}[language=Java]
+Integer num = Integer.valueOf(42);
+int value = num.intValue();
+\end{lstlisting}
+
+Grâce à sa connaissance des internes de la classe standard \texttt{java.lang.Integer}, le compilateur peut automatiquement « compléter les pointillés » en ajoutant le constructeur et en sélectionnant la bonne méthode de conversion. La boucle \texttt{for-each} améliorée pour les itérateurs est un autre exemple de sucre syntaxique, car écrire :
+
+\begin{lstlisting}[language=Java]
+List<Integer> a = new ArrayList<>();
+a.add(-1);
+a.add(10);
+a.add(42);
+
+for (Integer item: a) {
+    System.out.println(item);
+}
+\end{lstlisting}
+
+est sémantiquement équivalent à :
+
+\begin{lstlisting}[language=Java]
+Iterator<Integer> it = a.iterator();
+while (it.hasNext()) {
+    Integer item = it.next();
+    System.out.println(item);
+}
+\end{lstlisting}
+
+Une fois que le compilateur rencontre une boucle \texttt{for()} sur une collection qui implémente l’interface standard \texttt{Iterable<E>}, il peut instancier de manière transparente l’itérateur et parcourir la collection en utilisant cet itérateur.
+
+Dans le contexte des classes internes, le sucre syntaxique consiste à inclure une référence vers l’objet externe qui a créé l’instance de l’objet interne. Dans notre exemple, le compilateur transforme automatiquement la classe \texttt{RowComparator3} en la classe imbriquée statique suivante :
+
+\begin{lstlisting}[language=Java]
+public class Spreadsheet {
+    private List<Row> rows;
+    private int sortOnColumn;
+    // ...
+
+    private static class RowComparator4 implements Comparator<Row> {
+        private Spreadsheet outer;  // Reference vers l'objet externe
+
+        RowComparator4(Spreadsheet outer) {
+            this.outer = outer;
+        }
+
+        @Override
+        public int compare(Row a, Row b) {
+            return a.get(outer.sortOnColumn).compareTo(b.get(outer.sortOnColumn));
+        }
+    }
+
+    private void sort() {
+        Collections.sort(rows, new RowComparator4(this));
+    }
+}
+\end{lstlisting}
+
+Comme on peut le voir, le compilateur ajoute de manière transparente un nouvel argument au constructeur de la classe interne, qui contient la référence vers l’objet externe.
+
+\subsection{Classes internes locales}
+
+Jusqu’ici, nous avons vu trois constructions différentes pour définir des classes :
+\begin{itemize}
+\item Les classes externes sont la manière par défaut de définir des classes, c.-à-d. séparément de toute autre classe.
+\item Les classes imbriquées statiques sont des membres d’une classe externe. Elles ont accès aux membres statiques de la classe externe.
+\item Les classes internes sont des membres non statiques d’une classe externe. Elles sont connectées à l’objet qui les a créées via du sucre syntaxique.
+\end{itemize}
+
+Les classes internes sont très adaptées à l’application de tableur, mais la lisibilité du code pourrait encore être améliorée si la classe \texttt{RowComparator3} pouvait d’une certaine manière être déplacée à l’intérieur de la méthode \texttt{sort()}, parce que c’est vraisemblablement le seul endroit où ce comparateur aurait du sens dans l’application. Cela rendrait immédiatement apparente la relation un-à-un entre la méthode et son comparateur. C’est l’objectif des classes internes locales :
+
+\begin{lstlisting}[language=Java]
+private void sort() {
+    class RowComparator5 implements Comparator<Row> {
+        @Override
+        public int compare(Row a, Row b) {
+            return a.get(sortOnColumn).compareTo(b.get(sortOnColumn));
+        }
+    }
+    Collections.sort(rows, new RowComparator5());
+}
+\end{lstlisting}
+
+Dans cette nouvelle version de la méthode \texttt{sort()}, le comparateur a été défini dans la portée de la méthode. La classe \texttt{RowComparator5} est entièrement locale à \texttt{sort()}, et ne peut pas être utilisée dans une autre méthode ou une autre classe, ce qui réduit encore le couplage.
+
+\subsection{Classes internes anonymes}
+
+Parce que les classes internes locales sont typiquement utilisées à un seul endroit de la méthode, il n’est généralement pas utile de donner un nom aux classes internes locales (dans l’exemple précédent, ce nom était \texttt{RowComparator5}). En conséquence, Java propose la construction de classe interne anonyme :
+
+\begin{lstlisting}[language=Java]
+private void sort() {
+    Comparator<Row> comparator = new Comparator<Row>() {
+        @Override
+        public int compare(Row a, Row b) {
+            return a.get(sortOnColumn).compareTo(b.get(sortOnColumn));
+        }
+    };
+    Collections.sort(rows, comparator);
+}
+\end{lstlisting}
+
+Comme on peut le voir dans cet exemple, une classe interne anonyme est une classe qui est définie sans nom à l’intérieur d’une méthode et qui est instanciée au même endroit où elle est définie.
+
+Cette construction est souvent utilisée pour implémenter des interfaces ou étendre des classes à la volée. Pour rendre cela plus apparent, notez que nous aurions pu éviter l’introduction de la variable temporaire \texttt{comparator} en écrivant directement :
+
+\begin{lstlisting}[language=Java]
+private void sort() {
+    Collections.sort(rows, new Comparator<Row>() {
+        @Override
+        public int compare(Row a, Row b) {
+            return a.get(sortOnColumn).compareTo(b.get(sortOnColumn));
+        }
+    });
+}
+\end{lstlisting}
+
+Les classes internes anonymes correspondent aussi à une autre construction de sucre syntaxique, parce qu’une classe interne anonyme peut facilement être convertie en une classe interne locale en lui donnant un nom sans signification.
+
+\subsection{Accès aux variables de méthode}
+
+Fait important, à la fois les classes internes locales et les classes internes anonymes ont accès aux variables de leur méthode englobante.
+
+Pour illustrer ce point, considérons la tâche de remplir une matrice avec une valeur constante en utilisant plusieurs threads. Nous pourrions créer un thread qui remplit la partie supérieure de la matrice, et un autre thread qui remplit la partie inférieure de la matrice. En utilisant un pool de threads et la classe \texttt{SynchronizedMatrix} qui a été définie pour démontrer le multithreading, l’implémentation correspondante pourrait être :
+
+\begin{lstlisting}[language=Java]
+public static void fill1(ExecutorService threadPool,
+                         SynchronizedMatrix m,
+                         float value) throws ExecutionException, InterruptedException {
+
+    class Filler implements Runnable {
+        private int startRow;
+        private int endRow;
+
+        Filler(int startRow,
+               int endRow) {
+            this.startRow = startRow;
+            this.endRow = endRow;
+        }
+
+        @Override
+        public void run() {
+            for (int row = startRow; row < endRow; row++) {
+                for (int column = 0; column < m.getColumns(); column++) {
+                    // La classe interne a acces aux variables "m" et "value" !
+                    m.setValue(row, column, value);
+                }
+            }
+        }
+    }
+
+    Future upperPart = threadPool.submit(new Filler(0, m.getRows() / 2));
+    Future lowerPart = threadPool.submit(new Filler(m.getRows() / 2, m.getRows()));
+    upperPart.get();
+    lowerPart.get();
+}
+\end{lstlisting}
+
+Comme on peut le voir dans cet exemple, il n’est pas nécessaire pour la classe interne \texttt{Filler} de stocker explicitement une copie de \texttt{m} et de \texttt{value}. En effet, parce que ces deux variables font partie de la portée de la méthode \texttt{fill1()}, la méthode \texttt{run()} a un accès direct aux variables \texttt{m} et \texttt{value}. En réalité, c’est encore du sucre syntaxique : le compilateur donne automatiquement une copie de toutes les variables locales de la méthode englobante au constructeur de la classe interne.
+
+La méthode \texttt{fill1()} crée exactement deux threads, un pour chaque partie de la matrice. On pourrait vouloir tirer parti d’un plus grand nombre de cœurs CPU en réduisant cette granularité. Selon cette idée, voici une implémentation alternative qui introduit du parallélisme au niveau des lignes individuelles de la matrice :
+
+\begin{lstlisting}[language=Java]
+public static void fill2(ExecutorService threadPool,
+                         SynchronizedMatrix m,
+                         float value) throws ExecutionException, InterruptedException {
+    Stack<Future> pendingRows = new Stack<>();
+
+    for (int row = 0; row < m.getRows(); row++) {
+        final int myRow = row;
+        pendingRows.add(threadPool.submit(new Runnable() {
+            @Override
+            public void run() {
+                for (int column = 0; column < m.getColumns(); column++) {
+                    m.setValue(myRow, column, value);
+                }
+            }
+        }));
+    }
+
+    while (!pendingRows.isEmpty()) {
+        pendingRows.pop().get();
+    }
+}
+\end{lstlisting}
+
+Contrairement à \texttt{fill1()} qui utilisait une classe interne locale, la méthode \texttt{fill2()} utilise une classe interne anonyme, dont une instance est créée pour chaque ligne. Cette construction n’était pas possible dans la première implémentation, parce qu’il fallait suivre séparément exactement deux \texttt{Future} en utilisant deux variables, ce qui devait partager la définition de la classe interne entre les deux \texttt{Runnable} séparés. Cependant, dans la seconde implémentation, grâce au fait que les multiples \texttt{Future} sont suivis de manière uniforme en utilisant une pile, la définition de la classe interne peut apparaître à un seul endroit.
+
+Il y a toutefois un avertissement associé à \texttt{fill2()} : On pourrait s’attendre à avoir accès à la variable \texttt{row} à l’intérieur de la méthode \texttt{run()}, parce que \texttt{row} fait partie de la portée de la méthode englobante. Cependant, la classe interne pourrait continuer d’exister et d’être utilisée même après que la boucle a fini son exécution et que la variable \texttt{row} a disparu. Pour prévenir des problèmes potentiels résultant de changements de variables après le début de l’exécution d’une méthode, une classe interne n’est en réalité autorisée à accéder qu’aux variables \texttt{final} dans la portée de la méthode (ou aux variables qui auraient pu être taguées comme \texttt{final}). Rappelez-vous qu’une variable \texttt{final} signifie qu’il n’est pas permis de changer sa valeur plus tard.
+
+Dans l’exemple \texttt{fill2()}, \texttt{m} et \texttt{value} auraient pu être explicitement taguées comme \texttt{final}, parce que leur valeur ne change pas dans la méthode. Mais ajouter une ligne comme \texttt{value = 10;} à l’intérieur de la méthode casserait la compilation, parce que \texttt{value} ne pourrait plus être taguée comme \texttt{final}, ce qui empêcherait l’utilisation de \texttt{value} à l’intérieur du runnable. On pourrait argumenter que le contenu de \texttt{m} change à cause des appels à \texttt{m.setValue()}, cependant la référence vers l’objet \texttt{m} qui a été initialement fournie comme argument à la méthode ne change jamais. Enfin, la variable \texttt{row} ne peut pas être déclarée \texttt{final}, parce que sa valeur change pendant la boucle. Stocker une copie de \texttt{row} dans la variable \texttt{myRow} est une solution de contournement pour résoudre ce problème.
+
+\paragraph{Remarque}
+
+L’exemple de remplissage d’une matrice en utilisant le multithreading est un peu académique, parce que pour une telle opération, le goulot d’étranglement sera la RAM, pas le CPU. En conséquence, ajouter davantage de threads CPU n’améliorera probablement jamais les performances, et pourrait même être nuisible à cause du surcoût associé à la gestion des threads. De plus, notre classe \texttt{SynchronizedMatrix} implémente l’exclusion mutuelle pour l’accès aux cellules individuelles (c.-à-d. la méthode \texttt{setValue()} est taguée avec le mot-clé \texttt{synchronized}), ce qui réduira dramatiquement les performances.
+
+\section{Interfaces fonctionnelles et fonctions lambda}
+
+Depuis le début de notre exploration de la programmation orientée objet, un motif récurrent ne cesse d’apparaître :
+\begin{itemize}
+\item Lors de la délégation à des comparateurs d’objets :
+\begin{lstlisting}[language=Java]
+public class TitleComparator implements Comparator<Book> {
+    @Override
+    public int compare(Book b1, Book b2) {
+        return b1.getTitle().compareTo(b2.getTitle());
+    }
+}
+// ...
+Collections.sort(books, new TitleComparator());
+\end{lstlisting}
+
+\item À l’intérieur du Design Pattern Observer :
+\begin{lstlisting}[language=Java]
+class ButtonActionListener implements ActionListener {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        JOptionPane.showMessageDialog(null,"Merci !");
+    }
+}
+// ...
+button.addActionListener(new ButtonActionListener());
+\end{lstlisting}
+
+\item Pour spécifier des opérations à effectuer par des threads :
+\begin{lstlisting}[language=Java]
+class Computation implements Runnable {
+    @Override
+    public void run() {
+        expensiveComputation();
+    }
+}
+// ...
+Thread t = new Thread(new Computation());
+t.start();
+\end{lstlisting}
+\end{itemize}
+
+Ce motif récurrent correspond à des classes simples qui implémentent une seule méthode abstraite et qui n’ont aucun membre.
+
+La présence d’une seule méthode provient du fait que ces classes implémentent une seule interface fonctionnelle. En Java, une interface fonctionnelle est définie comme une interface qui contient une seule méthode abstraite. Les interfaces fonctionnelles sont aussi connues sous le nom d’interfaces Single Abstract Method (SAM). Les interfaces fonctionnelles sont un composant clé du support de programmation fonctionnelle introduit dans Java 8. Les interfaces \texttt{Comparator<T>}, \texttt{ActionListener}, \texttt{Runnable} et \texttt{Callable<T>} sont toutes des exemples d’interfaces fonctionnelles.
+
+\paragraph{Remarques avancées}
+
+Une interface fonctionnelle peut avoir plusieurs méthodes \texttt{default} ou méthodes \texttt{static} sans violer la règle d’avoir une seule méthode abstraite. Ce cours n’a pas couvert les méthodes \texttt{default}, mais il suffit de savoir qu’une méthode \texttt{default} fournit une implémentation par défaut au sein d’une interface que les classes implémentant l’interface peuvent choisir d’hériter ou de surcharger. Par exemple, l’interface \texttt{Comparator<T>} est livrée avec plusieurs méthodes \texttt{default} et \texttt{static}, comme on peut le voir dans la documentation Java : \url{https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html}
+
+Dans Java 8 et plus, l’annotation \texttt{@FunctionalInterface} aide à marquer explicitement une interface comme une interface fonctionnelle. Si une interface annotée avec \texttt{@FunctionalInterface} contient plus d’une méthode abstraite, le compilateur génère une erreur pour indiquer qu’elle ne répond pas aux critères d’une interface fonctionnelle. Néanmoins, faites attention au fait que toutes les interfaces fonctionnelles de Java ne sont pas annotées avec \texttt{@FunctionalInterface}. C’est notamment le cas de \texttt{ActionListener}.
+
+Une expression lambda est une expression qui crée une instance d’une classe interne anonyme qui n’a aucun membre et qui implémente une interface fonctionnelle. Grâce aux expressions lambda, la méthode \texttt{sort()} de notre application de tableur peut être raccourcie en une seule ligne de code :
+
+\begin{lstlisting}[language=Java]
+private void sort() {
+    Collections.sort(rows, (a, b) -> a.get(sortOnColumn).compareTo(b.get(sortOnColumn)));
+}
+\end{lstlisting}
+
+Comme on peut le voir dans cet exemple, une expression lambda ne spécifie que le nom des arguments et le corps de l’unique méthode abstraite de l’interface fonctionnelle qu’elle implémente.
+
+Une expression lambda ne peut apparaître que dans un contexte qui attend une valeur dont le type est une interface fonctionnelle. Une fois que le compilateur Java a déterminé quelle interface fonctionnelle est attendue pour ce contexte, il instancie de manière transparente une classe interne anonyme appropriée qui implémente l’interface fonctionnelle attendue avec la méthode unique attendue.
+
+Concrètement, dans l’exemple de \texttt{sort()}, le compilateur remarque la construction \texttt{Collections.sort(rows, lambda)}. Parce que \texttt{rows} a le type \texttt{List<Row>}, le compilateur cherche une méthode statique dans la classe \texttt{Collections} qui est nommée \texttt{sort()} et qui prend comme arguments une valeur de type \texttt{List<Row>} et une interface fonctionnelle. Comme on peut le voir dans la documentation Java, la seule méthode correspondante est \texttt{Collections.sort(List<T> list, Comparator<? super T> c)}, avec \texttt{T} correspondant à la classe \texttt{Row}. Le compilateur déduit que l’interface fonctionnelle d’intérêt est \texttt{Comparator<Row>}, et il instancie en conséquence une classe interne anonyme comme suit :
+
+\begin{lstlisting}[language=Java]
+private void sort() {
+    // "Comparator<Row>" est l'interface fonctionnelle qui correspond a l'expression lambda
+    Collections.sort(rows, new Comparator<Row>() {
+        @Override
+        // Le nom de l'unique methode abstraite et les types des arguments
+        // sont extraits de l'interface fonctionnelle. Le nom des arguments
+        // est pris dans l'expression lambda.
+        public int compare(Row a, Row b) {
+            // Ceci est le corps de l'expression lambda
+            return a.get(sortOnColumn).compareTo(b.get(sortOnColumn)));
+        }
+    }
+}
+\end{lstlisting}
+
+En d’autres termes, les expressions lambda sont aussi du sucre syntaxique ! Très important, les interfaces fonctionnelles fournissent un contrat clair pour la signature de la méthode que l’expression lambda correspondante doit implémenter, ce qui est nécessaire pour que ce sucre syntaxique fonctionne.
+
+Grâce aux expressions lambda, les trois exemples au début de cette section pourraient tous être simplifiés en one-liners :
+\begin{itemize}
+\item Lors de la délégation à des comparateurs d’objets :
+\begin{lstlisting}[language=Java]
+Collections.sort(books, (b1, b2) -> b1.getTitle().compareTo(b2.getTitle()));
+\end{lstlisting}
+
+\item À l’intérieur du Design Pattern Observer :
+\begin{lstlisting}[language=Java]
+button.addActionListener(() -> JOptionPane.showMessageDialog(null,"Merci !"));
+\end{lstlisting}
+
+\item Pour spécifier des opérations à effectuer par des threads :
+\begin{lstlisting}[language=Java]
+Thread t = new Thread(() -> expensiveComputation());
+\end{lstlisting}
+\end{itemize}
+
+La forme générale d’une expression lambda est :
+
+\begin{lstlisting}[language=Java]
+(A a, B b, C c /* ...eventuellement plus d'arguments */ ) -> {
+    /* Corps */
+    return /* resultat */;
+}
+\end{lstlisting}
+
+Cette forme générale peut être allégée dans différentes situations :
+\begin{itemize}
+\item Si le compilateur peut déduire les types des arguments, ce qui est le cas le plus fréquent, vous n’avez pas à fournir les types (par ex., \texttt{(A a, B b)} peut être réduit en \texttt{(a, b)}).
+\item Si l’expression lambda prend un seul argument, les parenthèses peuvent être supprimées (par ex., \texttt{a -> ...} est un synonyme de \texttt{(a) -> ...}). Notez qu’une expression lambda sans argument serait définie comme \texttt{() -> ...}.
+\item Si le corps de l’expression lambda ne contient que l’instruction \texttt{return}, les accolades et le \texttt{return} peuvent être supprimés.
+\item Si l’expression lambda retourne \texttt{void} et si son corps contient une seule ligne, les accolades peuvent également être supprimées, par exemple :
+\begin{lstlisting}[language=Java]
+i -> System.out.println(i)
+\end{lstlisting}
+\item Il arrive souvent que vous vouliez écrire une expression lambda qui appelle simplement une méthode et lui passe les arguments qu’elle a reçus. Dans de telles situations, Java offre la notion de référence de méthode. Par exemple, l’expression lambda suivante qui appelle une méthode statique :
+\begin{lstlisting}[language=Java]
+i -> System.out.println(i)
+\end{lstlisting}
+peut être raccourcie en :
+\begin{lstlisting}[language=Java]
+System.out::println
+\end{lstlisting}
+De même, l’expression lambda suivante qui appelle une méthode non statique sur une liste d’entiers :
+\begin{lstlisting}[language=Java]
+(List<Integer> a) -> a.size()
+\end{lstlisting}
+peut être réécrite comme :
+\begin{lstlisting}[language=Java]
+List<Integer>::size
+\end{lstlisting}
+\end{itemize}
+
+\section{Interfaces fonctionnelles généralistes}
+
+Les expressions lambda ne peuvent être utilisées que dans un contexte qui attend une valeur dont le type est une interface fonctionnelle. Il est donc utile d’avoir un certain nombre de telles interfaces disponibles, couvrant les principaux cas d’usage.
+
+Cela motive l’introduction du package standard \texttt{java.util.function} qui fournit des définitions généralistes pour :
+\begin{itemize}
+\item des fonctions unaires (avec un argument) et des fonctions binaires (avec deux arguments),
+\item des opérateurs unaires et binaires (fonctions dont le type de résultat est identique au type de l’argument), et
+\item des prédicats unaires et binaires (fonctions dont le type de résultat est \texttt{Boolean}).
+\end{itemize}
+
+Assurez-vous de jeter un coup d’œil à la documentation Java sur les fonctions généralistes : \url{https://docs.oracle.com/javase/8/docs/api/java/util/function/package-summary.html}
+
+\subsection{Fonctions unaires}
+
+L’interface \texttt{java.util.function.Function} représente une fonction généraliste avec un argument. Le type \texttt{T} de cet argument et le type de résultat \texttt{R} de la fonction sont les paramètres génériques de cette interface :
+
+\begin{lstlisting}[language=Java]
+public interface Function<T,R> {
+    public R apply(T t);
+}
+\end{lstlisting}
+
+Le type d’entrée \texttt{T} et le type de résultat \texttt{R} peuvent être différents. Ensemble, ils définissent le domaine de la fonction. En notation mathématique, la fonction correspondante $f$ serait définie comme $f : T \mapsto R$.
+
+Par exemple, le programme suivant utilise d’abord une expression lambda pour définir une fonction qui calcule la longueur d’une chaîne, puis applique la fonction à une chaîne :
+
+\begin{lstlisting}[language=Java]
+public static void main(String args[]) {
+    Function<String, Integer> f = s -> s.length();
+    // A ce stade, aucun calcul reel n'est fait : ceci n'est qu'une definition de "f" !
+    System.out.println(f.apply("Hello")); // Affiche : 5
+}
+\end{lstlisting}
+
+Comme autre exemple, voici une fonction qui extrait le premier caractère d’une chaîne en minuscules :
+
+\begin{lstlisting}[language=Java]
+Function<String, Character> f = s -> Character.toLowerCase(s.charAt(0));
+System.out.println(f.apply("Hello")); // Affiche : h
+\end{lstlisting}
+
+\subsection{Fonctions binaires}
+
+L’interface \texttt{java.util.function.BiFunction} représente une interface fonctionnelle généraliste avec deux arguments de types différents, et avec un type de résultat séparé :
+
+\begin{lstlisting}[language=Java]
+public interface BiFunction<T,U,R> {
+    public R apply(T t, U u);
+}
+\end{lstlisting}
+
+En notation mathématique, la fonction correspondante $f$ a pour domaine $f : T \times U \mapsto R$.
+
+Dans l’exemple suivant, une expression lambda est utilisée pour définir une fonction binaire qui retourne l’élément d’une liste à un index spécifique :
+
+\begin{lstlisting}[language=Java]
+BiFunction<List<Float>, Integer, Float> f = (lst, i) -> lst.get(i);
+List<Float> lst = Arrays.asList(10.0f, 20.0f, 30.0f, 40.0f);
+System.out.println(f.apply(lst, 1)); // Affiche : 20
+\end{lstlisting}
+
+\subsection{Opérateurs}
+
+Un opérateur est un cas particulier d’une interface fonctionnelle généraliste, dans lequel les arguments et le résultat sont tous du même type. Les opérateurs sont si courants que Java définit des interfaces spécifiques pour les opérateurs unaires et binaires :
+
+\begin{lstlisting}[language=Java]
+public interface UnaryOperator<T> {
+    public T apply(T x);
+}
+
+public interface BinaryOperator<T> {
+    public T apply(T x, T y);
+}
+\end{lstlisting}
+
+Le domaine mathématique d’un opérateur unaire $f$ est $f : T \mapsto T$, alors que le domaine d’un opérateur binaire $f$ est $f : T \times T \mapsto T$.
+
+À titre d’exemple, la fonction calculant le carré d’un nombre double est un opérateur unaire qui pourrait être défini comme :
+
+\begin{lstlisting}[language=Java]
+UnaryOperator<Double> f = x -> x * x;
+System.out.println(f.apply(5.0)); // Affiche : 25.0
+\end{lstlisting}
+
+De même, pour la valeur absolue :
+
+\begin{lstlisting}[language=Java]
+UnaryOperator<Double> f = x -> Math.abs(x);
+System.out.println(f.apply(-14.0)); // Affiche : 14.0
+System.out.println(f.apply(Math.PI)); // Affiche : 3.14159.
+\end{lstlisting}
+
+La fonction calculant la somme de deux entiers peut être définie comme :
+
+\begin{lstlisting}[language=Java]
+BinaryOperator<Integer> f = (x, y) -> x + y;
+System.out.println(f.apply(42, -5)); // Affiche : 37
+\end{lstlisting}
+
+\paragraph{Remarque}
+
+Si vous regardez la documentation Java, les opérateurs unaires et binaires sont en réalité définis comme :
+
+\begin{lstlisting}[language=Java]
+public interface UnaryOperator<T> extends Function<T,T> { }
+public interface BinaryOperator<T> extends BiFunction<T,T,T> { }
+\end{lstlisting}
+
+Cette construction implique qu’un \texttt{UnaryOperator} (resp. \texttt{BinaryOperator}) peut être utilisé comme substitut à une \texttt{Function} (resp. \texttt{BiFunction}). Cependant, la construction est plus impliquée, ce qui explique pourquoi nous avons préféré définir les opérateurs comme des interfaces séparées.
+
+\subsection{Composition}
+
+Dans le contexte des interfaces fonctionnelles généralistes en Java, la composition fait référence à la capacité de combiner plusieurs fonctions ou opérateurs pour créer des fonctions plus complexes. Cela implique de chaîner des fonctions pour effectuer une séquence d’opérations sur des données d’une manière concise et expressive.
+
+D’un point de vue mathématique, si nous avons une fonction $f : X \mapsto Y$ et une fonction $g : Y \mapsto Z$, leur composition est la fonction $g \circ f : X \mapsto Z : x \mapsto g(f(x))$. En d’autres termes, la fonction $g$ est appliquée au résultat de l’application de la fonction $f$ à $x$.
+
+En Java, l’interface \texttt{Function} contient la méthode \texttt{default} \texttt{compose()} qui peut être utilisée pour construire une nouvelle fonction qui représente sa composition avec une autre fonction. Grâce au fait que \texttt{UnaryOperator} est un cas particulier de \texttt{Function}, la composition est aussi compatible avec les opérateurs.
+
+Voici un exemple de composition :
+
+\begin{lstlisting}[language=Java]
+Function<Integer, Double> f = (i) -> Math.sqrt(i);
+UnaryOperator<Double> g = (d) -> d / 2.5;
+Function<Integer, Double> h = g.compose(f);
+System.out.println(h.apply(25)); // Affiche : 2.0, ce qui correspond a "sqrt(25) / 2.5"
+\end{lstlisting}
+
+Évidemment, la composition est aussi disponible pour les fonctions binaires et les opérateurs binaires.
+
+\subsection{Prédicats}
+
+Les prédicats sont un autre cas particulier d’une interface fonctionnelle généraliste. Ils correspondent à des fonctions dont le type de résultat est une valeur \texttt{Boolean}. Les prédicats unaires sont fréquemment utilisés pour filtrer une collection d’objets d’un type donné. L’interface fonctionnelle correspondante est définie comme suit :
+
+\begin{lstlisting}[language=Java]
+public interface Predicate<T> {
+    public boolean test(T x);
+}
+\end{lstlisting}
+
+Faites attention au fait que, tandis que l’unique méthode abstraite de \texttt{Function} est nommée \texttt{call()}, l’unique méthode abstraite de \texttt{Predicate} est nommée \texttt{test()}.
+
+Par exemple, un prédicat qui teste si une liste est vide pourrait être défini et utilisé comme suit :
+
+\begin{lstlisting}[language=Java]
+Predicate<List<Integer>> f = x -> x.isEmpty();
+System.out.println(f.test(Arrays.asList())); // Affiche : true
+System.out.println(f.test(Arrays.asList(10))); // Affiche : false
+System.out.println(f.test(Arrays.asList(10, 20))); // Affiche : false
+\end{lstlisting}
+
+Voici un autre exemple pour tester si un nombre est négatif :
+
+\begin{lstlisting}[language=Java]
+Predicate<Double> f = x -> x < 0;
+System.out.println(f.test(-10.0)); // Affiche : true
+System.out.println(f.test(10.0)); // Affiche : false
+\end{lstlisting}
+
+Notez qu’il existe une version binaire de l’interface fonctionnelle unaire \texttt{Predicate<T>}, connue sous le nom de \texttt{BiPredicate<T,U>}.
+
+De la même manière que les fonctions et les opérateurs peuvent être composés, les interfaces \texttt{Predicate} et \texttt{BiPredicate} contiennent des méthodes \texttt{default} qui peuvent être utilisées pour créer de nouveaux prédicats à partir de prédicats existants. Ces méthodes sont :
+\begin{itemize}
+\item \texttt{and()} pour définir la conjonction logique de deux prédicats (c.-à-d. $f \wedge g$),
+\item \texttt{or()} pour définir la disjonction logique de deux prédicats (c.-à-d. $f \vee g$), et
+\item \texttt{negate()} pour définir la négation logique d’un prédicat (c.-à-d. $\neg f$).
+\end{itemize}
+
+Ces opérations peuvent être utilisées comme suit :
+
+\begin{lstlisting}[language=Java]
+Predicate<Integer> p = x -> x >= 0;
+Predicate<Integer> q = x -> x <= 10;
+Predicate<Integer> r = p.and(q); // x >= 0 && x <= 10
+Predicate<Integer> s = p.or(q); // x >= 0 || x <= 10 <=> true
+Predicate<Integer> t = p.negate(); // x < 0
+
+System.out.println(r.test(-5));  // Affiche : false
+System.out.println(r.test(5));   // Affiche : true
+System.out.println(r.test(15));  // Affiche : false
+System.out.println(s.test(-5));  // Affiche : true
+System.out.println(s.test(5));   // Affiche : true
+System.out.println(s.test(15));  // Affiche : true
+System.out.println(t.test(-5));  // Affiche : true
+System.out.println(t.test(5));   // Affiche : false
+System.out.println(t.test(15));  // Affiche : false
+\end{lstlisting}
+
+\subsection{Consommateur}
+
+Enfin, un consommateur est une interface fonctionnelle généraliste dont le type de résultat est \texttt{void}, c.-à-d. qui ne produit aucune valeur. Elle est définie comme :
+
+\begin{lstlisting}[language=Java]
+public interface Consumer<T> {
+    public void accept(T x);
+}
+\end{lstlisting}
+
+Les consommateurs sont typiquement rencontrés comme le « bloc terminal » d’une chaîne de fonctions. Ils peuvent notamment être utilisés pour afficher le résultat d’une fonction, écrire ce résultat dans un fichier, ou stocker ce résultat dans une autre structure de données.
+
+Par exemple, le code suivant définit un consommateur pour afficher le résultat d’une fonction :
+
+\begin{lstlisting}[language=Java]
+Function<Integer, Integer> f = x -> 10 * x;
+Consumer<Integer> c = x -> System.out.println(x);
+c.accept(f.apply(5)); // Affiche : 50
+\end{lstlisting}
+
+\subsection{Fonctions d’ordre supérieur}
+
+En Java, les fonctions d’ordre supérieur sont des méthodes qui peuvent accepter d’autres fonctions comme arguments, renvoyer des fonctions comme résultats, ou les deux. Elles traitent les fonctions généralistes vues ci-dessus comme des citoyens de première classe, permettant à ces fonctions d’être manipulées, transmises et utilisées comme des données.
+
+La composition de deux fonctions est un exemple de fonction d’ordre supérieur : Elle prend deux \texttt{Function} en arguments, et génère une \texttt{Function} comme résultat. Nous avons déjà vu que Java fournit déjà un support intégré pour la composition de fonctions. Cependant, nous aurions pu implémenter la composition nous-mêmes grâce à l’expressivité des expressions lambda. En effet, le programme suivant aurait produit exactement le même résultat que la méthode standard \texttt{compose()} de la classe \texttt{Function} :
+
+\begin{lstlisting}[language=Java]
+public static <X,Y,Z> Function<X,Z> myCompose(Function<Y,Z> g,
+                                              Function<X,Y> f) {
+    return x -> g.apply(f.apply(x));
+}
+
+public static void main(String[] args) {
+    UnaryOperator<Double> f = (d) -> d / 2.5;
+    Function<Integer, Double> g = (i) -> Math.sqrt(i);
+    Function<Integer, Double> h = myCompose(f, g);
+    System.out.println(h.apply(25)); // Affiche : 2.0
+}
+\end{lstlisting}
+
+La composition est un exemple de fonction d’ordre supérieur qui produit de nouvelles fonctions. Les classes Java standard contiennent aussi des méthodes qui prennent des fonctions comme entrées. C’est notamment le cas des collections Java standard (en particulier les listes), qui incluent plusieurs méthodes prenant des opérateurs et des prédicats comme arguments, par exemple :
+\begin{itemize}
+\item \texttt{forEach(c)} applique un consommateur à tous les éléments de la collection (cela fait partie de l’interface \texttt{Iterable<E>}),
+\item \texttt{removeIf(p)} supprime tous les éléments de cette collection qui satisfont le prédicat donné (cela fait partie de l’interface \texttt{Collection<E>}), et
+\item \texttt{replaceAll(f)} remplace chaque élément de la collection par le résultat de l’application de l’opérateur à cet élément (c’est spécifique à l’interface \texttt{List<T>}).
+\end{itemize}
+
+Voici un exemple complet combinant ces trois méthodes :
+
+\begin{lstlisting}[language=Java]
+// Creer la liste d'entiers suivante : [ -3, -2, -1, 0, 1, 2, 3 ]
+List<Integer> lst = new ArrayList<>();
+for (int i = -3; i <= 3; i++) {
+    lst.add(i);
+}
+
+// Multiplier chaque entier par 10
+lst.replaceAll(x -> 10 * x); // => [ -30, -20, -10, 0, 10, 20, 30 ]
+
+// Enlever les entiers negatifs
+lst.removeIf(x -> x < 0); // => [ 0, 10, 20, 30 ]
+
+// Afficher chaque element de la liste
+lst.forEach(x -> System.out.println(x));
+\end{lstlisting}
+
+\section{Flux}
+
+En informatique, le terme «~flux~» (``stream'') désigne généralement une séquence d'éléments auxquels on accède l'un après l'autre, du premier au dernier.
+
+La «~programmation par flux~» en Java renvoie à l'utilisation de la \emph{Stream API}, qui a été introduite dans Java~8 au travers du paquetage \texttt{java.util.stream}. Les flux en Java fournissent une manière déclarative d'effectuer des calculs sur des séquences d'objets. Ils vous permettent d'exprimer des requêtes de traitement de données complexes de façon plus concise et plus efficace que l'itération traditionnelle à l'aide de boucles.
+
+Contrairement aux collections Java telles que \texttt{List}, \texttt{Set} ou \texttt{Map}, les flux ne sont pas une structure de données qui stocke des éléments dans la RAM de l'ordinateur. Ils sont une séquence d'éléments provenant d'une source de données. Cette source de données peut correspondre à une collection Java (avec des éléments en RAM), mais elle peut tout aussi bien correspondre à des objets lus progressivement depuis une base de données, depuis le système de fichiers, ou depuis une communication réseau, possiblement sans jamais être entièrement stockés dans la RAM de l'ordinateur.
+
+En programmation par flux, les calculs à appliquer aux objets individuels d'un flux sont déclarés sous la forme d'une chaîne d'opérations simples appelée un \emph{pipeline de flux}. Les expressions lambda sont en général utilisées pour exprimer ces opérations de manière concise. Un pipeline de flux peut être représenté comme suit~:
+
+\begin{figure}[h]
+\centering
+% (Schéma du pipeline de flux dans le document original)
+\end{figure}
+
+Dans cette figure~:
+\begin{enumerate}
+\item Un objet \texttt{Stream} est d'abord créé à partir d'une collection d'objets source de type \texttt{T} (les cercles).
+\item Zéro ou plusieurs opérations intermédiaires sont ensuite successivement appliquées aux objets individuels qui font partie de l'objet \texttt{Stream} d'entrée, ce qui génère un nouvel objet \texttt{Stream} de sortie. Ces opérations peuvent changer le contenu des objets d'entrée, peuvent créer de nouveaux objets (éventuellement d'un type différent), ou peuvent éliminer des objets.
+\item Enfin, une opération terminale est appliquée pour collecter les résultats du pipeline de flux. Dans la figure ci-dessus, l'opération terminale consiste à créer une collection de sortie d'objets de type \texttt{U} (les triangles), qui peut ou non être du même type que \texttt{T}. D'autres opérations terminales sont possibles, comme compter le nombre d'objets produits par le pipeline de flux.
+\end{enumerate}
+
+\subsection{Exemple~: des miles aux kilomètres}
+
+Pour illustrer les avantages de la programmation par flux, considérons la tâche consistant à convertir une liste de chaînes de caractères contenant des distances exprimées en miles, en une liste de chaînes de caractères contenant les distances exprimées en kilomètres, en ignorant les chaînes vides. Par exemple, la liste contenant~:
+\begin{verbatim}
+[ "15", "", "", "3.5", "" ]
+\end{verbatim}
+doit être convertie en la liste (par définition, 1~mile vaut 1609{,}344~mètres)~:
+\begin{verbatim}
+[ "24.14016", "5.6327043" ]
+\end{verbatim}
+
+En utilisant les classes et méthodes Java pour la programmation par flux, cette conversion peut être traduite très directement en un programme Java~:
+
+\begin{lstlisting}[language=Java]
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class Miles {
+  static public void main(String args[]) {
+    List<String> miles = List.of("15", "", "", "3.5", "");
+    List<String> kilometers = miles.stream()
+      .filter(s -> !s.isEmpty())           // Ignorer les chaînes vides
+      .map(s -> Float.parseFloat(s))       // De chaîne vers float
+      .map(x -> x * 1609.344f)             // De miles vers mètres
+      .map(x -> x / 1000.0f)               // De mètres vers kilomètres
+      .map(x -> String.valueOf(x))         // De float vers chaîne
+      .collect(Collectors.toList());       // Construire la liste
+  }
+}
+\end{lstlisting}
+
+Ce code source définit un pipeline de flux qui fonctionne comme suit~:
+\begin{enumerate}
+\item Obtenir un flux à partir de la liste d'entrée de chaînes de caractères en appelant \texttt{miles.stream()}.
+\item Filtrer le flux d'entrée en supprimant les chaînes vides.
+\item Analyser les chaînes en nombres à virgule flottante qui contiennent les miles.
+\item Convertir les miles en mètres, puis convertir les mètres en kilomètres.
+\item Encoder les nombres à virgule flottante qui contiennent les kilomètres en chaînes de caractères.
+\item Collecter toutes les chaînes de sortie dans une liste. C'est l'opération terminale.
+\end{enumerate}
+
+Comme on peut le voir, cette syntaxe est très compacte et intuitive car elle adopte une approche déclarative. Les opérations intermédiaires sont exprimées en programmation de style fonctionnel grâce aux interfaces fonctionnelles généralistes implémentées avec des expressions lambda. Les opérations intermédiaires sont ensuite chaînées en utilisant la sortie d'une opération comme entrée de la suivante.
+
+Fait important, les opérations intermédiaires n'ont pas le droit de modifier les données sur lesquelles elles opèrent~: chaque opération intermédiaire crée un nouveau flux, sans modifier son propre flux d'entrée. C'est totalement différent des méthodes \texttt{removeIf()} et \texttt{replaceAll()} des fonctions d'ordre supérieur des collections Java, car ces dernières méthodes modifient effectivement leur source de données (c.-à-d. la collection). Autrement dit, les pipelines de flux n'ont pas d'effets de bord et ne modifient pas leurs sources de données associées, tant que les opérations intermédiaires ne modifient pas l'état du programme (ce qui est l'hypothèse principale de la programmation fonctionnelle).
+
+Les pipelines de flux sont aussi paresseux (\emph{lazy}), ce qui signifie que les opérations intermédiaires ne sont pas évaluées tant qu'une opération terminale n'est pas rencontrée. Dans le code ci-dessus, rien n'est calculé tant que la méthode \texttt{collect()} n'est pas appelée. Cette paresse permet une optimisation potentielle en ne traitant que les éléments nécessaires (ce qui est par exemple utile si la source de données correspond à un gros fichier), et en ouvrant la voie à l'exploitation de plusieurs threads pour traiter séparément des éléments successifs dans un flux.
+
+\subsection{Flux Java}
+
+La programmation par flux en Java est construite au-dessus de l'interface générique suivante~:
+
+\begin{lstlisting}[language=Java]
+package java.util.stream;
+
+public interface Stream<T> {
+  // Methodes membres
+}
+\end{lstlisting}
+
+Cette interface représente un flux d'éléments de type \texttt{T}. Dans notre exemple précédent, les flux de valeurs de chaînes sont de type \texttt{Stream<String>}, alors que les flux de valeurs à virgule flottante sont de type \texttt{Stream<Float>}. Nous aurions pu rendre ceci plus explicite en scindant la chaîne d'opérations intermédiaires en flux distincts, ce qui aurait conduit au code équivalent (mais moins élégant)~:
+
+\begin{lstlisting}[language=Java]
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+public class Miles {
+  static public void main(String args[]) {
+    List<String> miles = List.of("15", "", "3.5", "");
+    Stream<String> s1 = miles.stream();
+    Stream<String> s2 = s1.filter(l -> !l.isEmpty());
+    Stream<Float>  s3 = s2.map(Float::parseFloat);
+    Stream<Float>  s4 = s3.map(f -> f * 1609.344f);
+    Stream<Float>  s5 = s4.map(f -> f / 1000.0f);
+    Stream<String> s6 = s5.map(String::valueOf);
+    List<String> kilometers = s6.collect(Collectors.toList());
+  }
+}
+\end{lstlisting}
+
+Les méthodes qui opèrent sur les flux appartiennent exactement à l'une des trois catégories suivantes~:
+\begin{itemize}
+\item Les méthodes \emph{source}, qui produisent un flux d'éléments à partir d'une source (comme une collection, un fichier, une base de données, \ldots),
+\item Les méthodes \emph{intermédiaires}, qui transforment les éléments d'un flux d'entrée pour produire un nouveau flux, et
+\item Les méthodes \emph{terminales}, qui consomment les éléments du flux (par exemple, pour les afficher à l'écran, les écrire dans un fichier, les stocker dans une collection Java, ou en extraire une valeur unique).
+\end{itemize}
+
+Dans la conversion miles-vers-kilomètres, la méthode \texttt{stream()} est la méthode source, les méthodes \texttt{filter()} et \texttt{map()} sont les méthodes intermédiaires, et la méthode \texttt{collect()} est la méthode terminale. Ensemble, ces méthodes définissent le pipeline de flux.
+
+Notez que les flux ne sont pas immuables, au sens où lorsque les éléments d'un flux sont consommés par une méthode terminale, ils disparaissent et le flux est alors vide. À cet égard, les flux sont similaires aux itérateurs, qui sont eux aussi modifiés à mesure qu'ils sont parcourus.
+
+\paragraph{Remarque importante}
+Notez que vous ne pouvez parcourir qu'une seule fois un même pipeline de flux. Une fois qu'un élément a été consommé, il n'est plus possible d'accéder au même élément à nouveau. Par exemple, ce code ne fonctionnera pas~:
+
+\begin{lstlisting}[language=Java]
+Stream<Integer> stream = List.of(1, 2, 3, 4, 5).stream();
+List<Integer> a = stream.collect(Collectors.toList()); // OK
+List<Integer> b = stream.collect(Collectors.toList()); // => java.lang.IllegalStateException: stream has already been operated upon or closed
+\end{lstlisting}
+
+Les principales méthodes source, intermédiaires et terminales pour la programmation par flux dans la bibliothèque standard Java sont maintenant passées en revue. Évidemment, cette liste n'est en aucun cas exhaustive. La liste complète des fonctionnalités offertes par \texttt{Stream<T>} est disponible dans la documentation Java en ligne~: \url{https://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html}
+
+\subsection{Méthodes sources}
+
+Comme déjà montré dans l'exemple miles-vers-kilomètres, les flux sont fréquemment créés à partir de l'une des collections Java standard (comme \texttt{List} ou \texttt{Set}). Cela vient du fait que l'interface \texttt{Collection<E>} contient la méthode suivante~:
+
+\begin{lstlisting}[language=Java]
+public interface Collection<E> {
+  // Autres membres
+  default Stream<E> stream();
+}
+\end{lstlisting}
+
+Cette méthode source fournit un pont entre le monde des collections Java et le monde des flux Java. Comme indiqué précédemment, le flux résultant utilise la collection comme source de données, mais ne modifie jamais cette source de données.
+
+Il est aussi possible de créer directement un flux sans utiliser une collection. Par exemple, la méthode statique \texttt{Stream<T> empty()} crée un flux vide~:
+
+\begin{lstlisting}[language=Java]
+Stream<String> s = Stream.empty();
+\end{lstlisting}
+
+Un flux contenant une liste prédéfinie de valeurs peut être construit en utilisant la méthode statique \texttt{Stream<T> of(T... values)}. Par exemple, voici comment définir un flux contenant les voyelles en français~:
+
+\begin{lstlisting}[language=Java]
+Stream<Character> vowels = Stream.of('a', 'e', 'i', 'o', 'u', 'y');
+\end{lstlisting}
+
+Notez que le type \texttt{T} de la méthode \texttt{of()} peut être une classe personnalisée. Par exemple, le code suivant est parfaitement valide et crée un flux d'objets complexes dont la classe est \texttt{Account}~:
+
+\begin{lstlisting}[language=Java]
+class Account {
+  private String name;
+  private int value;
+
+  public Account(String name, int value) {
+    this.name = name;
+    this.value = value;
+  }
+
+  public Account(int value) {
+    this.name = "";
+    this.value = value;
+  }
+
+  public String getName() { return name; }
+  public int getValue() { return value; }
+}
+
+Stream<Account> accounts = Stream.of(new Account(100), new Account(200));
+\end{lstlisting}
+
+Les flux peuvent aussi être construits à partir de tableaux en utilisant la méthode statique \texttt{Arrays.stream()}. Par exemple~:
+
+\begin{lstlisting}[language=Java]
+Float[] a = new Float[] { 1.0f, 2.0f, 3.0f };
+Stream<Float> b = Arrays.stream(a);
+\end{lstlisting}
+
+En ce qui concerne les fichiers, la méthode \texttt{lines()} de la classe standard \texttt{BufferedReader} renvoie un flux qui parcourt les lignes d'un lecteur Java. Cela permet notamment de créer un flux qui lit les lignes d'un fichier~:
+
+\begin{lstlisting}[language=Java]
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.stream.Stream;
+
+public class FileToStream {
+  static public void main(String args[]) throws IOException {
+    try (FileReader file = new FileReader("somefile.txt")) {
+      BufferedReader reader = new BufferedReader(file);
+      Stream<String> lines = reader.lines();
+    }
+  }
+}
+\end{lstlisting}
+
+Enfin, parce que les flux sont paresseux, il est possible de définir des flux qui s'étendent sur un nombre infini d'éléments. Évidemment, une séquence infinie ne peut pas être entièrement calculée avant d'être accédée. L'astuce consiste à fournir un élément graine à partir duquel la séquence commence, ainsi qu'un opérateur unaire qui met continuellement à jour l'élément graine pour générer l'élément suivant dans la séquence. La méthode statique \texttt{iterate()} de l'interface \texttt{Stream<T>} est introduite à cette fin~:
+
+\begin{lstlisting}[language=Java]
+static <T> Stream<T> iterate(T seed, UnaryOperator<T> f);
+\end{lstlisting}
+
+Le flux créé par \texttt{iterate()} produira successivement les éléments \texttt{seed}, \texttt{f(seed)}, \texttt{f(f(seed))}, \texttt{f(f(f(seed)))}, \ldots\ Ces éléments successifs ne sont calculés qu'à la demande, c.-à-d. lorsque le flux suivant dans le pipeline de flux doit lire un nouvel élément depuis son flux d'entrée. Par exemple, voici comment définir le flux infini des nombres pairs positifs~:
+
+\begin{lstlisting}[language=Java]
+Stream<Integer> evenNumbers = Stream.iterate(0, x -> x + 2);
+\end{lstlisting}
+
+Des flux infinis peuvent aussi être créés en utilisant la méthode statique \texttt{generate()} de l'interface \texttt{Stream<T>}~:
+
+\begin{lstlisting}[language=Java]
+public interface Supplier<T> {
+  public T get();
+}
+
+static <T> Stream<T> generate(Supplier<T> s);
+\end{lstlisting}
+
+La méthode de fabrique \texttt{generate()} est plus générique que la méthode de fabrique \texttt{iterate()}, au sens où \texttt{generate()} permet de gérer un contexte plus riche qu'un simple élément graine en utilisant les membres de la classe implémentant l'interface \texttt{Supplier<T>}. Notez que l'interface fonctionnelle \texttt{Supplier<T>} ressemble beaucoup à \texttt{Callable<T>}, sauf que sa méthode abstraite unique s'appelle \texttt{get()} au lieu de \texttt{call()}. L'exemple ci-dessous illustre comment créer un fournisseur qui génère une séquence d'entiers, en partant d'une valeur graine et en ajoutant successivement une valeur delta, et comment l'utiliser pour générer la séquence des entiers impairs négatifs~:
+
+\begin{lstlisting}[language=Java]
+class IntegerSequenceSupplier implements Supplier<Integer> {
+  private int value;
+  private int delta;
+
+  IntegerSequenceSupplier(int seed, int delta) {
+    this.value = seed;
+    this.delta = delta;
+  }
+
+  @Override
+  public Integer get() {
+    int current = value;
+    value = value + delta;
+    return current;
+  }
+}
+
+Stream<Integer> oddNumbers = Stream.generate(new IntegerSequenceSupplier(-1, -2));
+\end{lstlisting}
+
+Évidemment, le même flux aurait pu être généré ainsi~:
+
+\begin{lstlisting}[language=Java]
+Stream.iterate(-1, x -> x - 2);
+\end{lstlisting}
+
+\subsection{Méthodes intermédiaires}
+
+Une fois qu'une instance de \texttt{Stream<T>} est créée à l'aide de l'une des méthodes sources, diverses opérations intermédiaires peuvent lui être appliquées.
+
+\paragraph{Map}
+La méthode \texttt{map(Function<T,R> f)} est particulièrement importante et très fréquemment utilisée, car elle vous permet de transformer les éléments d'un flux pour en obtenir un nouveau. La méthode \texttt{map()} est une fonction d'ordre supérieur qui prend comme argument une fonction unaire \texttt{f} qui est généralement exprimée comme une expression lambda. Cette fonction unaire \texttt{f} est appliquée aux éléments du flux, ce qui conduit à la création d'un flux de sortie. À titre d'exemple, voici comment incrémenter chaque valeur dans un flux d'entiers~:
+
+\begin{lstlisting}[language=Java]
+Stream<Integer> stream = Stream.of(10, 20, 30, 40, 50);
+Stream<Integer> incremented = stream.map(i -> i + 1); // => [11, 21, 31, 41, 51]
+\end{lstlisting}
+
+C'est un exemple qui utilise un opérateur unaire, car les deux flux partagent le même type de données (c.-à-d. \texttt{Integer}). Mais la méthode \texttt{map()} accepte aussi des fonctions générales qui changent le type des éléments du flux d'entrée. À titre d'exemple, le code suivant crée un flux qui fournit le nombre de caractères dans chaque élément d'un flux de chaînes~:
+
+\begin{lstlisting}[language=Java]
+Stream<String> stream = Stream.of("Bonjour", "Hello");
+Stream<Integer> lengths = stream.map(s -> s.length()); // Cette fonction unaire va de String vers Integer
+// Notez que nous aurions pu écrire : stream.map(String::length);
+\end{lstlisting}
+
+La méthode \texttt{map()} supporte évidemment les classes définies par l'utilisateur. Par exemple, il est possible d'extraire les valeurs d'un flux d'objets \texttt{Account} (comme introduit dans la section précédente) sous forme d'un flux d'entiers~:
+
+\begin{lstlisting}[language=Java]
+Stream<Account> accounts = Stream.of(new Account(100), new Account(200));
+Stream<Integer> values = accounts.map(i -> i.getValue()); // => [100, 200]
+// Notez que nous aurions pu écrire : accounts.map(Account::getValue);
+\end{lstlisting}
+
+Fait intéressant, la méthode \texttt{map()} peut aussi être utilisée pour créer des objets en appelant leur constructeur sur les éléments du flux d'entrée. Par exemple~:
+
+\begin{lstlisting}[language=Java]
+Stream<Integer> values = Stream.of(100, 300, 600);
+Stream<Account> accounts = values.map(x -> new Account(x));
+// Notez que nous aurions pu écrire : values.map(Account::new);
+\end{lstlisting}
+
+\paragraph{Filter}
+Une autre méthode significative sur les flux est \texttt{filter(Predicate<T> p)}. Cette méthode est une fonction d'ordre supérieur qui prend comme argument un prédicat unaire \texttt{p}, et qui crée un nouveau flux ne contenant que les objets du flux d'entrée qui vérifient le prédicat. À titre d'exemple, voici comment filtrer un flux d'entiers pour ne garder que les valeurs qui sont des multiples entiers de~4~:
+
+\begin{lstlisting}[language=Java]
+Stream<Integer> stream = Stream.of(10, 20, 30, 40, 50);
+Stream<Integer> filtered = stream.filter(i -> i % 4 == 0); // [20, 40]
+\end{lstlisting}
+
+\paragraph{Autres méthodes intermédiaires}
+Les méthodes \texttt{map()} et \texttt{filter()} sont des fonctions d'ordre supérieur extrêmement importantes qui existent aussi en Python pour manipuler des listes. En plus de \texttt{map()} et \texttt{filter()}, mettons aussi en évidence l'existence des méthodes intermédiaires suivantes~:
+\begin{itemize}
+\item \texttt{sorted()} renvoie un flux contenant les mêmes éléments que celui auquel elle est appliquée, mais triés en ordre naturel croissant~:
+\begin{lstlisting}[language=Java]
+Stream<Integer> stream = Stream.of(20, 10, 50, 40, 30);
+Stream<Integer> sorted = stream.sorted(); // => [10, 20, 30, 40, 50]
+\end{lstlisting}
+
+\item \texttt{sorted(Comparator<T> c)} renvoie un flux contenant les mêmes éléments que celui auquel elle est appliquée, mais triés en délégant à un comparateur~:
+\begin{lstlisting}[language=Java]
+Stream<Account> accounts = Stream.of(new Account(500), new Account(100), new Account(800), new Account(200));
+Stream<Account> sorted = accounts.sorted((a, b) -> a.getValue() - b.getValue());
+// => [ Account(100), Account(200), Account(500), Account(800) ]
+\end{lstlisting}
+
+\item \texttt{skip(long n)} ignore les ``n'' premiers éléments du flux d'entrée, et renvoie le flux des éléments restants~:
+\begin{lstlisting}[language=Java]
+Stream<Integer> stream = Stream.of(10, 20, 30, 40, 50);
+Stream<Integer> skipped = stream.skip(3); // => [40, 50]
+\end{lstlisting}
+
+\item \texttt{limit(long l)} renvoie un flux contenant les mêmes éléments que le flux auquel elle est appliquée, mais tronqué pour avoir au plus ``l'' éléments~:
+\begin{lstlisting}[language=Java]
+Stream<Integer> stream = Stream.of(10, 20, 30, 40, 50);
+Stream<Integer> limited = stream.limit(2); // => [10, 20]
+\end{lstlisting}
+\end{itemize}
+
+La méthode \texttt{limit()} peut notamment être utilisée pour tronquer des flux infinis en un flux fini.
+
+\subsection{Méthodes terminales}
+
+Dans un pipeline de flux, la dernière opération est généralement une opération qui renvoie un certain résultat qui n'est pas un flux~: cette dernière opération extrait les données hors du flux. Il est possible de distinguer trois cas différents~:
+\begin{itemize}
+\item Les pipelines de flux dont la méthode terminale fait quelque chose avec chaque élément individuel du flux (méthodes \emph{consommatrices}),
+\item Les pipelines de flux dont la méthode terminale crée une structure de données Java pour stocker les éléments du flux (méthodes \emph{collectrices}), et
+\item Les pipelines de flux dont la méthode terminale extrait une valeur unique depuis le flux (méthodes de \emph{réduction}).
+\end{itemize}
+
+\paragraph{Méthodes consommatrices}
+La méthode terminale \texttt{forEach()} de l'interface \texttt{Stream<T>} est une fonction d'ordre supérieur qui prend en entrée une fonction consommatrice \texttt{c}. Cette méthode applique la fonction \texttt{c} à tous les éléments du flux. C'est similaire à la méthode intermédiaire \texttt{map()}, mais comme les consommateurs ne produisent pas de valeur de sortie, l'opération \texttt{forEach()} ne produit aucun résultat.
+
+Des usages typiques de \texttt{forEach()} incluent l'affichage du contenu du flux, l'écriture dans un fichier, l'envoi sur une connexion réseau, ou l'enregistrement dans une base de données. Un motif très courant consiste à appeler la méthode standard \texttt{System.out.println()} sur chaque élément du flux~:
+
+\begin{lstlisting}[language=Java]
+Stream<String> stream = Stream.of("Hello", "World");
+stream.forEach(s -> System.out.println(s));
+\end{lstlisting}
+
+En vertu de la construction par référence de méthode, le code ci-dessus est souvent raccourci ainsi~:
+
+\begin{lstlisting}[language=Java]
+Stream<String> stream = Stream.of("Hello", "World");
+stream.forEach(System.out::println);
+\end{lstlisting}
+
+\paragraph{Méthodes collectrices}
+Une autre possibilité pour une méthode terminale consiste à collecter les éléments du flux dans une structure de données Java. C'est le rôle de la méthode \texttt{collect()} disponible dans l'interface \texttt{Stream<T>}, et qui prend comme argument un objet qui implémente l'interface \texttt{Collector}.
+
+L'interface \texttt{Collector} représente une construction très générique qui est assez complexe à maîtriser. Heureusement, Java propose un ensemble d'implémentations concrètes prédéfinies de l'interface \texttt{Collector} qui peuvent être instanciées directement via les méthodes statiques de la classe \texttt{java.util.stream.Collectors}~: \url{https://docs.oracle.com/javase/8/docs/api/java/util/stream/Collectors.html}
+
+Dans ce qui suit, le type de retour des méthodes statiques de \texttt{Collectors} n'est jamais montré, car il tend à être compliqué et le comprendre n'est pas nécessaire pour utiliser les collecteurs prédéfinis. En pratique, le résultat des méthodes statiques est toujours passé directement à la méthode \texttt{collect()} d'un flux.
+
+Voici quelques-uns des collecteurs prédéfinis les plus utiles pour créer des conteneurs Java à partir de flux~:
+\begin{itemize}
+\item \texttt{Collectors.toList()} renvoie un collecteur qui stocke les éléments du flux dans une liste. Si le flux est de type \texttt{Stream<T>}, la liste de sortie sera de type \texttt{List<T>}. Par exemple~:
+\begin{lstlisting}[language=Java]
+Stream<Integer> stream = Stream.of(10, 20, 30);
+List<Integer> lst = stream.collect(Collectors.toList()); // => List: [10, 20, 30]
+\end{lstlisting}
+
+\item \texttt{Collectors.toSet()} renvoie un collecteur qui stocke les éléments du flux dans un ensemble. Si le flux est de type \texttt{Stream<T>}, l'ensemble de sortie sera de type \texttt{Set<T>}. Par exemple~:
+\begin{lstlisting}[language=Java]
+Stream<Integer> stream = Stream.of(10, 20, 20, 10);
+Set<Integer> lst = stream.collect(Collectors.toSet()); // => Set: {10, 20}
+\end{lstlisting}
+
+\item \texttt{Collectors.toMap(Function<T,K> keyMapper, Function<T,U> valueMapper)} renvoie un collecteur qui stocke les éléments du flux dans un tableau associatif (c.-à-d. un dictionnaire). La fonction \texttt{keyMapper} est utilisée pour générer la clé correspondant à chaque élément du flux, et la fonction \texttt{valueMapper} est utilisée pour générer la valeur correspondante. Si le flux est de type \texttt{Stream<T>}, le tableau associatif de sortie sera de type \texttt{Map<K,V>}. Par exemple~:
+\begin{lstlisting}[language=Java]
+Stream<Account> accounts = Stream.of(new Account("Dupont", 100),
+                                     new Account("Dupond", 200));
+Map<String, Integer> nameToValue =
+  accounts.collect(Collectors.toMap(x -> x.getName(),
+                                    x -> x.getValue()));
+// Le tableau associatif contiendra : { "Dupont" : 100, "Dupond" : 200 }
+\end{lstlisting}
+\end{itemize}
+
+Si le flux est de type \texttt{Stream<String>}, les collecteurs prédéfinis suivants peuvent être utilisés pour combiner les chaînes successives du flux~:
+\begin{itemize}
+\item \texttt{Collectors.joining()} renvoie un collecteur qui concatène les chaînes individuelles d'un flux de chaînes. Par exemple~:
+\begin{lstlisting}[language=Java]
+Stream<String> stream = Stream.of("one", "two", "three");
+String joined = stream.collect(Collectors.joining());
+System.out.println(joined); // Affiche : onetwothree
+\end{lstlisting}
+
+\item \texttt{Collectors.joining(String delimiter)} fonctionne de manière similaire à \texttt{Collectors.joining()}, mais ajoute le délimiteur entre chaque chaîne individuelle~:
+\begin{lstlisting}[language=Java]
+Stream<String> stream = Stream.of("one", "two", "three");
+String joined = stream.collect(Collectors.joining(", "));
+System.out.println(joined); // Affiche : one, two, three
+\end{lstlisting}
+
+\item \texttt{Collectors.joining(String delimiter, String prefix, String suffix)} fonctionne de manière similaire à \texttt{Collectors.joining(delimiter)}, mais ajoute aussi un préfixe et un suffixe~:
+\begin{lstlisting}[language=Java]
+Stream<String> stream = Stream.of("one", "two", "three");
+String joined = stream.collect(Collectors.joining(", ", "{ ", " }"));
+System.out.println(joined); // Affiche : {one, two, three}
+\end{lstlisting}
+\end{itemize}
+
+Enfin, notez que l'interface \texttt{Stream<T>} contient aussi la méthode collectrice \texttt{toArray()}. Cette méthode crée un tableau d'\texttt{Object} à partir d'un flux~:
+
+\begin{lstlisting}[language=Java]
+Stream<Integer> stream = Stream.of(100, 200);
+Object[] a = stream.toArray();
+System.out.println((Integer) a[0]); // Affiche : 100
+System.out.println((Integer) a[1]); // Affiche : 200
+\end{lstlisting}
+
+L'inconvénient de \texttt{toArray()} est que le type générique \texttt{T} est perdu et remplacé par le type \texttt{Object}, c.-à-d. la racine de la hiérarchie de classes. Cela ouvre un énorme risque de mauvais transtypages. Il est donc généralement préférable d'utiliser les collecteurs prédéfinis plutôt que \texttt{toArray()}.
+
+\paragraph{Méthodes de réduction}
+Comme expliqué ci-dessus, les méthodes consommatrices appliquent une opération à chaque élément d'un flux, tandis que les méthodes collectrices créent une nouvelle structure de données Java qui combine tous les éléments d'un flux. Cela contraste avec les méthodes de réduction, qui produisent une valeur unique à partir de l'ensemble du flux.
+
+La méthode de réduction la plus simple consiste à compter le nombre d'éléments dans le flux. La méthode \texttt{count()} peut être utilisée à cette fin~:
+
+\begin{lstlisting}[language=Java]
+Stream<String> stream = Stream.of("one", "two", "three");
+System.out.println(stream.count()); // Affiche : 3
+\end{lstlisting}
+
+Des méthodes de réduction existent aussi pour tester dans quelle mesure les éléments d'un flux satisfont une condition logique commune exprimée comme un prédicat~:
+\begin{itemize}
+\item \texttt{allMatch(Predicate<T> p)} renvoie \texttt{true} si et seulement si tous les éléments individuels d'un \texttt{Stream<T>} satisfont le prédicat \texttt{p}.
+\item \texttt{anyMatch(Predicate<T> p)} renvoie \texttt{true} si et seulement si au moins un des éléments individuels d'un \texttt{Stream<T>} satisfait le prédicat \texttt{p}.
+\item \texttt{noneMatch(Predicate<T> p)} renvoie \texttt{true} si et seulement si aucun des éléments individuels d'un \texttt{Stream<T>} ne satisfait le prédicat \texttt{p}.
+\end{itemize}
+
+Par exemple, le code suivant teste si on nous donne un flux d'entiers pairs~:
+
+\begin{lstlisting}[language=Java]
+System.out.println(Stream.of(2, 4, 8, 12).allMatch(x -> x % 2 == 0)); // Affiche : true
+System.out.println(Stream.of(2, 4, 8, 13).allMatch(x -> x % 2 == 0)); // Affiche : false
+\end{lstlisting}
+
+La méthode de réduction la plus générique est offerte par la méthode \texttt{reduce()}. Il existe plusieurs variantes de cette méthode, mais la plus couramment utilisée est \texttt{T reduce(T identity, BinaryOperator<T> accumulator)}~: cette méthode renvoie la valeur résultant de l'application successive de l'opérateur binaire \texttt{accumulator} à la valeur initiale \texttt{identity} et aux éléments successifs du flux. Si le flux est vide, cette méthode renvoie simplement \texttt{identity}.
+
+À titre d'exemple, considérons la tâche consistant à calculer la somme des valeurs dans un flux d'entiers. Zéro étant l'élément neutre pour l'addition, la méthode \texttt{reduce()} pourrait être utilisée comme suit~:
+
+\begin{lstlisting}[language=Java]
+Stream<Integer> stream = Stream.of(2, 5, 8);
+System.out.println(stream.reduce(0, (a, b) -> a + b)); // Affiche : 15
+\end{lstlisting}
+
+Voici les étapes du calcul réalisé par la méthode \texttt{reduce()}~:
+\begin{enumerate}
+\item Elle initialise une variable temporaire dont la valeur initiale est donnée par \texttt{identity} (c.-à-d. 0 dans ce cas).
+\item Elle lit l'élément suivant du flux, par exemple 2. En utilisant l'expression lambda pour \texttt{accumulator}, elle calcule $0 + 2$ (où 0 est la variable temporaire), et stocke le résultat 2 dans la variable temporaire.
+\item Elle lit l'élément suivant, par exemple 5. Selon \texttt{accumulator}, elle calcule $2 + 5$ (où 2 est la variable temporaire), et stocke 7 dans la variable temporaire.
+\item Elle lit l'élément final, par exemple 8. Selon \texttt{accumulator}, elle calcule $7 + 8$ (où 7 est la variable temporaire), et stocke 15 dans la variable temporaire, qui est finalement renvoyée à l'appelant.
+\end{enumerate}
+
+Comme autre exemple, voici comment calculer le produit des valeurs dans un flux de nombres en double précision, pour lequel 1{,}0 est la valeur neutre~:
+
+\begin{lstlisting}[language=Java]
+Stream<Double> stream = Stream.of(-1.0, 2.0, 5.5);
+System.out.println(stream.reduce(1.0, (a, b) -> a * b)); // Affiche : -11.0
+\end{lstlisting}
+
+\paragraph{Remarque}
+Faites attention au fait que lors d'une réduction, l'ordre dans lequel l'opérateur binaire \texttt{accumulator} est appliqué aux différents éléments n'est pas spécifié (par exemple parce que le parallélisme peut éventuellement être utilisé pour accélérer certains calculs), donc cet opérateur doit être associatif.
+
+\subsection{À propos de la paresse}
+
+Considérons le code suivant~:
+
+\begin{lstlisting}[language=Java]
+Stream<Integer> s1 = Stream.of(1, 2, 3, 4, 5);
+Stream<Integer> s2 = s1.map(i -> { System.out.println(i); return i + 1; });
+\end{lstlisting}
+
+Vous pourriez penser que le code fait ce qui suit~:
+\begin{enumerate}
+\item Un flux avec les éléments 1, 2, 3, 4 et 5 est créé.
+\item L'expression lambda \texttt{i -> \{ System.out.println(i); return i + 1; \}} est appliquée à chaque élément.
+\item La console affiche les lignes 1, 2, 3, 4 et 5.
+\item Un nouveau flux contenant 2, 3, 4, 5 et 6 est renvoyé.
+\end{enumerate}
+
+Cependant, c'est faux~! Le code ci-dessus n'affiche rien. En effet, comme écrit ci-dessus, les flux sont paresseux. Les opérations ne sont exécutées que si le résultat est nécessaire, par exemple comme dans~:
+
+\begin{lstlisting}[language=Java]
+Stream<Integer> s1 = Stream.of(1, 2, 3, 4, 5);
+Stream<Integer> s2 = s1.map(i -> { System.out.println(i); return i + 1; });
+Object[] a = s2.toArray(); // <- ici, tous les éléments du flux sont nécessaires
+\end{lstlisting}
+
+Ce code affichera effectivement tous les éléments sur la console~! Maintenant, considérons l'exemple suivant~:
+
+\begin{lstlisting}[language=Java]
+Stream<Integer> s1 = Stream.of(1, 2, 3, 4, 5);
+Stream<Integer> s2 = s1.map(i -> { System.out.println(i); return i + 1; });
+Object[] a = s2.limit(2).toArray(); // <- ici, seuls les deux premiers éléments du flux sont nécessaires
+\end{lstlisting}
+
+Ce code n'affichera que 1 et 2 sur la console~! C'est parce que la méthode \texttt{limit()} arrête tout traitement supplémentaire de son flux d'entrée dès que le nombre maximal d'éléments est atteint. Cela explique aussi pourquoi des flux infinis peuvent être représentés à l'aide des flux Java.
+
+Il est aussi intéressant de comprendre que la progression sur des flux interdépendants est entrelacée. Cela peut être vu dans l'exemple suivant~:
+
+\begin{lstlisting}[language=Java]
+Stream<Integer> s1 = Stream.of(1, 2, 3);
+Stream<Integer> s2 = s1.map(i -> { System.out.println("a: " + i); return i + 1; });
+s2.forEach(j -> System.out.println("b: " + j));
+\end{lstlisting}
+
+Cet exemple affiche la séquence suivante~:
+\begin{verbatim}
+a: 1
+b: 2
+a: 2
+b: 3
+a: 3
+b: 4
+\end{verbatim}
+
+C'est parce que la lecture des flux \texttt{s1} et \texttt{s2} est entrelacée. Voici les étapes de l'évaluation~:
+\begin{enumerate}
+\item \texttt{forEach()} a besoin du premier élément de \texttt{s2}. Pour obtenir ce premier élément, \texttt{map()} est exécuté sur le premier élément de \texttt{s1}. Donc, \texttt{a: 1} est affiché, puis \texttt{b: 2}.
+\item \texttt{forEach()} a besoin du deuxième élément de \texttt{s2}. Pour obtenir ce deuxième élément, \texttt{map()} est exécuté sur le deuxième élément de \texttt{s1}. Donc, \texttt{a: 2} est affiché, puis \texttt{b: 3}.
+\item \texttt{forEach()} a besoin du troisième et dernier élément de \texttt{s3}. Pour obtenir ce dernier élément, \texttt{map()} est exécuté sur le dernier élément de \texttt{s1}. Donc, \texttt{a: 3} est affiché, puis \texttt{b: 4}.
+\end{enumerate}
+
+Enfin, parce que les flux sont paresseux, ils peuvent aussi être utilisés dans des situations où l'on ne sait pas à l'avance quelle est la longueur du flux. Par exemple, voici un code qui affiche toutes les lignes d'un fichier texte en majuscules, en utilisant la méthode source \texttt{lines()} d'un lecteur~:
+
+\begin{lstlisting}[language=Java]
+try (FileReader file = new FileReader("somefile.txt")) {
+  BufferedReader reader = new BufferedReader(file);
+  Stream<String> lines = reader.lines();
+  lines.map(String::toUpperCase).forEach(System.out::println);
+}
+\end{lstlisting}
+
+Ce code ne lit pas tout le fichier, puis ne l'affiche pas. Cela utiliserait beaucoup de mémoire si le fichier est très gros~! À la place, ce code lit une nouvelle ligne du fichier uniquement quand c'est nécessaire. Autrement dit, le code lit la première ligne, l'affiche, lit la deuxième ligne, l'affiche, et ainsi de suite.
+
+\subsection{Flux spécialisés}
+
+Jusqu'ici, nous n'avons considéré que l'interface générique \texttt{Stream<T>}. Pour des raisons de performance, il existe aussi des interfaces spécialisées représentant des flux de trois types primitifs, à savoir~:
+\begin{itemize}
+\item \texttt{IntStream} pour des flux de nombres \texttt{int}~: \url{https://docs.oracle.com/javase/8/docs/api/java/util/stream/IntStream.html}
+\item \texttt{LongStream} pour des flux de nombres \texttt{long}~: \url{https://docs.oracle.com/javase/8/docs/api/java/util/stream/LongStream.html}
+\item \texttt{DoubleStream} pour des flux de nombres en double précision (c.-à-d. pour le type primitif \texttt{double})~: \url{https://docs.oracle.com/javase/8/docs/api/java/util/stream/DoubleStream.html}
+\end{itemize}
+
+Par exemple, un flux de nombres \texttt{int} peut soit être représenté comme un flux générique de type \texttt{Stream<Integer>} (où chaque élément est un objet de type \texttt{Integer}), soit comme un flux spécialisé de type \texttt{IntStream} (où chaque élément est représenté en interne comme une valeur primitive \texttt{int}). Les flux spécialisés sont en général plus efficaces que les flux génériques, car ils évitent la création d'objets, et devraient être préférés partout où l'optimisation des performances ou l'usage mémoire est important.
+
+Notez qu'il n'y a pas de flux spécialisés pour les autres types primitifs~: il est recommandé d'utiliser \texttt{IntStream} pour stocker des valeurs \texttt{short}, \texttt{char}, \texttt{byte} et \texttt{boolean}. En ce qui concerne \texttt{float}, il est recommandé d'utiliser \texttt{DoubleStream} si un flux spécialisé est préférable.
+
+Les conversions entre flux génériques et flux spécialisés sont régies comme suit~:
+\begin{itemize}
+\item Un \texttt{IntStream} spécialisé peut être construit à partir d'un \texttt{Stream<T>} en utilisant la méthode \texttt{mapToInt()} du flux générique.
+\item Un \texttt{LongStream} spécialisé peut être construit à partir d'un \texttt{Stream<T>} en utilisant la méthode \texttt{mapToLong()} du flux générique.
+\item Un \texttt{DoubleStream} spécialisé peut être construit à partir d'un \texttt{Stream<T>} en utilisant la méthode \texttt{mapToDouble()} du flux générique.
+\item Inversement, un flux générique \texttt{Stream<T>} peut être construit à partir d'un \texttt{IntStream}, d'un \texttt{LongStream} ou d'un \texttt{DoubleStream} en utilisant la méthode \texttt{mapToObj()} du flux spécialisé.
+\end{itemize}
+
+Par exemple, la conversion entre miles et kilomètres aurait pu être implémentée comme suit en utilisant le \texttt{DoubleStream} spécialisé (les deux lignes modifiées sont mises en évidence par des astérisques)~:
+
+\begin{lstlisting}[language=Java]
+List<String> kilometers = miles.stream()
+  .filter(s -> !s.isEmpty())                 // Ignorer les chaînes vides
+  .mapToDouble(s -> Double.parseDouble(s))   // (*) De chaîne vers double
+  .map(x -> x * 1609.344)                    // De miles vers mètres
+  .map(x -> x / 1000.0)                      // De mètres vers kilomètres
+  .mapToObj(x -> String.valueOf(x))          // (*) De double vers chaîne
+  .collect(Collectors.toList());             // Construire la liste
+\end{lstlisting}
+
+Comme autre exemple, voici comment créer un \texttt{IntStream} à partir des éléments d'un flux d'objets \texttt{Account} (comme introduit dans la section précédente)~:
+
+\begin{lstlisting}[language=Java]
+Stream<Account> accounts = Stream.of(new Account(100), new Account(200));
+IntStream values = accounts.mapToInt(i -> i.getValue());
+values.forEach(System.out::println);
+\end{lstlisting}
+
+Il vaut aussi la peine de remarquer que \texttt{IntStream} et \texttt{LongStream} ont deux méthodes statiques intéressantes \texttt{range()} et \texttt{rangeClosed()} qui peuvent être utilisées pour créer facilement un flux représentant un intervalle d'entiers~:
+
+\begin{lstlisting}[language=Java]
+IntStream s1 = IntStream.range(-3, 3);       // => [-3, -2, -1, 0, 1, 2]
+IntStream s2 = IntStream.rangeClosed(-3, 3); // => [-3, -2, -1, 0, 1, 2, 3]
+\end{lstlisting}
+
+Comme on peut le voir dans cet exemple, ces deux méthodes ne diffèrent qu'en ce qui concerne le fait que le dernier entier de l'intervalle est inclus ou non.
+
+Enfin, en plus de leur intérêt pour l'optimisation, les flux spécialisés fournissent aussi des méthodes collectrices pratiques qui renvoient directement des tableaux Java à partir d'un flux~:
+\begin{itemize}
+\item La méthode \texttt{toArray()} de \texttt{IntStream} crée une valeur \texttt{int[]},
+\item La méthode \texttt{toArray()} de \texttt{LongStream} crée une valeur \texttt{long[]}, et
+\item La méthode \texttt{toArray()} de \texttt{DoubleStream} crée une valeur \texttt{double[]}.
+\end{itemize}
+
+Voici un exemple de cette fonctionnalité~:
+
+\begin{lstlisting}[language=Java]
+IntStream stream = IntStream.of(10, 20, 30);
+int[] a = stream.toArray();
+\end{lstlisting}
+
+\section{Programmation sans effets de bord}
+
+\subsection{Effets de bord}
+
+Rappelez-vous que les expressions lambda en Java sont implémentées comme des classes internes anonymes. En conséquence, elles sont autorisées à accéder aux membres de la classe englobante~:
+
+\begin{lstlisting}[language=Java]
+import java.util.function.Function;
+
+public class SideEffect {
+  private int sum = 0;
+
+  public Function<Integer, Integer> createAddition() {
+    return i -> {
+      sum++; // Effet de bord !
+      return i + sum;
+    };
+  }
+
+  public static void main(String[] args) {
+    Function<Integer,Integer> add = new SideEffect().createAddition();
+    System.out.println(add.apply(3)); // Affiche : 4
+    System.out.println(add.apply(3)); // Affiche : 5
+  }
+}
+\end{lstlisting}
+
+C'est un comportement extrêmement contre-intuitif~: tout développeur qui n'a pas implémenté la méthode \texttt{createAddition()} s'attendrait à ce que plusieurs applications de la même \texttt{Function} donnent toujours le même résultat. En mathématiques, on s'attend en effet à ce qu'une fonction donne toujours le même résultat pour le même argument~!
+
+Pour cette raison, ce genre de code devrait être évité, même s'il respecte parfaitement la syntaxe Java. Une bonne fonction ne devrait avoir aucun effet de bord. Une fonction ne devrait jamais modifier des objets et variables existants. Le code d'une fonction ou d'une méthode est plus facile à comprendre si le résultat ne dépend que de ses arguments. De plus, une fonction qui a des effets de bord peut entraîner de sévères problèmes de concurrence si elle est exécutée dans un contexte multithread.
+
+\subsection{Objets immuables}
+
+Afin d'imposer l'absence d'effets de bord et d'assurer la sûreté vis-à-vis des threads, la programmation fonctionnelle promeut l'utilisation d'objets immuables. Les objets immuables sont des objets dont l'état ne peut pas être modifié après leur création.
+
+Par exemple, les chaînes (\texttt{String}) en Java sont immuables. Une fois qu'un objet \texttt{String} est créé, sa valeur ne peut plus être changée. Les opérations qui semblent modifier une chaîne créent en réalité un nouvel objet \texttt{String}.
+
+En revanche, les types primitifs en Java sont mutables (par exemple, vous pouvez changer la valeur d'une variable \texttt{int} après sa déclaration). Cependant, les classes enveloppes associées aux types primitifs sont immuables. En effet, des classes comme \texttt{Integer}, \texttt{Long}, \texttt{Float}, \texttt{Double}, \texttt{Byte}, \texttt{Short}, \texttt{Character} ou \texttt{Boolean}, qui sont utilisées pour envelopper les types de données primitifs, sont toutes immuables~: la valeur primitive qu'elles stockent ne peut jamais être changée après leur construction. Dans le même esprit, les \texttt{enum} Java sont implicitement immuables. Une fois les constantes de l'\texttt{enum} créées, leurs valeurs ne peuvent pas être modifiées.
+
+\subsection{Une liste immuable}
+
+Nous savons déjà que l'interface standard \texttt{List<T>} offre les méthodes \texttt{removeIf()} et \texttt{replaceAll()} pour appliquer des fonctions d'ordre supérieur à son contenu. À cause de la présence de telles méthodes, les listes Java standard sont des objets mutables, ce qui contraste avec la philosophie de la programmation fonctionnelle. Peut-on concevoir une liste sans effet de bord, d'une manière similaire aux flux~? La réponse est «~oui~», et cette section explique comment créer une liste générique immuable.
+
+L'idée de base est similaire à la structure de données abstraite des listes chaînées. Elle consiste à créer la hiérarchie de classes suivante~:
+
+\begin{figure}[h]
+\centering
+% (Schéma de la hiérarchie Nil/Cons/ImmutableList dans le document original)
+\end{figure}
+
+Dans cette hiérarchie~:
+\begin{itemize}
+\item \texttt{T} est un type générique qui doit correspondre à un type immuable, comme \texttt{Integer} ou \texttt{Float}.
+\item \texttt{Nil<T>} représente la fin d'une liste immuable. Cette structure de données ne contient aucune information, c'est simplement un nœud terminal.
+\item \texttt{Cons<T>} stocke une valeur non vide de la liste, ainsi qu'un lien vers l'élément suivant de la liste. Le nom \texttt{Cons} provient de la fonction fondamentale \texttt{cons} qui est utilisée dans la plupart des dialectes du langage de programmation Lisp pour construire des objets mémoire.
+\item \texttt{ImmutableList<T>} est une interface qui représente une référence à la liste immuable elle-même.
+\end{itemize}
+
+Cette hiérarchie de classes stockerait la liste immuable contenant les valeurs entières 10, 20 et 30 comme suit~:
+
+\begin{figure}[h]
+\centering
+% (Schéma de la représentation de [10,20,30] dans le document original)
+\end{figure}
+
+Voici le code Java correspondant pour définir cette hiérarchie~:
+
+\begin{lstlisting}[language=Java]
+public interface ImmutableList<T> {
+}
+
+public static final class Nil<T> implements ImmutableList<T> {
+  public Nil() {
+  }
+}
+
+public static final class Cons<T> implements ImmutableList<T> {
+  private final T value;
+  private final ImmutableList<T> next;
+
+  public Cons(T value, ImmutableList<T> next) {
+    if (next == null) {
+      throw new IllegalArgumentException();
+    }
+    this.value = value;
+    this.next = next;
+  }
+}
+\end{lstlisting}
+
+Et notre liste immuable exemple contenant 10, 20 et 30 peut ensuite être construite depuis son dernier élément jusqu'à son premier élément~:
+
+\begin{lstlisting}[language=Java]
+// Create the terminal node that represent the empty list
+ImmutableList<Integer> empty = new Nil<Integer>();
+
+// Create the node containing "30" that represents the list: [ 30 ]
+ImmutableList<Integer> list1 = new Cons<Integer>(30, empty);
+
+// Create the node containing "20" that represents the list: [ 20, 30 ]
+ImmutableList<Integer> list2 = new Cons<Integer>(20, list1);
+
+// Create the node containing "10" that represents the list: [ 10, 20, 30 ]
+ImmutableList<Integer> myList = new Cons<Integer>(10, list2);
+\end{lstlisting}
+
+Notez que \texttt{list1} et \texttt{list2} sont toujours les mêmes listes~: nous pouvons ajouter un élément à la tête d'une liste sans changer la queue de la liste. Cela démontre que cette structure de données est immuable. Elle ne peut pas être changée après création.
+
+\subsection{Consommer une liste immuable}
+
+Parce que notre structure de données \texttt{ImmutableList<T>} est immuable, nous ne fournissons pas d'accès public aux valeurs qu'elle stocke. Si nous voulons exécuter une opération sur chaque élément de la liste immuable selon le paradigme de la programmation fonctionnelle, nous utiliserions un consommateur. Un consommateur peut être appliqué à notre liste immuable en ajoutant une méthode d'ordre supérieur \texttt{forEach()} dans l'interface \texttt{ImmutableList<T>}, qui imite les flux~:
+
+\begin{lstlisting}[language=Java]
+public interface ImmutableList<T> {
+  public void forEach(Consumer<T> consumer);
+}
+\end{lstlisting}
+
+L'implémentation de \texttt{forEach()} dans les classes concrètes \texttt{Nil<T>} et \texttt{Cons<T>} suit un algorithme récursif. Le cas de base de la récursion correspond au traitement d'une liste vide, qui ne fait tout simplement rien~:
+
+\begin{lstlisting}[language=Java]
+public static final class Nil<T> implements ImmutableList<T> {
+  // ...
+  public void forEach(Consumer<T> consumer) {
+  }
+}
+\end{lstlisting}
+
+En ce qui concerne un nœud non vide, la classe concrète applique d'abord le consommateur à la valeur qu'elle stocke, puis transmet le consommateur à l'élément suivant dans la liste~:
+
+\begin{lstlisting}[language=Java]
+public static final class Cons<T> implements ImmutableList<T> {
+  private final T value;
+  private final ImmutableList<T> next;
+
+  // ...
+  public void forEach(Consumer<T> consumer) {
+    consumer.accept(value);
+    next.forEach(consumer);
+  }
+}
+\end{lstlisting}
+
+Grâce à cette méthode \texttt{forEach()}, il devient possible d'afficher les éléments de la liste immuable~:
+
+\begin{lstlisting}[language=Java]
+myList.forEach(i -> System.out.println(i));
+\end{lstlisting}
+
+\subsection{Map et filter sur une liste immuable}
+
+Puisqu'une liste immuable ne peut pas être changée, nous devons créer une nouvelle liste immuable si nous voulons changer le contenu de la liste. À cette fin, implémentons les méthodes \texttt{map()} et \texttt{filter()} qui sont les opérations intermédiaires les plus courantes dans un pipeline de flux. Nous ajoutons d'abord les deux méthodes abstraites à notre interface \texttt{ImmutableList<T>}~:
+
+\begin{lstlisting}[language=Java]
+public interface ImmutableList<T> {
+  public void forEach(Consumer<T> consumer);
+  public ImmutableList<T> map(UnaryOperator<T> operator);
+  public ImmutableList<T> filter(Predicate<T> predicate);
+}
+\end{lstlisting}
+
+Dans le cas de base d'une liste immuable vide, \texttt{map()} et \texttt{filter()} doivent simplement renvoyer une nouvelle liste vide~:
+
+\begin{lstlisting}[language=Java]
+public static final class Nil<T> implements ImmutableList<T> {
+  // ...
+  public ImmutableList<T> map(UnaryOperator<T> operator) {
+    return new Nil<T>();
+  }
+
+  public ImmutableList<T> filter(Predicate<T> predicate) {
+    return new Nil<T>();
+  }
+}
+\end{lstlisting}
+
+En ce qui concerne un nœud non vide, la classe concrète est implémentée comme suit~:
+
+\begin{lstlisting}[language=Java]
+public static final class Cons<T> implements ImmutableList<T> {
+  private final T value;
+  private final ImmutableList<T> next;
+
+  // ...
+  public ImmutableList<T> map(UnaryOperator<T> operator) {
+    // Create a new list with the transformed current value, followed by the transformed tail of the list
+    return new Cons<T>(operator.apply(value), next.map(operator));
+  }
+
+  public ImmutableList<T> filter(Predicate<T> predicate) {
+    if (predicate.test(value)) {
+      return new Cons<T>(value, next.filter(predicate));
+    } else {
+      return next.filter(predicate);
+    }
+  }
+}
+\end{lstlisting}
+
+Considérons par exemple l'opération \texttt{myList.map(x -> x + 3)} sur notre liste immuable contenant 10, 20 et 30. Si nous développons les appels récursifs, nous obtenons la séquence d'opérations suivante~:
+
+\begin{verbatim}
+myList.map(x -> x + 3)
+<=> new Cons(10 + 3, list2.map(x -> x + 3))
+<=> new Cons(10 + 3, new Cons(20 + 3, list3.map(x -> x + 3)))
+<=> new Cons(10 + 3, new Cons(20 + 3, new Cons(30 + 3, empty.map(x -> x + 3))))
+<=> new Cons(10 + 3, new Cons(20 + 3, new Cons(30 + 3, new Nil())))
+<=> ImmutableList<Integer> containing: [13, 23, 33]
+\end{verbatim}
+
+Grâce à ces méthodes \texttt{map()} et \texttt{filter()}, nous pouvons chaîner des opérations pour créer des pipelines plus complexes, par exemple~:
+
+\begin{lstlisting}[language=Java]
+myList.filter(x -> x > 2).map(x -> 2 * x).forEach(System.out::println);
+\end{lstlisting}
+
+Évidemment, notre structure de données \texttt{ImmutableList<T>} pourrait être encore améliorée en répliquant toutes les méthodes qui sont disponibles pour concevoir des pipelines de flux.
 
 
 
