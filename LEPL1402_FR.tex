@@ -1,0 +1,4024 @@
+\UseRawInputEncoding
+\documentclass[11pt,a4paper]{book}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{geometry}
+
+\geometry{margin=2.5cm}
+
+\hypersetup{
+  pdftitle={Concepts de Programmation avec Java},
+  pdfauthor={Sébastien Jodogne, Ramin Sadre, Pierre Schaus},
+  colorlinks=true,
+  linkcolor=blue,
+  urlcolor=blue,
+  citecolor=blue
+}
+
+\lstset{
+  basicstyle=\ttfamily\small,
+  keywordstyle=\bfseries,
+  commentstyle=\itshape,
+  stringstyle=\ttfamily,
+  showstringspaces=false,
+  tabsize=2,
+  breaklines=true
+}
+
+\title{Concepts de Programmation avec Java}
+\author{Sébastien Jodogne \and Ramin Sadre \and Pierre Schaus}
+\date{10 janvier 2025}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\chapter{De Python à Java}
+
+Le chapitre~1 de ce livre s'adresse aux étudiants et passionnés qui sont déjà
+familiers avec les bases de la programmation en Python, c'est-à-dire qui savent
+utiliser des variables, des listes, des fonctions et de simples objets de
+données. Une connaissance approfondie de la programmation orientée objet n'est
+pas requise.
+
+L'objectif des sections suivantes est de vous rendre rapidement familier avec
+les différences importantes entre Python et Java, ainsi qu'avec les mécanismes
+orientés objet de base de Java. Les sujets plus avancés, tels que les
+interfaces, les classes abstraites ou les fonctions lambda, seront abordés dans
+les parties suivantes du livre.
+
+\section{Votre premier programme Java avec IntelliJ}
+
+\subsection{Installation d'IntelliJ}
+
+Vous avez peut-être déjà utilisé un environnement de développement intégré
+(IDE) pour écrire des programmes en Python. Dans ce cours, nous ferons la même
+chose pour programmer en Java : nous utiliserons la « Community Edition »
+gratuite de IntelliJ IDEA (simplement appelée « IntelliJ » par la suite). Vous
+pouvez télécharger l'installateur depuis
+\url{https://www.jetbrains.com/idea/download/}
+(descendez dans la page pour trouver la Community Edition gratuite, vous n'avez
+pas besoin de l'édition commerciale Ultimate). Lancez l'installateur et
+suivez les instructions.
+
+La deuxième chose dont vous aurez besoin pour programmer en Java est un
+\emph{Java Development Kit} (JDK). Un JDK est un ensemble logiciel qui contient
+les outils nécessaires pour construire et exécuter des programmes Java. Le JDK
+comprend également une bibliothèque très, très vaste de classes utiles pour
+toutes sortes de tâches de programmation. Vous pouvez consulter le contenu de
+cette bibliothèque ici :
+\url{https://docs.oracle.com/en/java/javase/21/docs/api/index.html}.
+
+Heureusement, IntelliJ peut automatiquement télécharger le JDK pour vous lorsque
+vous créez un nouveau projet, donc vous n'avez pas à vous soucier du JDK pour
+l'instant. Mais si plus tard vous souhaitez écrire une application Java sur un
+ordinateur sans IntelliJ, vous devrez télécharger manuellement le JDK depuis
+\url{https://openjdk.org/} et l'installer.
+
+\subsection{Création d'un nouveau projet}
+
+Démarrez IntelliJ. Une fenêtre s'ouvre et vous permet de créer un nouveau
+projet. Cliquez sur le bouton correspondant et vous devriez voir une fenêtre
+semblable à celle-ci.
+
+Pour créer un nouveau projet, vous devez entrer un nom de projet (dans le champ
+\textit{Name}) et un emplacement sur votre disque où vous souhaitez stocker le
+projet (dans le champ \textit{Location}). Laissez les autres champs
+\textit{Language}, \textit{Build system} et \textit{Add sample code}
+tels qu'affichés sur l'image. Il reste cependant quelque chose à faire pour le
+champ \textit{JDK} : comme vous pouvez le voir sur l'image, la version 21 du
+JDK (ainsi que d'autres versions) était déjà installée sur mon ordinateur. Si
+vous n'avez pas encore installé de JDK sur votre machine, ouvrez la liste
+déroulante et choisissez \textit{Download JDK...} comme sur l'image ci-dessous.
+
+Une petite fenêtre apparaît alors et vous permet de sélectionner la version du
+JDK à télécharger et installer.
+
+Sélectionnez la version 21 fournie par le fournisseur \emph{Oracle OpenJDK}
+(en réalité, toute version plus récente que 17 convient pour ce livre). Vous
+pouvez conserver l'emplacement proposé par IntelliJ. Cliquez sur le bouton
+\textit{Download} et terminez l'installation du JDK. Une fois tout prêt, vous
+pouvez finalement créer votre premier projet Java. IntelliJ ouvrira
+normalement automatiquement le nouveau projet et affichera la fenêtre
+principale.
+
+Dans la partie gauche de la fenêtre, vous voyez la structure du projet. Comme
+nous avons coché \textit{Add sample code} lors de la création du projet,
+IntelliJ a déjà créé un répertoire \texttt{src} contenant un fichier :
+\texttt{Main.java} (l'extension \texttt{.java} peut ne pas être affichée).
+Lorsque vous double-cliquez sur ce fichier, son contenu apparaît dans l'éditeur
+à droite.
+
+Cliquez sur le triangle orienté vers la droite dans le coin supérieur droit
+pour lancer le programme. Une nouvelle vue apparaît en bas de la fenêtre avec
+la sortie du programme.
+
+\subsection{À quoi ressemblent les programmes Java ?}
+
+Voici le code source du programme d'exemple automatiquement créé par IntelliJ
+dans votre projet :
+
+\begin{lstlisting}[language=Java]
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("Hello world!");
+    }
+}
+\end{lstlisting}
+
+Et voici à quoi ressemblerait un programme Python équivalent :
+
+\begin{lstlisting}[language=Python]
+print('Hello world!')
+\end{lstlisting}
+
+Pourquoi le code Java semble-t-il plus compliqué que le code Python ? Tout
+d'abord, contrairement à Python, Java ne permet pas d'écrire une instruction
+comme \texttt{print('Hello world!')} directement dans un fichier source. En
+Java, toutes les instructions DOIVENT se trouver à l'intérieur d'une méthode et
+toutes les méthodes DOIVENT se trouver à l'intérieur d'une classe. Dans notre
+exemple, l'instruction \texttt{System.out.println("Hello world!")} se trouve
+dans la méthode \texttt{main()} et cette méthode se trouve dans la classe
+\texttt{Main}. Bien sûr, une classe Java peut contenir plusieurs méthodes, et
+un programme Java peut contenir plusieurs classes.
+
+Vous avez probablement déjà entendu parler des classes et des méthodes en
+Python, et vous vous souvenez peut-être que les classes servent à décrire des
+objets et que les méthodes servent à travailler avec ces objets. Dans notre
+simple exemple Java, nous n'avons pas besoin d'objets ni de toutes les choses
+compliquées qui vont avec (constructeurs, héritage, etc.). Le mot-clé
+\texttt{static} dans la ligne
+\texttt{public static void main(String[] args)} indique que la méthode
+\texttt{main()} se comporte davantage comme une fonction « traditionnelle » en
+Python et non comme une méthode d'instance. En effet, aucun objet n'est
+nécessaire pour exécuter une méthode statique comme \texttt{main()}. Nous en
+apprendrons plus à ce sujet plus tard.
+
+La deuxième chose que vous avez peut-être remarquée est le mot \texttt{public},
+présent deux fois dans les deux premières lignes du code :
+
+\begin{lstlisting}[language=Java]
+public class Main {
+    public static void main(String[] args) {
+\end{lstlisting}
+
+Le mot \texttt{public} dans la première ligne indique que la classe
+\texttt{Main} peut être utilisée par d'autres. Ce n'est pas strictement
+nécessaire pour ce programme simple et, en fait, notre programme fonctionnera
+toujours si vous le supprimez (essayez !). Cependant, il y a un point important
+à connaître sur les classes \texttt{public} : si une classe est marquée
+\texttt{public}, le fichier source qui la contient doit avoir le même nom que
+la classe. C'est pour cela que le fichier s'appelle \texttt{Main.java} et que
+la classe \texttt{public} dans ce fichier s'appelle \texttt{Main} (essayez de
+changer le nom de la classe et voyez ce qui se passe !). À part cela, le nom
+\texttt{Main} n'a aucune signification particulière en Java. Notre programme
+fonctionnerait encore si nous renommions la classe en \texttt{Catweazle} ou
+\texttt{Cinderella}, à condition de renommer aussi le fichier. Notez toutefois
+que tous les noms de classes en Java (publiques ou non) commencent par une
+majuscule.
+
+Le \texttt{public} de la deuxième ligne est beaucoup plus important dans notre
+exemple. Un programme Java ne peut être exécuté que s'il contient une méthode
+\texttt{main()} qui est \texttt{public} et \texttt{static}. Supprimez
+\texttt{public} ou \texttt{static} dans la deuxième ligne et observez ce qui se
+passe lorsque vous essayez d'exécuter le programme. De manière générale, un
+programme Java commence toujours dans une méthode
+\texttt{public static void main(String[] args)}. Si votre programme contient
+plusieurs classes avec une méthode \texttt{main}, vous devez indiquer à
+IntelliJ laquelle lancer.
+
+Avec ces connaissances, pouvez-vous deviner ce qu'affiche le programme
+suivant ?
+
+\begin{lstlisting}[language=Java]
+public class Main {
+    static void printHello() {
+        System.out.print("How do ");
+        System.out.println("you do, ");
+    }
+
+    public static void main(String[] args) {
+        printHello();
+        System.out.println("fellow kids?");
+    }
+}
+\end{lstlisting}
+
+(Au fait, avez-vous remarqué la différence entre
+\texttt{System.out.print} et \texttt{System.out.println} ?)
+
+Un fichier \texttt{.java} peut contenir plus d'une classe ; toutefois, une
+seule de ces classes peut être \texttt{public}. Voici l'exemple précédent avec
+deux classes :
+
+\begin{lstlisting}[language=Java]
+class MyOtherClass {
+    static void printHello() {
+        System.out.print("How do ");
+        System.out.println("you do, ");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        MyOtherClass.printHello();
+        System.out.println("fellow kids?");
+    }
+}
+\end{lstlisting}
+
+Vous pouvez accéder au contenu statique d'une classe depuis une autre classe en
+utilisant le nom de la classe, comme démontré avec
+\texttt{MyOtherClass.printHello()} dans l'exemple.
+
+\subsection{Types}
+
+Vous savez peut-être déjà que Python est un langage fortement typé. Cela
+signifie que toutes les « choses » en Python ont un type spécifique. Vous
+pouvez le constater en entrant les instructions suivantes dans l'interpréteur
+Python :
+
+\begin{lstlisting}[language=Python]
+>>> type("hello")
+<class 'str'>
+>>> type(1234)
+<class 'int'>
+>>> type(1234.5)
+<class 'float'>
+>>> type(True)
+<class 'bool'>
+\end{lstlisting}
+
+Java est lui aussi un langage fortement typé. Cependant, il y a une grande
+différence avec Python : Java est également un langage à typage statique. Sans
+entrer dans tous les détails, cela signifie qu'en Java, vous devez, la plupart
+du temps, indiquer pour chaque variable de votre programme quel type de choses
+elle peut contenir.
+
+Voici un simple programme Python qui calcule et affiche l'aire d'un carré :
+
+\begin{lstlisting}[language=Python]
+def calculateArea(side):
+    return side * side
+
+def printArea(message, side):
+    area = calculateArea(side)
+    print(message)
+    print(area)
+
+t = 3 + 4
+printArea("Area of square", t)
+\end{lstlisting}
+
+Et voici le programme Java équivalent :
+
+\begin{lstlisting}[language=Java]
+public class Main {
+    static int calculateArea(int side) {
+        return side * side;
+    }
+
+    static void printArea(String message, int side) {
+        int area = calculateArea(side);
+        System.out.println(message);
+        System.out.println(area);
+    }
+
+    public static void main(String[] args) {
+        int t = 3 + 4;
+        printArea("Area of square", t);
+    }
+}
+\end{lstlisting}
+
+Voyons ce qui se passe avec les types dans ce code Java :
+
+\begin{itemize}
+  \item La ligne \lstinline!int calculateArea(int side)! indique que la
+        méthode \lstinline!calculateArea()! a un paramètre \texttt{side} de
+        type \texttt{int}. De plus, le \texttt{int} au début indique que cette
+        méthode ne peut retourner qu'une valeur de type \texttt{int}. C'est le
+        \emph{type de retour} de la méthode.
+  \item La ligne \lstinline!void printArea(String message, int side)!
+        définit que la méthode \lstinline!printArea()! a un paramètre
+        \texttt{message} de type \texttt{String} et un paramètre
+        \texttt{side} de type \texttt{int}. La méthode ne retourne rien ;
+        elle a donc le type de retour spécial \texttt{void}.
+  \item À l'intérieur de \lstinline!printArea()!, la ligne
+        \lstinline!int area = calculateArea(side)! indique que la variable
+        \texttt{area} est de type \texttt{int}.
+  \item (Exercice : examinez les types visibles dans la méthode
+        \lstinline!main()!. Nous expliquerons plus tard pourquoi cette méthode
+        a toujours un paramètre \texttt{args}.)
+\end{itemize}
+
+IntelliJ utilise un outil particulier appelé \emph{compilateur Java}, qui
+vérifie soigneusement l'absence d'erreurs de type dans votre programme, c'est-à-dire
+que vous n'avez pas commis d'erreurs dans les types des variables, des
+paramètres de méthodes et des types de retour. Contrairement à Python, cette
+vérification de types est faite avant l'exécution du programme. Vous ne pouvez
+même pas démarrer un programme Java qui contient des erreurs de type !
+
+Voici quelques exemples contenant des erreurs de type. Pouvez-vous trouver les
+erreurs ?
+
+\begin{itemize}
+  \item \lstinline!int t = "Hello";!
+  \item \lstinline!boolean t = calculateArea(3);!
+  \item \lstinline!printArea(5, "Size of square");!
+        (cet exemple illustre pourquoi il est plus facile de trouver des bugs
+        en Java qu'en Python)
+\end{itemize}
+
+\section{Le compilateur Java et les fichiers \texttt{class}}
+
+Dans la section précédente, nous avons mentionné qu'un outil particulier, le
+compilateur Java, vérifie votre programme à la recherche d'erreurs de type.
+Cette vérification fait partie d'une autre différence fondamentale entre Python
+et Java. Python est un langage interprété. Cela signifie que lorsque vous
+lancez un programme écrit en Python dans un IDE ou en ligne de commande avec
+
+\begin{lstlisting}
+> python myprogram.py
+\end{lstlisting}
+
+l'interpréteur Python effectue les opérations suivantes :
+
+\begin{enumerate}
+  \item Charger le fichier \texttt{myprogram.py},
+  \item Effectuer quelques vérifications pour s'assurer que votre programme ne
+        contient pas d'erreurs de syntaxe, par exemple
+        \texttt{print('Hello')))))},
+  \item Exécuter votre programme.
+\end{enumerate}
+
+Java, en tant que langage compilé, fonctionne différemment. Pour exécuter un
+programme Java, une étape supplémentaire est effectuée avant que votre
+programme puisse être exécuté :
+
+\begin{enumerate}
+  \item Tout d'abord, le code Java doit être compilé. C'est le travail du
+        compilateur Java, un outil fourni avec le JDK. Le compilateur :
+        \begin{itemize}
+          \item vérifie que votre code source est un programme Java
+                bien formé. Ce processus inclut la vérification de types
+                décrite précédemment ;
+          \item traduit votre code source Java en une représentation plus
+                compacte, plus facile à traiter par l'ordinateur. Cette
+                représentation compacte est appelée \emph{fichier de classe}
+                (\texttt{.class}). Un fichier de ce type est créé par classe
+                de votre programme. Dans IntelliJ, vous pouvez trouver les
+                fichiers \texttt{.class} générés dans le répertoire
+                \texttt{out} de votre projet.
+        \end{itemize}
+  \item Si la compilation de votre code a réussi, la \emph{Java Virtual
+        Machine} (JVM) est démarrée. La JVM est un programme spécial qui peut
+        charger et exécuter des fichiers de classe. La JVM n'a pas besoin du
+        code source (\texttt{.java}) pour exécuter votre programme, puisque
+        les fichiers \texttt{.class} contiennent toutes les informations
+        nécessaires. Quand vous développez un logiciel pour d'autres, ce sont
+        généralement les fichiers \texttt{.class} que vous leur fournissez,
+        pas le code source.
+\end{enumerate}
+
+IntelliJ lance le compilateur Java et démarre la JVM pour vous lorsque vous
+appuyez sur le bouton de démarrage (vert), mais il est parfaitement possible
+de faire cela à la main en ligne de commande, sans IDE :
+
+\begin{lstlisting}
+> javac Main.java   # javac est le compilateur, fourni avec le JDK.
+                    # Il génère le fichier Main.class
+
+> java Main         # cette commande démarre la JVM avec votre classe Main
+\end{lstlisting}
+
+\section{Bases}
+
+\subsection{Types primitifs}
+
+Comme expliqué, Java exige que vous précisiez le type de toutes les variables
+(y compris les paramètres de méthodes) et les types de retour de toutes les
+méthodes. Java distingue les \emph{types primitifs} et les types complexes,
+comme les tableaux et les objets. Les types primitifs sont utilisés pour les
+nombres (entiers et réels), les valeurs booléennes (\texttt{true} et
+\texttt{false}) et les caractères individuels (a, b, etc.). Il existe
+cependant plusieurs types de nombres. Le tableau ci-dessous présente tous les
+types primitifs :
+
+\begin{center}
+\begin{tabular}{lll}
+\textbf{Type} & \textbf{Valeurs possibles} & \textbf{Exemple} \\
+\hline
+\texttt{int} & $-2^{31}..2^{31}-1$ & \lstinline!int a = 3;! \\
+\texttt{long} & $-2^{63}..2^{63}-1$ & \lstinline!long a = 3;! \\
+\texttt{short} & $-2^{15}..2^{15}-1$ & \lstinline!short a = 3;! \\
+\texttt{byte} & $-2^{7}..2^{7}-1$ & \lstinline!byte a = 3;! \\
+\texttt{float} & $\approx 1.4 \cdot 10^{-45}..3.4 \cdot 10^{38}$ &
+  \lstinline!float a = 3.45f;! \\
+\texttt{double} & $\approx 4.9 \cdot 10^{-324}..1.7 \cdot 10^{308}$ &
+  \lstinline!double a = 3.45;! \\
+\texttt{char} & $0..2^{16}-1$ & \lstinline!char a = 'X';! \\
+\texttt{boolean} & \texttt{true}, \texttt{false} &
+  \lstinline!boolean a = true;! \\
+\end{tabular}
+\end{center}
+
+Comme vous pouvez le voir, chaque type primitif a un domaine de valeurs limité.
+Par exemple, une variable de type \texttt{int} ne peut être utilisée que pour
+des entiers compris entre $-2^{31}$ et $2^{31}-1$. Si vous ne respectez pas le
+domaine d'un type, des choses très étranges se produiront dans votre programme
+! Essayez ce code dans IntelliJ (copiez-le dans la méthode
+\texttt{main()}) :
+
+\begin{lstlisting}[language=Java]
+int a = 123456789;
+int b = a * 100000; // Ce résultat est trop grand pour le type int !
+System.out.println(b); // Qu'obtenez-vous ici ?
+\end{lstlisting}
+
+Pour la plupart des exemples de ce livre, il suffira d'utiliser \texttt{int}
+(pour les entiers) et \texttt{float} (pour les réels). Les types
+\texttt{long} et \texttt{double} offrent un domaine plus large et davantage de
+précision, mais ils sont plus lents et votre programme consommera plus de
+mémoire.
+
+Java prend en charge les opérations arithmétiques usuelles sur les types
+numériques : \texttt{+} (addition), \texttt{-} (soustraction),
+\texttt{*} (multiplication), \texttt{/} (division) et \texttt{\%}
+(modulo). Il existe aussi des opérateurs pour manipuler les valeurs entières au
+niveau des bits (par exemple, le décalage à gauche \texttt{<<} et le « et »
+binaire \texttt{\&}), mais nous ne les détaillerons pas ici.
+
+Le type \texttt{char} est utilisé pour manipuler des caractères individuels
+(lettres, chiffres, etc.) :
+
+\begin{lstlisting}[language=Java]
+char c = 'a';
+\end{lstlisting}
+
+Vous pouvez vous demander pourquoi ce type apparaît dans le tableau comme ayant
+des valeurs entre 0 et 65535. C'est parce que Java représente les caractères
+par des nombres, selon le standard Unicode. Par conséquent, vous pouvez réaliser
+certaines opérations arithmétiques simples sur les caractères :
+
+\begin{lstlisting}[language=Java]
+char c = 'a';
+c++;
+System.out.println(c); // affiche 'b'
+\end{lstlisting}
+
+\subsection{Conversions de type (cast)}
+
+Java effectue des conversions automatiques entre valeurs de différents types si
+le type de destination est « assez grand » pour contenir le résultat. On parle
+de \emph{cast automatique}. C'est pourquoi les deux instructions suivantes sont
+autorisées :
+
+\begin{lstlisting}[language=Java]
+float a = 34;        // valeur int 34 convertie en float 34.0f
+float b = 6 * 4.5f;  // int * float donne un float
+\end{lstlisting}
+
+Mais ceci n'est pas autorisé :
+
+\begin{lstlisting}[language=Java]
+int a = 4.5f;          // Erreur ! pas de cast automatique float -> int
+float b = 4.5f * 6.7;  // Erreur ! float * double donne un double
+\end{lstlisting}
+
+Vous pouvez forcer la conversion en effectuant un cast explicite, mais le
+résultat sera moins précis, voire erroné dans certaines situations :
+
+\begin{lstlisting}[language=Java]
+int a = (int) 4.5f;           // donne 4
+float b = (float) (4.5f * 6.7);
+\end{lstlisting}
+
+La classe Java \texttt{Math} fournit un grand nombre de méthodes pour travailler
+avec des nombres de différents types. Elle définit aussi des constantes utiles
+comme \texttt{Math.PI}. Exemple :
+
+\begin{lstlisting}[language=Java]
+double area = 123.4;
+double radius = Math.sqrt(area / Math.PI);
+
+System.out.println("Area of disk: " + area);
+System.out.println("Radius of disk: " + radius);
+\end{lstlisting}
+
+\subsection{Qu'est-ce qu'une variable ? Modèle mental}
+
+Pour les variables de type primitif, vous pouvez imaginer que chaque fois que
+votre programme atteint une ligne où une variable est déclarée, la JVM réserve
+une petite partie de la mémoire principale (RAM) de votre ordinateur pour
+stocker la valeur de cette variable.
+
+Lorsque vous affectez le contenu d'une variable à une autre, la valeur est
+copiée. Il en va de même pour les paramètres de méthodes : lorsqu'une méthode
+est appelée avec des arguments, leurs valeurs sont copiées dans les variables
+paramètres de la méthode appelée.
+
+Considérez le programme suivant :
+
+\begin{lstlisting}[language=Java]
+public class Main {
+    static void f(int x) {
+        x = x + 1;
+    }
+
+    public static void main(String[] args) {
+        int i = 3;
+        f(i);
+        System.out.println(i);
+    }
+}
+\end{lstlisting}
+
+Ce programme affiche \texttt{3}, car lors de l'appel à \texttt{f(i)}, le
+contenu de \texttt{i} est copié dans le paramètre \texttt{x}. Même si la
+méthode modifie \texttt{x}, la variable \texttt{i} conserve la valeur 3.
+
+Il est illégal d'utiliser une variable locale (déclarée dans une méthode) avant
+de lui avoir affecté une valeur :
+
+\begin{lstlisting}[language=Java]
+public static void main(String[] args) {
+    int a = 2;
+    int b;
+    int c;
+
+    int d = a * 3;   // OK
+
+    b = 3;
+    int e = b * 3;   // OK
+
+    int f = c * 3;   // Erreur ! "c" n'a pas été initialisée.
+}
+\end{lstlisting}
+
+\subsection{Variables de classe}
+
+Dans nos exemples, toutes les variables étaient des paramètres ou des variables
+locales. Ces variables ne « vivent » que pendant l'exécution de la méthode où
+elles sont définies. Il est également possible d'avoir des variables qui
+« vivent » en dehors de toute méthode : ce sont les \emph{variables de classe}
+(ou variables statiques), car elles appartiennent à la classe et non à une
+méthode. Comme pour les méthodes statiques, on les marque avec le mot-clé
+\texttt{static} :
+
+\begin{lstlisting}[language=Java]
+public class Main {
+
+    static int a = 3; // variable de classe
+
+    static void increment() {
+        a += 5; // équivaut à a = a + 5
+    }
+
+    public static void main(String[] args) {
+        increment();
+        System.out.println(a);
+    }
+}
+\end{lstlisting}
+
+Contrairement aux variables locales, les variables de classe sont
+automatiquement initialisées : à 0 pour les nombres, \texttt{false} pour les
+booléens. Ce code est donc accepté :
+
+\begin{lstlisting}[language=Java]
+public class Main {
+
+    static int a; // équivaut à a = 0
+
+    static void increment() {
+        a += 5;
+    }
+
+    public static void main(String[] args) {
+        increment();
+        System.out.println(a);
+    }
+}
+\end{lstlisting}
+
+Attention lorsque vous avez des variables de classe et des variables locales ou
+paramètres portant le même nom :
+
+\begin{lstlisting}[language=Java]
+public class Main {
+
+    static int a = 3;
+
+    static void increment(int a) {
+        a += 5; // ici, on modifie le paramètre, pas la variable de classe
+    }
+
+    public static void main(String[] args) {
+        increment(10);
+        System.out.println(a);
+    }
+}
+\end{lstlisting}
+
+Le paramètre \texttt{a} masque (\emph{shadow}) la variable de classe
+\texttt{a} dans le corps de la méthode \texttt{increment}. Si vous devez malgré
+tout accéder à la variable de classe, vous pouvez écrire :
+
+\begin{lstlisting}[language=Java]
+public class Main {
+
+    static int a = 3;
+
+    static void increment(int a) {
+        Main.a += 5; // on vise explicitement la variable de classe
+    }
+
+    public static void main(String[] args) {
+        increment(10);
+        System.out.println(a);
+    }
+}
+\end{lstlisting}
+
+\subsection{Tableaux}
+
+Si vous avez besoin d'un certain nombre de variables de même type primitif, il
+peut être utile d'utiliser un \emph{tableau} (\texttt{array}) plutôt que des
+variables séparées. Les tableaux sont similaires aux listes en Python, avec
+d'importantes différences :
+
+\begin{itemize}
+  \item Vous devez spécifier la taille lors de la création.
+  \item Tous les éléments ont le même type.
+\end{itemize}
+
+\begin{lstlisting}[language=Java]
+int[] a = new int[4]; // tableau de 4 entiers
+\end{lstlisting}
+
+Les éléments d'un tableau sont automatiquement initialisés (à 0 pour
+\texttt{int}, etc.) :
+
+\begin{lstlisting}[language=Java]
+int[] a = new int[4]; // tous les éléments valent 0
+a[2] = 5;
+int b = a[1] + a[2];
+System.out.println(b); // affiche 5
+\end{lstlisting}
+
+La taille d'un tableau est fixe : on ne peut pas ajouter ou supprimer des
+éléments (contrairement aux listes Python). Plus tard, nous verrons la classe
+\texttt{ArrayList}, plus flexible.
+
+\subsection{Modèle mental pour les tableaux}
+
+Une variable de type tableau ne contient pas directement les éléments ; elle
+contient une \emph{référence} vers les données du tableau. Lorsqu'on écrit :
+
+\begin{lstlisting}[language=Java]
+int[] a = new int[4];
+int[] b = a;
+\end{lstlisting}
+
+\texttt{a} et \texttt{b} référencent le même tableau. Modifier via
+\texttt{b} affecte aussi ce que l'on voit via \texttt{a} :
+
+\begin{lstlisting}[language=Java]
+int[] a = new int[4];
+int[] b = a;
+b[2] = 5;
+System.out.println(a[2]); // affiche 5
+\end{lstlisting}
+
+Même chose lorsqu'un tableau est passé en paramètre :
+
+\begin{lstlisting}[language=Java]
+public class Main {
+
+    static void five(int[] x) {
+        x[2] = 5;
+    }
+
+    public static void main(String[] args) {
+        int[] a = new int[4];
+        five(a);
+        System.out.println(a[2]); // affiche 5
+    }
+}
+\end{lstlisting}
+
+\subsection{Initialisation d'un tableau}
+
+On peut créer et initialiser un tableau en une seule étape :
+
+\begin{lstlisting}[language=Java]
+int[] a = { 2, 5, 6, -3 };
+\end{lstlisting}
+
+Ceci équivaut à créer le tableau puis affecter chaque élément un par un.
+Attention : cette syntaxe compacte n'est autorisée que lors de la déclaration.
+Pour réaffecter un tableau plus tard, on doit écrire :
+
+\begin{lstlisting}[language=Java]
+int[] a = { 2, 5, 6, -3 };
+a = new int[]{ 1, 9, 3, 4 };
+\end{lstlisting}
+
+\subsection{Tableaux multidimensionnels}
+
+Les tableaux peuvent avoir plusieurs dimensions. Par exemple, un tableau
+bidimensionnel peut représenter une matrice :
+
+\begin{lstlisting}[language=Java]
+int[][] a = new int[3][5]; // matrice 3x5
+a[2][4] = 5;
+\end{lstlisting}
+
+Un \texttt{int[3][5]} est en fait un tableau de 3 références vers des tableaux
+d'entiers de taille 5.
+
+\begin{lstlisting}[language=Java]
+int[][] a = new int[3][5];
+int[] b = a[0]; // b référence la première ligne (5 éléments)
+b[3] = 7;
+System.out.println(a[0][3]); // même élément
+\end{lstlisting}
+
+On peut aussi initialiser directement :
+
+\begin{lstlisting}[language=Java]
+// matrice identité 3x3
+int[][] a = {
+    { 1, 0, 0 },
+    { 0, 1, 0 },
+    { 0, 0, 1 }
+};
+\end{lstlisting}
+
+\subsection{Tableaux partiellement initialisés}
+
+Il est possible de ne spécifier que la première dimension :
+
+\begin{lstlisting}[language=Java]
+int[][] a = new int[3][];
+\end{lstlisting}
+
+Ici, chaque élément de \texttt{a} est initialisé à \texttt{null}. On les
+initialise ensuite :
+
+\begin{lstlisting}[language=Java]
+int[][] a = new int[3][];
+a[0] = new int[5];
+a[1] = new int[5];
+a[2] = new int[2]; // autorisé : pas obligé d'avoir la même taille
+\end{lstlisting}
+
+\subsection{Tableaux et variables de classe}
+
+Les variables de type tableau peuvent aussi être des variables de classe :
+
+\begin{lstlisting}[language=Java]
+public class Main {
+
+    static int[] a; // initialisée automatiquement à null
+
+    public static void main(String[] args) {
+        // compile, mais lancera une erreur à l'exécution
+        System.out.println(a[2]);
+    }
+}
+\end{lstlisting}
+
+La valeur \texttt{null} représente une référence invalide.
+
+\subsection{Boucles \texttt{while}}
+
+La boucle \texttt{while} en Java est très proche de celle de Python :
+
+\begin{lstlisting}[language=Java]
+int sum = 0;
+int i = 0;
+while (i < 10) {
+    sum += i;
+    System.out.println("Nearly there");
+    i++;
+}
+System.out.println("The sum is " + sum);
+\end{lstlisting}
+
+Attention : si le corps de la boucle contient plus d'une instruction, il doit
+être entouré d'accolades \texttt{\{...\}}. Il est fortement recommandé de
+toujours utiliser les accolades, même pour une seule instruction.
+
+\subsection{Boucles \texttt{for} simples}
+
+La forme simplifiée de \texttt{for} (\emph{for-each}) est pratique pour
+parcourir les éléments d'un tableau :
+
+\begin{lstlisting}[language=Java]
+int[] myArray = new int[]{ 2, 5, 6, -3 };
+int sum = 0;
+for (int elem : myArray) {
+    sum += elem;
+}
+System.out.println("The sum is " + sum);
+\end{lstlisting}
+
+\subsection{Boucles \texttt{for} complexes}
+
+La forme complète donne un contrôle total :
+
+\begin{lstlisting}[language=Java]
+int sum = 0;
+for (int i = 0; i < 10; i++) {
+    sum += i;
+    System.out.println("Nearly there");
+}
+System.out.println("The sum is " + sum);
+\end{lstlisting}
+
+Exemple : somme d'un élément sur deux dans un tableau :
+
+\begin{lstlisting}[language=Java]
+int[] myArray = new int[]{ 2, 5, 6, -3, 4, 1 };
+int sum = 0;
+for (int i = 0; i < myArray.length; i += 2) {
+    sum += myArray[i];
+}
+System.out.println("The sum is " + sum);
+\end{lstlisting}
+
+\subsection{Arrêter une boucle, sauter des itérations}
+
+\texttt{break} permet de sortir de la boucle, \texttt{continue} de passer
+directement à l'itération suivante :
+
+\begin{lstlisting}[language=Java]
+for (int i = 0; i < 10; i++) {
+    if (i == 5) {
+        continue;
+    }
+    // ...
+}
+\end{lstlisting}
+
+À n'utiliser que s'ils rendent le code plus lisible.
+
+\subsection{Instructions \texttt{if/else}}
+
+L'instruction \texttt{if} fonctionne comme en Python. Exemple :
+
+\begin{lstlisting}[language=Java]
+int[] myArray = new int[]{ 2, -5, 6, 0, -4, 1 };
+int countNegative = 0;
+int countPositive = 0;
+for (int elem : myArray) {
+    if (elem < 0) {
+        countNegative++;
+    } else if (elem > 0) {
+        countPositive++;
+    } else {
+        System.out.println("Value zero found");
+    }
+}
+System.out.println("The number of negative values is " + countNegative);
+System.out.println("The number of positive values is " + countPositive);
+\end{lstlisting}
+
+Toujours penser aux accolades.
+
+\subsection{Opérateurs de comparaison et logiques}
+
+\begin{lstlisting}[language=Java]
+boolean b1 = 3 < 4;     // <, >, <=, >=, ==, !=
+boolean b2 = !b1;       // négation
+boolean b3 = b1 && b2;  // et logique
+boolean b4 = b1 || b2;  // ou logique
+\end{lstlisting}
+
+\subsection{Instruction \texttt{switch}}
+
+Plutôt qu'une longue suite de \texttt{if/else if} :
+
+\begin{lstlisting}[language=Java]
+int x = 0, y = 0;
+char[] directions = new char[]{'N', 'S', 'S', 'E', 'E', 'W'};
+
+for (char c : directions) {
+    switch (c) {
+        case 'N' -> { y++; }
+        case 'S' -> { y--; }
+        case 'W' -> { x--; }
+        case 'E' -> { x++; }
+        default -> { System.out.println("Error! Unknown direction"); }
+    }
+    System.out.println("The new position is " + x + " , " + y);
+}
+\end{lstlisting}
+
+Cette syntaxe avec \texttt{->} nécessite Java~14 ou plus récent. Pour les
+versions plus anciennes, il faut utiliser \texttt{case} avec \texttt{break}.
+
+\subsection{Chaînes de caractères}
+
+Les variables contenant des chaînes ont le type \texttt{String}. On les
+concatène avec \texttt{+}, y compris avec des valeurs primitives :
+
+\begin{lstlisting}[language=Java]
+String s1 = "This is a string";
+String s2 = "This is another string";
+String s3 = s1 + "---" + s2 + 12345;
+System.out.println(s3);
+\end{lstlisting}
+
+La classe \texttt{String} propose de nombreuses méthodes utiles, par exemple :
+
+\begin{lstlisting}[language=Java]
+String s = "Hello world";
+int l = s.length();
+boolean b = s.isEmpty();
+char c = s.charAt(3);
+boolean b2 = s.startsWith("Hello");
+int i = s.indexOf("wo");
+String t = s.substring(2);
+\end{lstlisting}
+
+Pour convertir une chaîne en entier :
+
+\begin{lstlisting}[language=Java]
+int i = Integer.parseInt("1234");
+\end{lstlisting}
+
+\subsection{Modèle mental pour les chaînes}
+
+Comme les tableaux, les variables \texttt{String} contiennent des références.
+
+\subsection{Comparer des valeurs}
+
+Pour les types primitifs, \texttt{==} compare les valeurs. Pour les tableaux et
+les chaînes, \texttt{==} compare les références, pas le contenu :
+
+\begin{lstlisting}[language=Java]
+int[] a = {1, 2, 3};
+int[] b = {1, 2, 3};
+System.out.println(a == b); // false
+
+int[] c = a;
+System.out.println(a == c); // true
+\end{lstlisting}
+
+Pour comparer le contenu de deux chaînes, on utilise \texttt{equals} :
+
+\begin{lstlisting}[language=Java]
+String s1 = "Hello" + String.valueOf(1234);
+String s2 = "Hello1234";
+System.out.println(s1.equals(s2)); // true
+\end{lstlisting}
+
+Pour les tableaux, on utilise \texttt{Arrays.equals} de
+\texttt{java.util.Arrays}.
+
+\subsection{Énumérations}
+
+Les \texttt{enum} définissent un ensemble de constantes typées. On peut les
+utiliser avec \texttt{switch} ou \texttt{==}. Exemple (directions) :
+
+\begin{lstlisting}[language=Java]
+public class DirectionFollower {
+
+    public enum Direction {
+        NORTH, EAST, SOUTH, WEST;
+    }
+
+    public static int[] followDirections(int[] start, Direction[] directions) {
+        int[] result = new int[]{start[0], start[1]};
+
+        for (Direction direction : directions) {
+            switch (direction) {
+                case NORTH: result[1]++; break;
+                case EAST:  result[0]++; break;
+                case SOUTH: result[1]--; break;
+                case WEST:  result[0]--; break;
+            }
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        int[] start = {0, 0};
+        Direction[] directions = {
+            Direction.NORTH,
+            Direction.EAST,
+            Direction.EAST,
+            Direction.SOUTH,
+            Direction.WEST,
+            Direction.NORTH,
+            Direction.NORTH
+        };
+
+        int[] finalCoordinates = followDirections(start, directions);
+        System.out.println(
+            "The final coordinates are: [" +
+            finalCoordinates[0] + ", " + finalCoordinates[1] + "]"
+        );
+    }
+}
+\end{lstlisting}
+
+\section{Exceptions}
+
+En Java, il existe deux façons de sortir d'une méthode : utiliser l'instruction
+\texttt{return} ou lever une exception.
+
+\subsection{Lever une exception}
+
+Les exceptions permettent d'interrompre l'exécution normale lorsqu'une situation
+exceptionnelle survient. On utilise pour cela l'instruction \texttt{throw} en
+lui fournissant une instance de \texttt{Exception} (ou d'une sous-classe) qui
+contient des informations sur le problème :
+
+\begin{lstlisting}[language=Java]
+class Employee {
+    Employee boss;
+
+    void setBoss(Employee boss) throws Exception {
+        if (this == boss) {
+            throw new Exception("An employee cannot be their own boss");
+        } else {
+            this.boss = boss;
+        }
+    }
+}
+\end{lstlisting}
+
+En général, une méthode susceptible de lever une exception doit l'indiquer dans
+sa déclaration avec le mot-clé \texttt{throws}.
+
+Quand une méthode appelle une autre méthode qui peut lever une exception, elle
+peut réagir en la \emph{capturant} via un bloc \texttt{try-catch} :
+
+\begin{lstlisting}[language=Java]
+public class Main {
+    public static void main(String[] args) {
+
+        Employee peter = new Employee();
+        Employee anna = new Employee();
+
+        try {
+            peter.setBoss(anna);  // OK
+            peter.setBoss(peter); // lève une exception
+        }
+        catch (Exception e) {
+            System.out.println("An exception happened: " + e.getMessage());
+        }
+    }
+}
+\end{lstlisting}
+
+Si \texttt{setBoss()} lève une exception, l'exécution passe directement dans le
+bloc \texttt{catch}. La variable \texttt{e} référence l'objet \texttt{Exception}.
+
+Une méthode peut aussi choisir de ne pas intercepter l'exception : celle-ci est
+alors propagée à la méthode appelante, et ainsi de suite, jusqu'à ce qu'elle
+soit interceptée :
+
+\begin{lstlisting}[language=Java]
+public class Main {
+    static void setBossOfTeam(Employee[] team, Employee boss) throws Exception {
+        for (Employee employee : team) {
+            employee.setBoss(boss); // peut lever une exception
+        }
+    }
+
+    public static void main(String[] args) {
+        Employee peter = new Employee();
+        Employee anna = new Employee();
+
+        try {
+            Employee[] team = { peter, anna };
+            setBossOfTeam(team, peter); // lèvera une exception
+        }
+        catch (Exception e) {
+            System.out.println("An exception happened: " + e.getMessage());
+        }
+    }
+}
+\end{lstlisting}
+
+\subsection{Utiliser des sous-classes d'Exception}
+
+En créant des sous-classes de \texttt{Exception}, on fournit plus
+d'informations au code qui intercepte l'exception :
+
+\begin{lstlisting}[language=Java]
+class SelfBossException extends Exception {
+    SelfBossException(String message) {
+        super(message);
+    }
+}
+
+class NoBossException extends Exception {
+    NoBossException(String message) {
+        super(message);
+    }
+}
+
+class Employee {
+    Employee boss;
+
+    void setBoss(Employee boss) throws SelfBossException, NoBossException {
+        if (this == boss) {
+            throw new SelfBossException("An employee cannot be their own boss");
+        } else if (boss == null) {
+            throw new NoBossException("You cannot take the boss away from an employee");
+        } else {
+            this.boss = boss;
+        }
+    }
+}
+\end{lstlisting}
+
+On peut alors écrire :
+
+\begin{lstlisting}[language=Java]
+public class Main {
+    public static void main(String[] args) {
+        Employee peter = new Employee();
+        Employee anna = new Employee();
+
+        try {
+            peter.setBoss(anna);
+            peter.setBoss(null); // lève NoBossException
+        }
+        catch (SelfBossException e) {
+            System.out.println("SelfBossException happened: " + e.getMessage());
+        }
+        catch (NoBossException e) {
+            System.out.println("NoBossException happened: " + e.getMessage());
+        }
+    }
+}
+\end{lstlisting}
+
+Ou regrouper :
+
+\begin{lstlisting}[language=Java]
+catch (SelfBossException | NoBossException e) {
+    System.out.println("Some exception happened: " + e.getMessage());
+}
+\end{lstlisting}
+
+Ou encore intercepter toutes les exceptions :
+
+\begin{lstlisting}[language=Java]
+catch (Exception e) {
+    System.out.println("Some exception happened: " + e.getMessage());
+}
+\end{lstlisting}
+
+\subsection{Exceptions contrôlées et non contrôlées}
+
+Les exceptions que nous avons levées ci-dessus sont \emph{contrôlées}
+(\emph{checked}) : le compilateur vérifie qu'elles sont soit interceptées, soit
+déclarées avec \texttt{throws}.
+
+Certaines exceptions sont \emph{non contrôlées} (\emph{unchecked}), par
+exemple \texttt{NullPointerException}, levée lorsque le programme tente
+d'accéder à une référence \texttt{null} :
+
+\begin{lstlisting}[language=Java]
+public class Main {
+    public static void main(String[] args) {
+        Object obj = null;
+        String s = obj.toString(); // NullPointerException
+    }
+}
+\end{lstlisting}
+
+Pas besoin de \texttt{throws} ni de \texttt{try-catch}, même si on peut les
+intercepter :
+
+\begin{lstlisting}[language=Java]
+try {
+    String s = obj.toString();
+}
+catch (NullPointerException e) {
+    System.out.println("A null pointer exception happened!");
+}
+\end{lstlisting}
+
+Les exceptions non contrôlées sont des instances de \texttt{Error} ou de
+\texttt{RuntimeException} (ou de leurs sous-classes). Toutes ces classes
+dérivent de \texttt{Throwable}.
+
+\subsection{Avons-nous besoin des exceptions ?}
+
+On pourrait réécrire \texttt{setBoss} sans exceptions :
+
+\begin{lstlisting}[language=Java]
+class Employee {
+    Employee boss;
+
+    boolean setBoss(Employee boss) {
+        if (this == boss) {
+            return false;
+        } else {
+            this.boss = boss;
+            return true;
+        }
+    }
+}
+\end{lstlisting}
+
+Et côté appel :
+
+\begin{lstlisting}[language=Java]
+boolean success = peter.setBoss(anna);
+if (success) {
+    success = peter.setBoss(peter);
+}
+if (!success) {
+    System.out.println("Something bad happened");
+}
+\end{lstlisting}
+
+Sans exceptions, il faut vérifier le résultat après chaque appel, ce qui alourdit
+le code, mais la logique peut parfois être plus explicite. Conclusion :
+utilisez les exceptions avec parcimonie.
+
+\subsection{Exceptions et opérations d'entrée/sortie}
+
+Le JDK fournit de nombreuses classes pour travailler avec des fichiers et
+communiquer sur Internet. Beaucoup de leurs méthodes peuvent lever
+\texttt{IOException}. Exemple : lecture de deux caractères depuis un fichier :
+
+\begin{lstlisting}[language=Java]
+import java.io.FileReader;
+import java.io.IOException;
+
+public class Main {
+    public static void main(String[] args) {
+        try {
+            FileReader reader = new FileReader("somefile.txt");
+
+            char c1 = (char) reader.read();
+            char c2 = (char) reader.read();
+
+            reader.close();
+        }
+        catch (IOException e) {
+            System.out.println(e);
+        }
+    }
+}
+\end{lstlisting}
+
+Si \texttt{read()} lève une exception, \texttt{reader.close()} n'est pas
+appelé. On corrige avec \texttt{finally} :
+
+\begin{lstlisting}[language=Java]
+try {
+    FileReader reader = new FileReader("somefile.txt");
+    try {
+        char c1 = (char) reader.read();
+        char c2 = (char) reader.read();
+    }
+    finally {
+        reader.close();
+    }
+}
+catch (IOException e) {
+    System.out.println(e);
+}
+\end{lstlisting}
+
+Java propose une forme compacte, le \emph{try-with-resources} :
+
+\begin{lstlisting}[language=Java]
+import java.io.FileReader;
+import java.io.IOException;
+
+public class Main {
+    public static void main(String[] args) {
+        try (FileReader reader = new FileReader("somefile.txt")) {
+            char c1 = (char) reader.read();
+            char c2 = (char) reader.read();
+        }
+        catch (IOException e) {
+            System.out.println(e);
+        }
+    }
+}
+\end{lstlisting}
+
+\chapter{Programmation orientée objet}
+\label{chap:oopl}
+
+\section{Notions de base}
+\label{sec:oopl-basics}
+
+\subsection{Créer vos propres objets}
+
+Jusqu’ici, nous avons surtout utilisé :
+
+\begin{itemize}
+  \item des types primitifs (\texttt{int}, \texttt{double}, \dots),
+  \item des tableaux,
+  \item la classe \texttt{String}.
+\end{itemize}
+
+En Java, nous pouvons définir nos \emph{propres} types d’objets à l’aide de classes.  
+Considérons par exemple des employé·e·s décrits par un nom et un salaire :
+
+\begin{lstlisting}[language=Java]
+class Employee {
+    String name;
+    int salary;
+}
+\end{lstlisting}
+
+Nous pouvons alors créer et manipuler ces objets :
+
+\begin{lstlisting}[language=Java]
+public class Main {
+    public static void main(String[] args) {
+        Employee anna = new Employee();
+        anna.name = "Anna";
+        anna.salary = 45000;
+
+        Employee peter = new Employee();
+        peter.name = "Peter";
+        peter.salary = 45000;
+
+        System.out.println(anna.name + " earns " + anna.salary);
+        System.out.println(peter.name + " earns " + peter.salary);
+    }
+}
+\end{lstlisting}
+
+Chaque objet possède ses \emph{propres} variables d’instance. Si nous augmentons le salaire d’Anna, cela ne modifie pas celui de Peter, car ce sont deux objets distincts.
+
+\subsection{Initialiser les objets}
+
+Par défaut, en Java :
+
+\begin{itemize}
+  \item les champs numériques sont initialisés à \texttt{0},
+  \item les références (par exemple \texttt{String}) sont initialisées à \texttt{null}.
+\end{itemize}
+
+Pour éviter d’oublier certaines initialisations, on utilise des \emph{constructeurs}. Un constructeur a le même nom que la classe et n’a pas de type de retour.
+
+\begin{lstlisting}[language=Java]
+class Employee {
+    String name;
+    int salary;
+
+    Employee(String name, int salary) {
+        this.name = name;
+        this.salary = salary;
+    }
+}
+\end{lstlisting}
+
+Le mot-clé \texttt{this} désigne l’objet courant. Il permet aussi de distinguer les paramètres des champs lorsqu’ils portent le même nom :
+
+\begin{lstlisting}[language=Java]
+Employee(String name, int salary) {
+    // Mauvais :
+    // name = name;       // ne fait que réaffecter le paramètre à lui-même
+
+    // Correct :
+    this.name = name;
+    this.salary = salary;
+}
+\end{lstlisting}
+
+\subsection{Modèle mental}
+
+Une variable de type classe ne \emph{contient} pas directement l’objet, mais une \emph{référence} vers celui-ci.
+
+\begin{lstlisting}[language=Java]
+Employee anna = new Employee("Anna", 45000);
+Employee peter = new Employee("Peter", 45000);
+\end{lstlisting}
+
+Ici, \texttt{anna} et \texttt{peter} sont deux références distinctes, chacune pointant vers un objet différent en mémoire.
+
+L’opérateur \texttt{==} appliqué à des objets compare les \emph{références}, pas le contenu.
+
+\begin{lstlisting}[language=Java]
+Employee x = new Employee("Anna", 45000);
+Employee y = new Employee("Anna", 45000);
+Employee z = x;
+
+System.out.println(x == y); // false : objets distincts
+System.out.println(x == z); // true  : même référence
+\end{lstlisting}
+
+\subsection{Travailler avec des objets}
+
+On peut créer des tableaux d’objets :
+
+\begin{lstlisting}[language=Java]
+Employee[] staff = new Employee[3];
+
+staff[0] = new Employee("Anna", 45000);
+staff[1] = new Employee("Peter", 45000);
+staff[2] = new Employee("John", 40000);
+\end{lstlisting}
+
+Chaque case du tableau est une \emph{référence} vers un \texttt{Employee}.  
+Une référence non initialisée vaut \texttt{null}. Toute tentative d’utiliser une référence \texttt{null} provoque un \texttt{NullPointerException}.
+
+\subsection{Méthodes}
+
+On peut définir des méthodes \emph{statiques} externes :
+
+\begin{lstlisting}[language=Java]
+static void increaseSalary(Employee employee, int raise) {
+    if (raise < 10000) {
+        employee.salary += raise;
+    }
+}
+\end{lstlisting}
+
+Mais en programmation orientée objet, il est préférable que les opérations sur un objet soient définies à \emph{l’intérieur} de sa classe :
+
+\begin{lstlisting}[language=Java]
+class Employee {
+    String name;
+    int salary;
+
+    Employee(String name, int salary) {
+        this.name = name;
+        this.salary = salary;
+    }
+
+    void increaseSalary(int raise) {
+        if (raise < 10000) {
+            this.salary += raise;
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Employee anna = new Employee("Anna", 45000);
+        Employee peter = new Employee("Peter", 45000);
+
+        anna.increaseSalary(2000);
+        peter.increaseSalary(3000);
+
+        System.out.println("New salary of Anna is " + anna.salary);
+        System.out.println("New salary of Peter is " + peter.salary);
+    }
+}
+\end{lstlisting}
+
+À l’intérieur d’une méthode d’instance, \texttt{this} référence l’objet sur lequel la méthode a été appelée.
+
+\subsection{Restreindre l’accès}
+
+Avec le code précédent, on peut toujours contourner la logique métier :
+
+\begin{lstlisting}[language=Java]
+Employee anna = new Employee("Anna", 45000);
+anna.salary += 1_500_000; // Oups.
+\end{lstlisting}
+
+Pour protéger les données, on utilise le modificateur d’accès \texttt{private} :
+
+\begin{lstlisting}[language=Java]
+class Employee {
+    String name;
+    private int salary;
+
+    Employee(String name, int salary) {
+        this.name = name;
+        this.salary = salary;
+    }
+
+    void increaseSalary(int raise) {
+        if (raise < 10000) {
+            this.salary += raise;
+        }
+    }
+}
+\end{lstlisting}
+
+La variable d’instance \texttt{salary} n’est plus accessible depuis l’extérieur.  
+Pour lire sa valeur, on ajoute une méthode d’accès (\emph{getter}) :
+
+\begin{lstlisting}[language=Java]
+int getSalary() {
+    return this.salary;
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Employee anna = new Employee("Anna", 45000);
+        anna.increaseSalary(2000);
+        System.out.println("New salary of Anna is " + anna.getSalary());
+    }
+}
+\end{lstlisting}
+
+\subsection{Héritage}
+
+Supposons un jeu où les armes sont représentées par une classe :
+
+\begin{lstlisting}[language=Java]
+class Weapon {
+    private int level;
+    private String name;
+
+    Weapon(String name, int level) {
+        this.name = name;
+        this.level = level;
+    }
+
+    int getPrice() {
+        return this.level * 500;
+    }
+
+    int getSimpleDamage() {
+        return this.level * 10;
+    }
+
+    int getDoubleDamage() {
+        return this.getSimpleDamage() * 2;
+    }
+}
+\end{lstlisting}
+
+On veut maintenant une \texttt{MightySword} (épée puissante) avec des dégâts différents. On utilise \emph{extends} :
+
+\begin{lstlisting}[language=Java]
+class MightySword extends Weapon {
+
+    MightySword(int level) {
+        super("Mighty sword", level);
+    }
+
+    @Override
+    int getSimpleDamage() {
+        return super.getSimpleDamage() + 10;
+    }
+}
+\end{lstlisting}
+
+Ici :
+
+\begin{itemize}
+  \item \texttt{extends} indique que \texttt{MightySword} \emph{hérite} de \texttt{Weapon},
+  \item le constructeur appelle \texttt{super(...)} pour initialiser la super-classe,
+  \item \texttt{@Override} signale que l’on redéfinit une méthode existante.
+\end{itemize}
+
+\subsection{Le mot-clé \texttt{super}}
+
+\texttt{super} permet :
+
+\begin{itemize}
+  \item d’appeler le constructeur de la super-classe,
+  \item d’accéder à une méthode ou un champ de la super-classe (\texttt{super.methode()}).
+\end{itemize}
+
+Il est utile lorsqu’on spécialise un comportement tout en réutilisant l’implémentation existante.
+
+\subsection{L’annotation \texttt{@Override}}
+
+\texttt{@Override} demande au compilateur de vérifier qu’une méthode redéfinit effectivement une méthode héritée.  
+Sans cette annotation, une simple faute de frappe créerait une nouvelle méthode au lieu d’écraser l’ancienne.
+
+\subsection{Étendre encore et encore\ldots{} (polymorphisme)}
+
+On peut enchaîner l’héritage (par exemple différentes sous-classes de \texttt{Weapon}).  
+Le \emph{polymorphisme} permet de manipuler des objets de sous-classes via une référence de la super-classe :
+
+\begin{lstlisting}[language=Java]
+Weapon w = new MightySword(3);
+System.out.println(w.getSimpleDamage()); // Appelle la version de MightySword
+\end{lstlisting}
+
+Le choix de la méthode est fait dynamiquement à l’exécution selon le type réel de l’objet.
+
+\subsection{La hiérarchie de classes et \texttt{Object}}
+
+En Java, toute classe hérite (directement ou indirectement) de \texttt{Object}, qui fournit notamment :
+
+\begin{itemize}
+  \item \texttt{toString()} : représentation textuelle,
+  \item \texttt{equals(Object o)} : test d’égalité logique,
+  \item \texttt{hashCode()} : code de hachage.
+\end{itemize}
+
+Redéfinir correctement \texttt{toString()}, \texttt{equals()} et \texttt{hashCode()} est essentiel pour les collections.
+
+\subsection{\texttt{ArrayList}}
+
+\texttt{ArrayList<E>} est une implémentation dynamique de liste.
+
+\begin{lstlisting}[language=Java]
+import java.util.ArrayList;
+
+ArrayList<String> names = new ArrayList<>();
+names.add("Alice");
+names.add("Bob");
+\end{lstlisting}
+
+On utilise :
+
+\begin{itemize}
+  \item \texttt{add}, \texttt{get}, \texttt{size}, \texttt{remove}, \dots
+\end{itemize}
+
+\subsection{Boucles \texttt{for} sur \texttt{ArrayList}}
+
+\begin{lstlisting}[language=Java]
+// for classique
+for (int i = 0; i < names.size(); i++) {
+    System.out.println(names.get(i));
+}
+
+// for-each
+for (String n : names) {
+    System.out.println(n);
+}
+\end{lstlisting}
+
+\subsection{Boxing et unboxing}
+
+Java convertit automatiquement entre types primitifs et leurs classes enveloppes :
+
+\begin{itemize}
+  \item \texttt{int} $\leftrightarrow$ \texttt{Integer},
+  \item \texttt{double} $\leftrightarrow$ \texttt{Double}, etc.
+\end{itemize}
+
+\begin{lstlisting}[language=Java]
+ArrayList<Integer> list = new ArrayList<>();
+list.add(10);          // boxing automatique
+int x = list.get(0);   // unboxing automatique
+\end{lstlisting}
+
+\subsection{\texttt{ArrayList} et génériques}
+
+Les collections utilisent des \emph{génériques} pour indiquer le type des éléments :
+
+\begin{lstlisting}[language=Java]
+ArrayList<String> list = new ArrayList<>();
+list.add("hello");
+// list.add(1); // interdit : pas une String
+\end{lstlisting}
+
+Cela permet de détecter des erreurs de type à la compilation.
+
+\subsection{Surcharge de méthodes (paramètres différents)}
+
+Deux méthodes dans la même classe peuvent partager le même nom si leurs listes de paramètres sont différentes :
+
+\begin{lstlisting}[language=Java]
+void print(String s) { ... }
+void print(int x)    { ... }
+\end{lstlisting}
+
+Le compilateur choisit la version appropriée selon les arguments.
+
+\subsection{Surcharge avec des types de sous-classes}
+
+Si plusieurs signatures correspondent, Java choisit celle dont les types de paramètres sont les plus spécifiques.
+
+\subsection{Surcharge et ``meilleure correspondance''}
+
+La résolution de surcharge suit des règles précises (conversion, promotion, etc.). Si l’ambiguïté est trop grande, le code ne compile pas.
+
+\subsection{Héritage multiple}
+
+Java \emph{n’autorise pas} l’héritage multiple de classes (une classe ne peut étendre qu’une seule autre classe), afin d’éviter des ambiguïtés.  
+La flexibilité supplémentaire se fait via :
+
+\begin{itemize}
+  \item les interfaces,
+  \item la délégation.
+\end{itemize}
+
+\subsection{Le mot-clé \texttt{final}}
+
+\subsubsection{Paramètres \texttt{final}}
+
+Un paramètre déclaré \texttt{final} ne peut plus être réaffecté dans le corps de la méthode.
+
+\subsubsection{Variables locales \texttt{final}}
+
+Même idée : une variable locale \texttt{final} ne peut être réaffectée. Utile pour exprimer qu’une valeur ne doit pas changer.
+
+\subsubsection{Méthodes \texttt{final}}
+
+Une méthode \texttt{final} ne peut pas être redéfinie dans une sous-classe. On garantit ainsi un comportement immuable.
+
+\subsubsection{Classes \texttt{final}}
+
+Une classe \texttt{final} ne peut pas être étendue. Exemple : \texttt{String}. Cela évite qu’une sous-classe ne brise des hypothèses cruciales.
+
+\subsubsection{Variables de classe \texttt{final}}
+
+Typiquement utilisées pour les constantes :
+
+\begin{lstlisting}[language=Java]
+class Physics {
+    static final double SPEED_OF_LIGHT = 299792458;
+}
+\end{lstlisting}
+
+\subsubsection{Variables d’instance \texttt{final}}
+
+Une variable d’instance \texttt{final} est fixée une fois pour toutes (souvent dans le constructeur) et ne peut plus être modifiée.  
+Pratique pour représenter l’\og identité\fg{} d’un objet (par exemple un numéro de registre national).
+
+\subsection{Paquets (\textit{packages})}
+\label{subsec:packages}
+
+Dans des projets plus grands, on place chaque classe dans son propre fichier \texttt{.java} et on les regroupe par \emph{paquets} :
+
+\begin{lstlisting}[language=Java]
+// Fichier Person.java
+package lepl1402.week3;
+
+class Person {
+    final String socialSecurityNumber;
+
+    Person(String ssn) {
+        this.socialSecurityNumber = ssn;
+    }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=Java]
+// Fichier Main.java
+package lepl1402.week3;
+
+public class Main {
+    public static void main(String[] args) {
+        Person person = new Person("123-456-789");
+    }
+}
+\end{lstlisting}
+
+La structure des répertoires doit refléter celle des paquets.
+
+Si aucun \texttt{package} n’est indiqué, la classe appartient au \og package sans nom\fg{}.
+
+\subsection{Utiliser plusieurs paquets}
+
+Les classes de paquets différents ne se voient pas automatiquement. Exemple :
+
+\begin{lstlisting}[language=Java]
+// Person.java
+package lepl1402.week3.example;
+
+public class Person {
+    final String socialSecurityNumber;
+
+    public Person(String ssn) {
+        this.socialSecurityNumber = ssn;
+    }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=Java]
+// Main.java
+package lepl1402.week3;
+
+import lepl1402.week3.example.Person;
+
+public class Main {
+    public static void main(String[] args) {
+        Person person = new Person("123-456-789");
+    }
+}
+\end{lstlisting}
+
+Points importants :
+
+\begin{enumerate}
+  \item Seules les classes \texttt{public} sont accessibles depuis d’autres paquets.
+  \item Seuls les membres \texttt{public} sont accessibles depuis d’autres paquets.
+  \item On utilise \texttt{import} ou le nom pleinement qualifié.
+\end{enumerate}
+
+\subsection{Pourquoi les paquets sont-ils utiles ?}
+
+\begin{itemize}
+  \item Ils permettent de contrôler la visibilité des classes et méthodes.
+  \item Ils offrent des espaces de noms séparés : deux paquets peuvent contenir chacun une classe \texttt{ABC} sans conflit.
+\end{itemize}
+
+\subsection{Contrôle d’accès}
+\label{subsec:access-control}
+
+Récapitulatif :
+
+\paragraph{Visibilité des classes}
+
+\begin{itemize}
+  \item \texttt{public} : visible partout.
+  \item sans modificateur : visible uniquement dans le même paquet.
+\end{itemize}
+
+\paragraph{Visibilité des membres (champs, méthodes)}
+
+\begin{itemize}
+  \item \texttt{public} : accessible partout.
+  \item \texttt{private} : accessible uniquement dans la classe.
+  \item \texttt{protected} : accessible dans la classe, ses sous-classes et les classes du même paquet.
+  \item sans modificateur : accessible dans la classe et dans le même paquet.
+\end{itemize}
+
+\section{Classes abstraites}
+\label{sec:abstract-classes}
+
+Une classe abstraite ne peut pas être instanciée directement. Elle sert de base commune à plusieurs sous-classes.  
+Elle peut contenir :
+
+\begin{itemize}
+  \item des méthodes concrètes,
+  \item des méthodes abstraites (sans corps).
+\end{itemize}
+
+Imaginons un programme de dessin scientifique qui gère différentes formes géométriques. Toutes les formes peuvent :
+
+\begin{itemize}
+  \item afficher des informations à leur sujet,
+  \item mais la formule de l’aire dépend du type de forme.
+\end{itemize}
+
+On applique le principe Open/Closed : ouvert à l’extension, fermé à la modification.  
+
+\begin{lstlisting}[language=Java]
+public abstract class Shape {
+    protected String shapeName;
+
+    public Shape(String name) {
+        this.shapeName = name;
+    }
+
+    // Méthode abstraite : chaque sous-classe fournit sa formule
+    public abstract double calculateArea();
+
+    // Méthode concrète commune
+    public void displayShapeInfo() {
+        System.out.println("The " + shapeName +
+                           " has an area of: " + calculateArea());
+    }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=Java]
+public class Circle extends Shape {
+    private double radius;
+
+    public Circle(double radius) {
+        super("Circle");
+        this.radius = radius;
+    }
+
+    @Override
+    public double calculateArea() {
+        return Math.PI * radius * radius;
+    }
+}
+
+public class Rectangle extends Shape {
+    private double length;
+    private double width;
+
+    public Rectangle(double length, double width) {
+        super("Rectangle");
+        this.length = length;
+        this.width = width;
+    }
+
+    @Override
+    public double calculateArea() {
+        return length * width;
+    }
+}
+
+public class Triangle extends Shape {
+    private double base;
+    private double height;
+
+    public Triangle(double base, double height) {
+        super("Triangle");
+        this.base = base;
+        this.height = height;
+    }
+
+    @Override
+    public double calculateArea() {
+        return 0.5 * base * height;
+    }
+}
+\end{lstlisting}
+
+On peut alors écrire des méthodes génériques :
+
+\begin{lstlisting}[language=Java]
+class ShapeUtils {
+    public static double calculateTotalArea(Shape[] shapes) {
+        double totalArea = 0.0;
+        for (Shape shape : shapes) {
+            totalArea += shape.calculateArea();
+        }
+        return totalArea;
+    }
+
+    public static void main(String[] args) {
+        Shape[] shapes = {
+            new Circle(5),
+            new Rectangle(4, 5),
+            new Triangle(3, 4)
+        };
+        double totalArea = calculateTotalArea(shapes);
+        System.out.println("Total Area: " + totalArea);
+    }
+}
+\end{lstlisting}
+
+L’ajout d’une nouvelle forme ne nécessite pas de modifier \texttt{ShapeUtils} : il suffit de créer une nouvelle sous-classe de \texttt{Shape}.
+
+\section{Interfaces}
+\label{sec:interfaces}
+
+Une interface est un type entièrement abstrait : elle spécifie \emph{ce que} doivent faire les classes qui l’implémentent, pas \emph{comment}.
+
+\begin{lstlisting}[language=Java]
+public interface Camera {
+    void takePhoto();
+    void recordVideo();
+}
+
+public interface MediaPlayer {
+    void playAudio();
+    void playVideo();
+}
+\end{lstlisting}
+
+Une classe peut implémenter plusieurs interfaces (contrairement à l’héritage de classes) :
+
+\begin{lstlisting}[language=Java]
+public class Smartphone implements Camera, MediaPlayer {
+
+    @Override
+    public void takePhoto() {
+        System.out.println("Taking a photo");
+    }
+
+    @Override
+    public void recordVideo() {
+        System.out.println("Recording video");
+    }
+
+    @Override
+    public void playAudio() {
+        System.out.println("Playing audio");
+    }
+
+    @Override
+    public void playVideo() {
+        System.out.println("Playing video");
+    }
+}
+\end{lstlisting}
+
+Les interfaces offrent une grande flexibilité et encouragent la conception modulaire.
+
+\section{Délégation}
+\label{sec:delegation}
+
+Considérons une classe \texttt{Book} :
+
+\begin{lstlisting}[language=Java]
+public class Book {
+    private String title;
+    private String author;
+    private int publicationYear;
+
+    public Book(String title, String author, int year) {
+        this.title = title;
+        this.author = author;
+        this.publicationYear = year;
+    }
+
+    // getters, setters, ...
+}
+\end{lstlisting}
+
+On veut trier des livres par titre. Une première approche : implémenter \texttt{Comparable<Book>} :
+
+\begin{lstlisting}[language=Java]
+public class Book implements Comparable<Book> {
+    final String title;
+    final String author;
+    final int publicationYear;
+
+    public Book(String title, String author, int year) {
+        this.title = title;
+        this.author = author;
+        this.publicationYear = year;
+    }
+
+    @Override
+    public int compareTo(Book other) {
+        return this.title.compareTo(other.title);
+    }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=Java]
+List<Book> books = new ArrayList<>();
+// ... ajout de livres ...
+Collections.sort(books); // tri par titre
+\end{lstlisting}
+
+Mais si l’on veut trier aussi par auteur ou par année, une unique méthode \texttt{compareTo} ne suffit plus.  
+On utilise alors le \emph{design pattern de délégation} avec l’interface \texttt{Comparator} :
+
+\begin{lstlisting}[language=Java]
+import java.util.Comparator;
+
+public class TitleComparator implements Comparator<Book> {
+    @Override
+    public int compare(Book b1, Book b2) {
+        return b1.getTitle().compareTo(b2.getTitle());
+    }
+}
+
+public class AuthorComparator implements Comparator<Book> {
+    @Override
+    public int compare(Book b1, Book b2) {
+        return b1.getAuthor().compareTo(b2.getAuthor());
+    }
+}
+
+public class YearComparator implements Comparator<Book> {
+    @Override
+    public int compare(Book b1, Book b2) {
+        return Integer.compare(b1.getPublicationYear(),
+                               b2.getPublicationYear());
+    }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=Java]
+Collections.sort(books, new TitleComparator());
+Collections.sort(books, new AuthorComparator());
+Collections.sort(books, new YearComparator());
+\end{lstlisting}
+
+Ici, l’algorithme de tri délègue la comparaison à un objet \texttt{Comparator}. On peut ajouter de nouveaux critères sans modifier \texttt{Book} ni \texttt{Collections.sort} : cela illustre le principe Open/Closed.
+
+\paragraph{Exercice (délégation)}
+
+On développe un système de gestion de documents. La classe \texttt{Document} contient le contenu, mais délègue l’impression à une interface \texttt{Printer} (par exemple \texttt{InkjetPrinter}, \texttt{LaserPrinter}).  
+L’objectif est de respecter le principe de responsabilité unique et de faciliter l’extension.
+
+(Énoncé en code identique à la version anglaise, avec les commentaires adaptés.)
+
+\section{Observer}
+\label{sec:observer}
+
+Une bonne conception cherche un couplage faible entre objets.  
+Le \emph{design pattern Observer} permet à un objet (le sujet) de notifier automatiquement plusieurs observateurs des changements.
+
+\subsection{Pattern Observer sur des composants GUI}
+
+Les bibliothèques Swing/AWT utilisent ce principe. Exemple : un bouton qui affiche ``Thank you'' lorsqu’on clique :
+
+\begin{lstlisting}[language=Java]
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+class ButtonActionListener implements ActionListener {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        JOptionPane.showMessageDialog(null, "Thank you!");
+    }
+}
+
+public class AppWithActionListener {
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Hello");
+        frame.setSize(400, 200);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        JButton button = new JButton("Press me!");
+        button.addActionListener(new ButtonActionListener());
+        frame.add(button);
+
+        frame.setVisible(true);
+    }
+}
+\end{lstlisting}
+
+\begin{itemize}
+  \item \texttt{ActionListener} est une interface avec la méthode \texttt{actionPerformed}.
+  \item \texttt{ButtonActionListener} l’implémente.
+  \item On enregistre un observateur via \texttt{addActionListener}.
+\end{itemize}
+
+Le bouton appelle l’observateur lorsqu’un clic survient : \og Don’t call us, we will call you.\fg{}
+
+\subsection{Implémenter le pattern Observer}
+
+Exemple d’un compte bancaire observable :
+
+\begin{lstlisting}[language=Java]
+public interface AccountObserver {
+    void accountHasChanged(int newValue);
+}
+
+class MyObserver implements AccountObserver {
+    @Override
+    public void accountHasChanged(int newValue) {
+        System.out.println("The account has changed. New value: " + newValue);
+    }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=Java]
+import java.util.LinkedList;
+import java.util.List;
+
+public class ObservableAccount {
+    private int value;
+    private List<AccountObserver> observers = new LinkedList<>();
+
+    public void deposit(int d) {
+        value += d;
+        for (AccountObserver o : observers) {
+            o.accountHasChanged(value);
+        }
+    }
+
+    public void addObserver(AccountObserver o) {
+        observers.add(o);
+    }
+
+    public static void main(String[] args) {
+        ObservableAccount account = new ObservableAccount();
+        MyObserver observerFather = new MyObserver();
+        MyObserver observerMother = new MyObserver();
+        MyObserver observerGirl = new MyObserver();
+        MyObserver observerBoy = new MyObserver();
+
+        account.addObserver(observerFather);
+        account.addObserver(observerMother);
+        account.addObserver(observerGirl);
+        account.addObserver(observerBoy);
+
+        account.deposit(100);
+        account.deposit(50);
+    }
+}
+\end{lstlisting}
+
+Remarques :
+
+\begin{itemize}
+  \item \texttt{ObservableAccount} est le sujet observé.
+  \item Les observateurs sont stockés dans une collection.
+  \item À chaque dépôt, tous les observateurs sont notifiés.
+\end{itemize}
+
+\paragraph{Exercice (Observer + Swing)}
+
+On vous fournit une application \texttt{MessageApp} avec :
+
+\begin{itemize}
+  \item une zone de texte pour saisir un message,
+  \item un bouton \og Submit\fg{},
+  \item une zone de texte multi-lignes pour afficher les messages.
+\end{itemize}
+
+Le message soumis doit passer par un \texttt{SpellChecker}, puis être diffusé à des observateurs via un sujet \texttt{MessageSubject}, et finalement être affiché dans l’UI.
+
+Contraintes :
+
+\begin{itemize}
+  \item on doit pouvoir remplacer facilement le \texttt{SpellChecker} sans modifier \texttt{MessageApp},
+  \item \texttt{MessageSubject} ne doit pas dépendre directement de \texttt{MessageApp},
+  \item privilégier les interfaces pour le couplage.
+\end{itemize}
+
+Le code fourni (interfaces \texttt{SpellChecker}, \texttt{MessageObserver}, classe \texttt{MessageSubject}, etc.) doit être complété en appliquant rigoureusement le pattern Observer.
+
+% Fin du chapitre 2
+\chapter{Tests unitaires}
+\label{chap:unit-testing}
+
+\section{Tests logiciels}
+\label{sec:software-testing}
+
+\subsection{Qu'est-ce que le test logiciel ?}
+\label{subsec:what-is-testing}
+
+Selon la norme ANSI/IEEE 610.12-1990, le test est « le processus consistant à faire fonctionner un système ou un
+composant dans des conditions spécifiées, à observer ou enregistrer les résultats et à évaluer un ou plusieurs aspects
+du système ou du composant ». Plus informellement, tester signifie vérifier que le logiciel (ou matériel) fait ce que
+nous attendons de lui.
+
+Comme exemple, supposons que nous ayons écrit une méthode qui calcule le quotient $a/b$ de deux nombres
+naturels $a$ et $b$ :
+
+\begin{lstlisting}[language=Java]
+// returns the quotient a / b
+static int division(int a, int b) {
+    ...
+}
+\end{lstlisting}
+
+Nous voulons maintenant savoir si notre implémentation est correcte. Nous l'appelons avec les arguments \texttt{6}
+et \texttt{3}, et nous obtenons peut-être \texttt{2}. Cela semble correct. Puis nous appelons la méthode avec
+\texttt{12} et \texttt{3}, et nous obtenons \texttt{4} : cela semble toujours bon. Enfin, nous appelons la méthode
+avec \texttt{5} et \texttt{2} et nous obtenons \texttt{3}. Est-ce correct, ou attendions-nous \texttt{2} ? Et que
+devrait-il se passer si les arguments sont \texttt{4} et \texttt{0} ?
+
+Comme le montre cet exemple, les tests ne sont utiles que si nous avons défini ce que notre programme est censé
+faire. Il existe différentes manières de spécifier le comportement attendu :
+
+\begin{enumerate}
+  \item Nous pouvons écrire une \emph{spécification formelle}. Dans notre exemple, c'est relativement facile car la
+        méthode réalise une opération simple. Une spécification possible serait :
+        \[
+          \operatorname{division}(a,b) =
+          \begin{cases}
+            \left\lceil \dfrac{a}{b} \right\rceil & \text{si } b \neq 0,\\[0.4em]
+            \text{exception d'erreur} & \text{sinon.}
+          \end{cases}
+        \]
+        D'après cette spécification (remarquez le $\lceil\cdot\rceil$), il est clair que la méthode devrait renvoyer
+        \texttt{3} lorsqu'on l'appelle avec \texttt{5} et \texttt{2}, et lever une exception si le second argument vaut
+        \texttt{0}.
+  \item Pour des programmes plus complexes, difficiles à décrire formellement, la spécification est souvent rédigée
+        sous forme textuelle, par des phrases du type : « La méthode renvoie le quotient de deux nombres naturels
+        \dots ».
+  \item Enfin, lorsqu'on travaille avec des clients, on commence souvent avec une liste d'\emph{exigences
+        utilisateur}, c'est-à-dire une description de ce qui est souhaité (« Le programme doit calculer $a/b$ »),
+        et c'est à nous d'en déduire une spécification précise.
+\end{enumerate}
+
+Les exigences peuvent prendre des formes variées. On distingue en général deux grandes catégories :
+
+\begin{itemize}
+  \item \textbf{Exigences fonctionnelles} : décrivent ce que le produit doit être capable de faire.
+        \begin{itemize}
+          \item « Le programme doit calculer $a/b$. »
+          \item « Le programme doit trier une liste. »
+          \item « Le programme doit afficher les cinq premiers nombres premiers. »
+        \end{itemize}
+  \item \textbf{Exigences non fonctionnelles} : décrivent comment le produit doit se comporter.
+        \begin{itemize}
+          \item « Le programme doit être facile à utiliser. »
+          \item « Le programme ne doit pas mettre plus de 10 millisecondes pour calculer $a/b$. »
+          \item « Le programme doit être sécurisé. »
+        \end{itemize}
+\end{itemize}
+
+\subsection{Que peut-on tester ?}
+\label{subsec:what-can-be-tested}
+
+Les tests peuvent être effectués à différents niveaux.
+
+Dans l'exemple précédent, le test de la méthode \texttt{division()} est un \emph{test unitaire}, car les méthodes
+sont les plus petites entités en Java que l'on puisse tester indépendamment.
+
+On peut aussi tester :
+
+\begin{itemize}
+  \item une classe ou un paquet complet : \emph{test de module},
+  \item plusieurs paquets ensemble : \emph{test d'intégration},
+  \item un programme complet : \emph{test système}.
+\end{itemize}
+
+Dans ce livre, nous nous concentrerons sur les tests unitaires.
+
+Plus un programme est gros et complexe, plus les tests sont compliqués et, surtout, plus la correction d'un bug peut
+être coûteuse. Un test unitaire peut être réalisé dès l'écriture d'une méthode ; si l'on trouve un bug, il est encore
+relativement facile de corriger l'implémentation. Imaginez l'inverse : terminer tout le programme, et découvrir
+plusieurs mois plus tard, lors d'un test système, que le programme viole la spécification ; dans le pire des cas, il
+faudrait tout réécrire.
+
+Il est donc judicieux de commencer à tester le plus tôt possible à l'aide de tests unitaires. Attention toutefois : les
+tests unitaires ne remplacent pas les autres niveaux de tests, car certains problèmes n'apparaissent que lorsque
+plusieurs méthodes ou classes interagissent.
+
+\subsection{Comment planifier un test unitaire}
+\label{subsec:plan-unit-test}
+
+Nous testons un logiciel afin de vérifier qu'il produit les bons résultats (exigences fonctionnelles) de la bonne manière
+(exigences non fonctionnelles).
+
+En général, un programme comme notre méthode \texttt{division()} prend une ou plusieurs valeurs en entrée et
+produit une sortie. L'ensemble des valeurs d'entrée possibles s'appelle le \emph{domaine d'entrée}. Tester la méthode
+avec toutes les valeurs possibles serait l'idéal, mais pratiquement impossible.
+
+Cela nous amène à une approche plus intelligente :
+
+\begin{enumerate}
+  \item \textbf{Déterminer le domaine d'entrée.}  
+        Ici, la méthode a deux paramètres entiers ; le domaine d'entrée est donc
+        $\{-2^{31}..\ 2^{31}-1\} \times \{-2^{31}..\ 2^{31}-1\}$.
+  \item \textbf{Découper le domaine en sous-domaines intéressants.}  
+        Par exemple, il est intéressant de tester le cas \texttt{b == 0}.  
+        On obtient :
+        \begin{itemize}
+          \item $b = 0$ :
+                $\{-2^{31}..\ 2^{31}-1\} \times \{0\}$,
+          \item $b \neq 0$ :
+                $\{-2^{31}..\ 2^{31}-1\} \times
+                 \big(\{-2^{31}..\ 2^{31}-1\} \setminus \{0\}\big)$.
+        \end{itemize}
+  \item \textbf{Choisir quelques valeurs représentatives par sous-domaine.}  
+        Par exemple :
+        \begin{itemize}
+          \item $a=3, b=0$ pour le cas interdit,
+          \item $a=6, b=3$ pour le cas autorisé.
+        \end{itemize}
+\end{enumerate}
+
+Cette approche fonctionne aussi pour des méthodes plus complexes. Considérons :
+
+\begin{lstlisting}[language=Java]
+// returns a sorted array with the elements
+// of "a" in ascending order
+static int[] sortArray(int[] a) {
+    ...
+}
+\end{lstlisting}
+
+Le domaine d'entrée contient tous les tableaux d'entiers de longueur $n \ge 0$, avec toutes les valeurs possibles.
+Des sous-domaines pertinents pourraient être :
+
+\begin{enumerate}
+  \item tableau vide ($n = 0$),
+  \item tableau avec un seul élément ($n = 1$),
+  \item tableaux aléatoires non triés ($n > 1$),
+  \item tableaux déjà triés par ordre croissant ($n > 1$),
+  \item tableaux triés par ordre décroissant ($n > 1$).
+\end{enumerate}
+
+Il est souhaitable que les sous-domaines soient disjoints et couvrent l'ensemble du domaine d'entrée. Si, par exemple,
+le cas $n=1$ est déjà couvert dans un sous-domaine, il n'est pas nécessaire de le répéter ailleurs.
+
+\section{Couverture de tests}
+\label{sec:test-coverage}
+
+\subsection{Tests en boîte noire et en boîte blanche}
+\label{subsec:black-white-box}
+
+Comme le domaine d'entrée d'un programme non trivial est immense, choisir de bons cas de test est un défi majeur.
+
+\begin{itemize}
+  \item Si nous n'avons pas accès au code source, nous choisissons les valeurs de test à partir de la spécification et de
+        notre expérience : c'est le \emph{test en boîte noire}.
+  \item Si nous avons accès au code source (ce sera notre hypothèse), nous pouvons l'utiliser pour choisir des tests
+        pertinents : c'est le \emph{test en boîte blanche}.
+\end{itemize}
+
+\subsection{Graphe de flot de contrôle et couverture de nœuds}
+\label{subsec:cfg-node-coverage}
+
+Considérons une implémentation fautive de \texttt{min()} :
+
+\begin{lstlisting}[language=Java]
+// returns the minimum of "a" and "b"
+static int min(int a, int b) {
+    int m;
+    if (a < b)
+        m = a;
+    else
+        m = a; // oops, cela devrait être "m = b"
+    return m;
+}
+\end{lstlisting}
+
+Si nous appelons cette méthode avec des nombres \texttt{a} et \texttt{b} tels que \texttt{a < b}
+(par exemple \texttt{3} et \texttt{5}), le bug ne sera jamais exécuté, et le résultat sera toujours correct. On ne peut
+découvrir un bug que si le flux d'exécution atteint l'instruction fautive.
+
+On représente souvent le comportement avec un \emph{graphe de flot de contrôle} (CFG), où :
+
+\begin{itemize}
+  \item les nœuds représentent des blocs d'instructions,
+  \item les arêtes représentent les transitions possibles entre ces blocs.
+\end{itemize}
+
+La \emph{couverture de nœuds} consiste à choisir des tests de sorte que chaque nœud du CFG soit exécuté au moins
+une fois. C'est un objectif important, mais pas suffisant.
+
+\subsection{Couverture des arêtes}
+\label{subsec:edge-coverage}
+
+Même avec 100\% de couverture de nœuds, certains bugs peuvent passer inaperçus. Prenons :
+
+\begin{lstlisting}[language=Java]
+static int min(int a, int b) {
+    int m = 0;
+    if (a < b) {
+        m = a;
+    }
+    // oops : on a oublié le "else" pour le cas a >= b
+    return m;
+}
+\end{lstlisting}
+
+Si nous testons seulement avec \texttt{a = 3, b = 5}, le flux suit toujours le même chemin, et nous obtenons
+le bon résultat. Pourtant, le code est incorrect pour d'autres valeurs.
+
+La \emph{couverture des arêtes} exige que chaque arête (transition) du CFG soit empruntée au moins une fois. Elle est
+plus stricte que la couverture de nœuds, mais ne garantit toujours pas l'absence de bugs.
+
+\subsection{Couverture des chemins}
+\label{subsec:path-coverage}
+
+Considérons maintenant une méthode avec une boucle :
+
+\begin{lstlisting}[language=Java]
+// returns the sum of the values 1 to n
+static int sum(int n) {
+    int sum = 0;
+    int i = 1;
+    while (i <= n) {
+        sum = i;   // oops, devrait être: sum += i;
+        i++;
+    }
+    return sum;
+}
+\end{lstlisting}
+
+\begin{itemize}
+  \item Pour \texttt{n = 0}, la boucle n'est jamais exécutée, le résultat est \texttt{0} : ce test ne révèle rien.
+  \item Pour \texttt{n = 1}, la boucle s'exécute une fois, le résultat est \texttt{1} : encore correct \emph{par hasard}.
+\end{itemize}
+
+Avec ces deux tests, toutes les arêtes du CFG sont couvertes, mais nous n'avons toujours pas trouvé le bug.  
+L'idée de \emph{couverture des chemins} est de considérer des séquences complètes d'arêtes. Malheureusement, dès
+qu'il y a des boucles, il existe théoriquement une infinité de chemins possibles : viser 100\% de couverture des chemins
+n'est pas réaliste. On se contente donc de choisir des chemins représentatifs (par exemple, zéro itération, une
+itération, plusieurs itérations).
+
+\subsection{Chemins « cachés »}
+\label{subsec:hidden-paths}
+
+Certains chemins d'exécution ne sont pas visibles directement dans le code source. Par exemple :
+
+\begin{lstlisting}[language=Java]
+int r = a / b;
+\end{lstlisting}
+
+En Java, cette instruction peut lever une \texttt{ArithmeticException} si \texttt{b == 0}. On peut donc la voir
+comme équivalente à :
+
+\begin{lstlisting}[language=Java]
+if (b == 0)
+    throw new ArithmeticException();
+else
+    r = a / b;
+\end{lstlisting}
+
+Si votre objectif est une couverture « complète », il faut aussi prévoir un cas de test avec \texttt{b == 0}.
+
+\subsection{Outils de mesure de couverture}
+\label{subsec:coverage-tools}
+
+\texttt{JaCoCo} est un outil (et une bibliothèque) pour mesurer la couverture des tests de programmes Java.
+Lorsqu'on exécute un programme avec JaCoCo, il calcule notamment :
+
+\begin{itemize}
+  \item la \textbf{couverture des instructions bytecode} JVM (analogue à la couverture de nœuds, mais au niveau
+        bytecode plutôt que des instructions Java),
+  \item la \textbf{couverture des branches}, qui correspond à la couverture des différents résultats possibles des
+        instructions conditionnelles (\texttt{if}, \texttt{switch}, etc.).
+\end{itemize}
+
+Des outils similaires existent pour d'autres langages. Ils aident à vérifier si l'on a écrit suffisamment de cas de test.
+
+\section{Tests unitaires automatisés}
+\label{sec:automated-unit-testing}
+
+\subsection{Écrire les tests comme un programme}
+\label{subsec:tests-as-programs}
+
+Les tests sont des tâches répétitives. En test unitaire, nous devons tester chaque nouvelle méthode que nous écrivons,
+et répéter ces tests à chaque modification du code. Il est donc naturel de laisser l'ordinateur exécuter ces tests pour
+nous.
+
+Reprenons la méthode \texttt{min()} :
+
+\begin{lstlisting}[language=Java]
+class Main {
+    static int min(int a, int b) {
+        ...
+    }
+}
+\end{lstlisting}
+
+Nous pouvons écrire un petit programme de test :
+
+\begin{lstlisting}[language=Java]
+// test case 1
+int result1 = Main.min(3, 5);
+if (result1 != 3) {
+    System.out.println("Test 1 failed: Minimum of 3 and 5 should be 3");
+}
+
+// test case 2
+int result2 = Main.min(5, 3);
+if (result2 != 3) {
+    System.out.println("Test 2 failed: Minimum of 5 and 3 should be 3");
+}
+\end{lstlisting}
+
+Chaque combinaison de valeurs d'entrée et de résultat attendu est un \emph{cas de test}.
+
+L'avantage d'un tel programme est que nous pouvons relancer facilement tous les tests après chaque changement de
+code. Certains développeurs vont plus loin et écrivent d'abord les tests, puis le code qui les fait passer : c'est le
+\emph{Test Driven Development} (TDD).
+
+\subsection{JUnit}
+\label{subsec:junit}
+
+En Java, la bibliothèque la plus connue pour écrire des tests unitaires automatisés est \texttt{JUnit}. Des outils
+similaires existent pour d'autres langages.
+
+Pour écrire des tests avec JUnit, on crée en général une nouvelle classe (par exemple \texttt{MainTest}) et une
+méthode par cas de test.
+
+Avec JUnit~4, nos deux tests pour \texttt{min()} peuvent s'écrire :
+
+\begin{lstlisting}[language=Java]
+import static org.junit.Assert.* ;
+
+public class MainTest {
+
+    @org.junit.Test
+    public void testFirstNumberLessThanSecondNumber() {
+        assertEquals("Minimum of 3 and 5 should be 3",
+                     3, Main.min(3, 5));
+    }
+
+    @org.junit.Test
+    public void testFirstNumberGreaterThanSecondNumber() {
+        assertEquals("Minimum of 5 and 3 should be 3",
+                     3, Main.min(5, 3));
+    }
+}
+\end{lstlisting}
+
+Avec JUnit~5, la syntaxe est légèrement différente :
+
+\begin{lstlisting}[language=Java]
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+public class MainTest {
+
+    @Test
+    public void testFirstNumberLessThanSecondNumber() {
+        Assertions.assertEquals(3, Main.min(3, 5),
+                "Minimum of 3 and 5 should be 3");
+    }
+
+    @Test
+    public void testFirstNumberGreaterThanSecondNumber() {
+        Assertions.assertEquals(3, Main.min(5, 3),
+                "Minimum of 5 and 3 should be 3");
+    }
+}
+\end{lstlisting}
+
+La méthode \texttt{assertEquals} compare la valeur attendue avec la valeur produite par l'implémentation. Un message
+(d'usage facultatif) peut être fourni ; il sera affiché si le test échoue.
+
+L'annotation \texttt{@Test} indique à JUnit quelles méthodes exécuter comme tests. IntelliJ utilise également ces
+annotations pour afficher les petits triangles verts permettant de lancer un test individuel ou l'ensemble des tests.
+
+La classe \texttt{Assertions} fournit de nombreuses autres méthodes utiles, par exemple :
+
+\begin{itemize}
+  \item \texttt{assertArrayEquals()} pour comparer des tableaux,
+  \item \texttt{assertNotEquals()} pour vérifier une inégalité,
+  \item \texttt{assertSame()} pour vérifier que deux références pointent le même objet.
+\end{itemize}
+
+Attention : pour les objets, \texttt{assertEquals()} utilise la méthode \texttt{equals()}, pas \texttt{==}. Pour tester
+l'égalité de références, il faut utiliser \texttt{assertSame()}.
+
+\subsection{Aspects pratiques des tests unitaires}
+\label{subsec:practical-unit-testing}
+
+L'idée des tests unitaires est d'organiser le programme en petites unités testables. En Java, les méthodes jouent ce
+rôle. Si une méthode est trop complexe ou fait plusieurs choses différentes, elle devient plus difficile à tester.
+
+Considérons le code (incomplet) suivant :
+
+\begin{lstlisting}[language=Java]
+class DifficultToTest {
+    static int m(int v1) {
+        // quelque chose de complexe utilisant v1 pour calculer v2
+        int v2 = ...;
+        // quelque chose de complexe utilisant v2 pour calculer le résultat
+        int result = ...;
+        return result;
+    }
+}
+\end{lstlisting}
+
+En tant que développeur, nous aimerions vérifier séparément si \texttt{v2} et le résultat final sont correctement
+calculés. Il est plus simple de découper la méthode :
+
+\begin{lstlisting}[language=Java]
+class EasierToTest {
+
+    static int m1(int v1) {
+        // calcule v2 à partir de v1
+        int v2 = ...;
+        return v2;
+    }
+
+    static int m2(int v2) {
+        // calcule le résultat à partir de v2
+        int result = ...;
+        return result;
+    }
+
+    static int m(int v1) {
+        int v2 = m1(v1);
+        int result = m2(v2);
+        return result;
+    }
+}
+\end{lstlisting}
+
+Ce nouveau code est plus lisible et plus facile à tester : on peut fournir des valeurs choisies pour \texttt{v1} et
+\texttt{v2} afin de tester les deux parties indépendamment.
+
+Un autre aspect pratique concerne les méthodes non statiques ou dépendant d'objets. Par exemple :
+
+\begin{lstlisting}[language=Java]
+class Employee {
+    private int salary;
+
+    public Employee(int s) {
+        salary = s;
+    }
+
+    public void increaseSalary(int s) {
+        salary += s;
+    }
+
+    public int getSalary() {
+        return salary;
+    }
+}
+\end{lstlisting}
+
+Pour tester \texttt{increaseSalary()}, il faut d'abord créer un objet :
+
+\begin{lstlisting}[language=Java]
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+public class EmployeeTest {
+
+    @Test
+    void testSalaryIncrease() {
+        Employee employee = new Employee(1000);
+
+        Assertions.assertEquals(1000, employee.getSalary());
+
+        employee.increaseSalary(500);
+
+        Assertions.assertEquals(1500, employee.getSalary());
+    }
+}
+\end{lstlisting}
+
+Certains développeurs préfèrent des méthodes de test très petites avec un seul \texttt{assert} chacune ; d'autres
+acceptent plusieurs assertions par test lorsqu'elles sont liées. Il s'agit en grande partie d'une question de style : à vous
+de choisir une approche claire et cohérente.
+
+% Fin du chapitre 3
+\chapter{Algorithmes et structures de données}
+\label{chap:algo-ds}
+
+\section{Complexité temporelle}
+\label{sec:time-complexity}
+
+Dans le monde en constante évolution de l'informatique, l'efficacité d'un algorithme est primordiale. À mesure que nous cherchons à résoudre des problèmes de plus en plus complexes et à manipuler des volumes de données toujours plus importants, comprendre les performances de nos algorithmes devient plus important que jamais.
+
+C'est là qu'intervient la notion de \emph{complexité temporelle}.
+
+La complexité temporelle fournit une estimation \emph{théorique} du temps nécessaire à l'exécution d'un algorithme en fonction de la taille de ses données d'entrée. Autrement dit, elle nous permet de \emph{prédire} l'efficacité de notre code avant même de l'exécuter — comme une boule de cristal nous indiquant comment l'algorithme se comportera ``dans la nature'' !
+
+Pour en dévoiler les rouages, commençons par une méthode très simple \texttt{sum()} qui calcule la somme de tous les éléments d'un tableau d'entiers passé en argument :
+
+\begin{lstlisting}[language=Java]
+// Sums all elements of the array
+public class Main {
+    public static int sum(int[] values) {
+        int total = 0;
+        for (int i = 0; i < values.length; i++) {
+            total += values[i];
+        }
+        return total;
+    }
+}
+\end{lstlisting}
+
+On peut mesurer le temps d'exécution à l'aide de la méthode \texttt{System.currentTimeMillis()}, qui renvoie le temps courant en millisecondes depuis l'\emph{Unix Epoch} (1er janvier 1970, 00:00:00 UTC). Voici un exemple qui mesure la durée d'un appel à \texttt{sum()} :
+
+\begin{lstlisting}[language=Java]
+public class Main {
+    public static void main(String[] args) {
+        int[] values = {1, 2, 3, 4, 5};
+        long startTime = System.currentTimeMillis();
+        int totalSum = sum(values);
+        long endTime   = System.currentTimeMillis();
+        long duration  = (endTime - startTime); // durée en millisecondes
+        System.out.println("sum = " + totalSum + " in " + duration + " ms");
+    }
+}
+\end{lstlisting}
+
+Si l'on fait varier la taille du tableau \texttt{values}, on peut observer l'évolution du temps d'exécution en fonction de la taille de l'entrée et la tracer. Voici ce que l'on obtient sur un ordinateur portable standard :
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=.85\linewidth]{chap4_imgs/chap4_p88_img1.png}
+  \caption{Évolution des mesures de temps pour \texttt{sum} sur des tableaux de taille croissante.}
+  \label{fig:sum-scaling}
+\end{figure}
+
+Sans surprise, le temps absolu dépend fortement de la machine utilisée. Le \emph{même} code, sur un autre ordinateur, produira des mesures différentes. Néanmoins, on remarque que l'évolution du temps est \emph{linéaire} par rapport à la taille du tableau (cf. la droite de tendance).
+
+Question cruciale : pouvait-on le prévoir sans exécuter le code ? La réponse est \emph{oui}. Les travaux fondateurs d'Hartmanis et Stearns permettent d'analyser théoriquement un algorithme à partir de son (pseudo-)code, sans mesures d'exécution. Pour cela, il nous faut d'abord un modèle de calcul simple.
+
+\subsection{Le modèle RAM (\textit{Random Access Machine})}
+\label{subsec:ram-model}
+
+Le modèle RAM est une abstraction mathématique d'un ordinateur pour l'analyse d'algorithmes. Dans ce modèle, chaque opération ``simple'' (addition, soustraction, multiplication, division, comparaison, opérations binaires, suivi d'une référence, adressage direct en mémoire, etc.) prend un \emph{temps constant}. On suppose en particulier que l'accès mémoire (par exemple \texttt{values[i]}) s'effectue en temps constant, indépendamment de l'adresse. C'est l'idée de ``\emph{random access}'' : tout emplacement mémoire est accessible en le même temps.
+
+Cette abstraction est raisonnable pour de nombreux cas pratiques (de la même façon que les lois de Newton constituent une bonne approximation de la relativité générale).
+
+\subsection{Meilleur cas et pire cas d'un algorithme}
+\label{subsec:best-worst}
+
+Des entrées de \emph{même taille} peuvent forcer un algorithme à effectuer plus ou moins d'étapes. Illustrons-le avec une recherche linéaire qui renvoie l'indice de la première occurrence d'une valeur cible (ou \texttt{-1} si elle est absente) :
+
+\begin{lstlisting}[language=Java]
+/**
+ * Effectue une recherche linéaire dans un tableau.
+ *
+ * @param arr le tableau d'entrée
+ * @param x   la valeur recherchée
+ * @return l'indice de la première occurrence de x, ou -1 si absente
+ */
+public static int linearSearch(int[] arr, int x) {
+    for (int i = 0; i < arr.length; i++) {
+        if (arr[i] == x) {
+            return i;
+        }
+    }
+    return -1;
+}
+\end{lstlisting}
+
+Ici, le nombre d'étapes dépend fortement de la \emph{position} de la valeur cible : si elle est au début, l'algorithme termine très vite (\emph{meilleur cas}); si elle est à la fin (ou absente), il parcourt tout le tableau (\emph{pire cas}). Pour certaines familles d'algorithmes, le temps dépend surtout de la \emph{taille} de l'entrée, plus que de son \emph{contenu} (comme pour \texttt{sum()} ci-dessus).
+
+La notation introduite ci-dessous nous permettra de caractériser rigoureusement ces scénarios.
+
+\subsection{Les classes \(\mathcal{O}\), \(\Omega\) et \(\Theta\)}
+\label{subsec:big-oh}
+
+Nous nous intéressons à la façon dont le temps d'exécution évolue quand la taille d'entrée \(n\) devient grande. Les \emph{notations asymptotiques} suivantes décrivent des \emph{classes de fonctions} et abstraient les constantes et les termes de plus bas degré :
+
+\[
+\begin{aligned}
+&f(n) \in \mathcal{O}(g(n))
+&&\Longleftrightarrow&&
+\exists\, c \in \mathbb{R}^+,\ \exists\, n_0 \in \mathbb{N}:\ \forall n \ge n_0,\ f(n) \le c \cdot g(n)
+&&\text{(borne \emph{supérieure})},\\[0.3em]
+&f(n) \in \Omega(g(n))
+&&\Longleftrightarrow&&
+\exists\, c \in \mathbb{R}^+,\ \exists\, n_0 \in \mathbb{N}:\ \forall n \ge n_0,\ f(n) \ge c \cdot g(n)
+&&\text{(borne \emph{inférieure})},\\[0.3em]
+&f(n) \in \Theta(g(n))
+&&\Longleftrightarrow&&
+\exists\, c_1,c_2 \in \mathbb{R}^+,\ \exists\, n_0 \in \mathbb{N}:\ \forall n \ge n_0,\
+c_1 g(n) \le f(n) \le c_2 g(n)
+&&\text{(borne \emph{exacte})}.
+\end{aligned}
+\]
+
+Intuition : on ne s'intéresse pas aux petites constantes, mais au \emph{comportement dominant} quand \(n\) devient grand (par ex. \(10^4\), \(10^6\)). Cela autorise des simplifications : si
+\(f(n) = c \cdot n^a + d \cdot n^b\) avec \(a \ge b \ge 0\) et \(c,d \ge 0\), alors \(f(n) \in \Theta(n^a)\), même si \(c\) est petit et \(d\) très grand. Autrement dit, on ne garde que le \emph{terme de plus haut degré} et on \emph{omet les constantes}.
+
+\subsection{Exemples pratiques d'algorithmes}
+\label{subsec:examples}
+
+Quelques classes de complexité courantes et exemples associés :
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Complexité} & \textbf{Exemple d'algorithme}\\
+\midrule
+\(\mathcal{O}(1)\) (constante) & Somme de deux entiers\\
+\(\mathcal{O}(\log n)\) (logarithmique) & Recherche dans un tableau trié (recherche binaire)\\
+\(\mathcal{O}(n)\) (linéaire) & Somme des éléments ou recherche dans un tableau non trié\\
+\(\mathcal{O}(n \log n)\) (linéarithmique) & Tri efficace d'un tableau (tri fusion)\\
+\(\mathcal{O}(n^2)\) (quadratique) & Tri par insertion (inefficace)\\
+\(\mathcal{O}(n^3)\) (cubique) & Énumération de tous les triplets d'un tableau\\
+\(\mathcal{O}(2^n)\) (exponentielle) & Sous-ensemble à somme nulle (\textit{subset-sum})\\
+\(\mathcal{O}(n!)\) (factorielle) & TSP : tournée minimale visitant toutes les villes\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{Recherche binaire.} La recherche binaire (dichotomique) trouve la position d'une valeur cible dans un tableau \emph{trié}, en divisant l'intervalle de recherche par deux à chaque étape :
+
+\begin{enumerate}
+  \item on examine l'élément du \emph{milieu} ;
+  \item s'il est égal à la cible : trouvé ;
+  \item s'il est plus grand : on continue dans la moitié \emph{gauche} ;
+  \item s'il est plus petit : on continue dans la moitié \emph{droite} ;
+  \item on répète jusqu'à trouver ou épuiser l'intervalle.
+\end{enumerate}
+
+Sur un tableau de \(16\) valeurs, le pire cas requiert au plus \(4\) essais (\(\log_2 16 = 4\)).
+
+\begin{lstlisting}[language=Java]
+public static int binarySearch(int[] arr, int x) {
+    int left = 0, right = arr.length - 1;
+    while (left <= right) {
+        int mid = left + (right - left) / 2; // éviter l'overflow
+        if (arr[mid] == x) return mid;
+        if (arr[mid] <  x) left  = mid + 1;   // ignorer la moitié gauche
+        else               right = mid - 1;   // ignorer la moitié droite
+    }
+    return -1; // absent
+}
+\end{lstlisting}
+
+\textbf{Astuce :} \(\texttt{left + (right - left) / 2}\) est préférable à \(\texttt{(left + right) / 2}\) pour éviter un dépassement d'entier (\emph{overflow}) quand \texttt{left + right} dépasse \(2^{31}-1\). Avec des \emph{objets}, on utilisera \texttt{equals()} au lieu de \texttt{==}.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=.85\linewidth]{chap4_imgs/chap4_p90_img1.png}
+  \caption{Illustration pas à pas de la recherche binaire (\(n=16\)).}
+  \label{fig:binsearch-1}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=.85\linewidth]{chap4_imgs/chap4_p91_img1.png}
+  \caption{Suite de l'illustration de la recherche binaire.}
+  \label{fig:binsearch-2}
+\end{figure}
+
+\paragraph{Exemple \(\mathcal{O}(\log n)\) : nombre de bits.} Le nombre de bits nécessaires pour représenter un entier positif est \(\Theta(\log n)\). Exemple :
+
+\begin{lstlisting}[language=Java]
+// Renvoie le nombre de bits nécessaires pour représenter n (>0)
+public static int bitCount(int n) {
+    int bitCount = 0;
+    while (n > 0) {
+        bitCount++;
+        n = n >> 1; // décalage à droite (division par 2)
+    }
+    return bitCount;
+}
+\end{lstlisting}
+
+\paragraph{Remarques sur les cas meilleur/pire.}
+La recherche binaire est en \(\Omega(1)\) (meilleur cas : trouvé du premier coup) et en \(\mathcal{O}(\log n)\) (pire cas : on divise l'intervalle jusqu'à 1).
+
+\bigskip
+\noindent
+Les autres classes citées ci-dessus seront illustrées par les sections suivantes (tri, structures de données, itérateurs, etc.).
+
+% Suite du chapitre 4 : compléments de la section 4.1 puis sections 4.2 à 4.5
+
+\paragraph{Recherche linéaire (\(\mathcal{O}(n)\)).}
+
+Nous avons déjà vu l’algorithme \texttt{sum} et sa complexité \(\Theta(n)\). Un autre exemple typique de complexité
+linéaire est la recherche séquentielle :
+
+\begin{lstlisting}[language=Java]
+/**
+ * Recherche linéaire d'une valeur dans un tableau.
+ *
+ * @param arr le tableau d'entrée
+ * @param x   la valeur recherchée
+ * @return l'indice de la première occurrence de x, ou -1 si absente
+ */
+public static int linearSearch(int[] arr, int x) {
+    for (int i = 0; i < arr.length; i++) {
+        if (arr[i] == x) {
+            return i;
+        }
+    }
+    return -1;
+}
+\end{lstlisting}
+
+Dans le pire cas (valeur absente ou en dernière position), on parcourt tout le tableau : complexité \(\mathcal{O}(n)\).  
+Dans le meilleur cas (première case), un seul test suffit : complexité \(\Omega(1)\).
+
+\paragraph{Tri fusion (\emph{Merge sort}, \(\mathcal{O}(n \log n)\)).}
+
+Le tri fusion est un algorithme « diviser pour régner » :
+
+\begin{itemize}
+  \item si le tableau est de taille 0 ou 1 : déjà trié ;
+  \item sinon : on le découpe en deux sous-tableaux, on trie récursivement chacun d’eux, puis on fusionne.
+\end{itemize}
+
+\begin{lstlisting}[language=Java]
+public class MergeSort {
+
+    private static void merge(int[] left, int[] right, int[] result) {
+        int i = 0; // index dans left
+        int j = 0; // index dans right
+        int k = 0; // index dans result
+
+        while (i < left.length && j < right.length) {
+            if (left[i] <= right[j]) {
+                result[k++] = left[i++];
+            } else {
+                result[k++] = right[j++];
+            }
+        }
+        while (i < left.length) {
+            result[k++] = left[i++];
+        }
+        while (j < right.length) {
+            result[k++] = right[j++];
+        }
+    }
+
+    public static void mergeSort(int[] values) {
+        if (values.length <= 1) { // tableau de taille 0 ou 1 : déjà trié
+            return;
+        }
+
+        int mid = values.length / 2;
+        int[] left  = new int[mid];
+        int[] right = new int[values.length - mid];
+
+        System.arraycopy(values, 0,        left,  0,   mid);
+        System.arraycopy(values, mid,      right, 0,   values.length - mid);
+
+        mergeSort(left);
+        mergeSort(right);
+
+        merge(left, right, values);
+    }
+}
+\end{lstlisting}
+
+Il y a \(\Theta(\log n)\) niveaux de découpe/fusion et chaque niveau traite \(\Theta(n)\) éléments : complexité
+\(\Theta(n \log n)\).
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=.7\linewidth]{chap4_imgs/chap4_p94_img1.png}
+  \caption{Illustration schématique du tri fusion.}
+\end{figure}
+
+\paragraph{Tri par insertion (\(\mathcal{O}(n^2)\)).}
+
+Le tri par insertion insère chaque élément à sa place dans la partie déjà triée à gauche :
+
+\begin{lstlisting}[language=Java]
+/**
+ * Trie le tableau en place par insertion.
+ */
+public static void insertionSort(int[] arr) {
+    for (int i = 1; i < arr.length; i++) {
+        int key = arr[i];
+        int j = i - 1;
+
+        // Décale vers la droite les éléments > key
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = key;
+    }
+}
+\end{lstlisting}
+
+Dans le pire cas, pour chaque élément on décale presque toute la partie gauche : \(\mathcal{O}(n^2)\).  
+Dans le meilleur cas (tableau déjà trié), on ne décale jamais : \(\Omega(n)\).
+
+\paragraph{Énumération de tous les triplets (\(\mathcal{O}(n^3)\)).}
+
+On teste si trois éléments quelconques d’un tableau somment à zéro :
+
+\begin{lstlisting}[language=Java]
+/**
+ * Vérifie s'il existe un triplet d'éléments dont la somme vaut 0.
+ */
+public static boolean checkTripleSum(int[] arr) {
+    int n = arr.length;
+    for (int i = 0; i < n - 2; i++) {
+        for (int j = i + 1; j < n - 1; j++) {
+            for (int k = j + 1; k < n; k++) {
+                if (arr[i] + arr[j] + arr[k] == 0) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+\end{lstlisting}
+
+Il y a \(\frac{n(n-1)(n-2)}{6} = \Theta(n^3)\) triplets possibles : pire cas \(\mathcal{O}(n^3)\).  
+Meilleur cas \(\Omega(1)\) si le premier triplet testé convient.
+
+\paragraph{Problème du sous-ensemble de somme nulle (Subset-Sum, \(\mathcal{O}(2^n)\)).}
+
+On généralise en cherchant \emph{un sous-ensemble quelconque} de valeurs dont la somme vaut zéro.  
+Algorithme naïf : on énumère récursivement tous les sous-ensembles.
+
+\begin{lstlisting}[language=Java]
+/**
+ * Vérifie s'il existe un sous-ensemble de arr qui somme à 0.
+ */
+public static boolean hasZeroSumSubset(int[] arr) {
+    return isSubsetSum(arr, 0, 0);
+}
+
+private static boolean isSubsetSum(int[] arr, int i, int sum) {
+    if (i == arr.length) {
+        return sum == 0;
+    }
+    // cas 1 : on n'inclut pas arr[i]
+    if (isSubsetSum(arr, i + 1, sum)) {
+        return true;
+    }
+    // cas 2 : on inclut arr[i]
+    return isSubsetSum(arr, i + 1, sum + arr[i]);
+}
+\end{lstlisting}
+
+Il y a \(2^n\) sous-ensembles possibles : complexité dans le pire cas \(\mathcal{O}(2^n)\).  
+Meilleur cas \(\Omega(1)\) si une solution est trouvée immédiatement.
+
+Ce problème est \emph{NP-complet} : aucune solution polynomiale n’est connue (ni exclue). Des algorithmes plus
+sophistiqués existent (programmation dynamique) mais le pire cas reste exponentiel.
+
+\paragraph{Problème du voyageur de commerce (TSP, \(\mathcal{O}(n!)\)).}
+
+Énoncé : trouver le plus court circuit passant une fois par chaque ville et revenant au départ.
+
+Une approche brute force consiste à énumérer toutes les permutations possibles :
+
+\begin{lstlisting}[language=Java]
+public class TravelingSalesman {
+
+    static class Result {
+        java.util.List<Integer> tour;
+        int distance;
+
+        Result(java.util.List<Integer> tour, int distance) {
+            this.tour = tour;
+            this.distance = distance;
+        }
+    }
+
+    public static Result solve(int[][] distanceMatrix) {
+        boolean[] visited = new boolean[distanceMatrix.length];
+        visited[0] = true; // ville de départ fixée à 0
+
+        java.util.List<Integer> current = new java.util.ArrayList<>();
+        current.add(0);
+
+        return bestTour(visited, current, 0, distanceMatrix);
+    }
+
+    private static Result bestTour(boolean[] visited,
+                                   java.util.List<Integer> current,
+                                   int currentLength,
+                                   int[][] d) {
+        int last = current.get(current.size() - 1);
+
+        if (current.size() == visited.length) {
+            int total = currentLength + d[last][0];
+            return new Result(new java.util.ArrayList<>(current), total);
+        }
+
+        Result best = null;
+        for (int city = 0; city < visited.length; city++) {
+            if (!visited[city]) {
+                visited[city] = true;
+                current.add(city);
+
+                Result cand = bestTour(visited, current,
+                                       currentLength + d[last][city], d);
+
+                if (best == null || cand.distance < best.distance) {
+                    best = cand;
+                }
+
+                current.remove(current.size() - 1);
+                visited[city] = false;
+            }
+        }
+        return best;
+    }
+}
+\end{lstlisting}
+
+La complexité est factorielle : \(\mathcal{O}(n!)\). Dès \(n \gtrsim 12\), cette approche devient impraticable.
+
+\paragraph{Exercice (bitCount).}
+
+Déterminer la complexité temporelle (meilleur/pire cas) de :
+
+\begin{lstlisting}[language=Java]
+/**
+ * Compte le nombre de bits nécessaires pour représenter n (> 0).
+ */
+public static int bitCount(int n) {
+    int bitCount = 0;
+    while (n > 0) {
+        bitCount++;
+        n = n >> 1; // division par 2
+    }
+    return bitCount;
+}
+\end{lstlisting}
+
+%------------------------------------------------------------
+\section{Complexité spatiale}
+\label{sec:space-complexity}
+
+La \emph{complexité spatiale} mesure la quantité de mémoire utilisée par un algorithme en fonction de la taille de
+l’entrée.
+
+On distingue :
+
+\begin{itemize}
+  \item l’\textbf{espace d’entrée} : mémoire occupée par les paramètres et les données déjà existantes (par exemple, le
+        tableau passé à une méthode) ;
+  \item l’\textbf{espace auxiliaire} : mémoire supplémentaire allouée par l’algorithme pendant son exécution
+        (variables locales, tableaux temporaires, pile d’appels, \dots).
+\end{itemize}
+
+Par définition :
+\[
+\text{complexité spatiale} =
+\text{espace auxiliaire} + \text{espace d'entrée}.
+\]
+
+\paragraph{Exemple \texttt{sum}.}
+
+\begin{lstlisting}[language=Java]
+public static int sum(int[] array) {
+    int sum = 0;              // O(1)
+    for (int i = 0; i < array.length; i++) {
+        sum += array[i];
+    }
+    return sum;
+}
+\end{lstlisting}
+
+\begin{itemize}
+  \item espace auxiliaire : \(\mathcal{O}(1)\),
+  \item espace d’entrée : \(\Theta(n)\) pour le tableau,
+\end{itemize}
+
+d’où une complexité spatiale \(\Theta(n)\).
+
+\paragraph{Exemple \texttt{range}.}
+
+\begin{lstlisting}[language=Java]
+public static int[] range(int n) {
+    int[] result = new int[n];
+    for (int i = 0; i < n; i++) {
+        result[i] = i;
+    }
+    return result;
+}
+\end{lstlisting}
+
+\begin{itemize}
+  \item espace auxiliaire : \(\Theta(n)\) (le tableau créé),
+  \item espace d’entrée : \(\mathcal{O}(1)\) (un entier).
+\end{itemize}
+
+On peut exprimer la complexité en fonction de \(|n|\) ou de la taille en bits de la représentation ; il est important de
+préciser ce que représente \(n\).
+
+\subsection{Complexité spatiale des algorithmes récursifs}
+
+Pour un algorithme récursif, l’espace auxiliaire inclut aussi la \emph{pile d’appels} : à chaque appel récursif, le contexte
+(local) est empilé.
+
+Exemple : factorielle.
+
+\begin{lstlisting}[language=Java]
+public class Factorial {
+
+    // Version récursive
+    public static long factorialRec(int n) {
+        if (n == 0) return 1L;
+        return n * factorialRec(n - 1);
+    }
+
+    // Version itérative
+    public static long factorialIter(int n) {
+        long result = 1L;
+        for (int i = 1; i <= n; i++) {
+            result *= i;
+        }
+        return result;
+    }
+}
+\end{lstlisting}
+
+Les deux versions ont une complexité temporelle \(\Theta(n)\).
+
+\begin{itemize}
+  \item Version itérative : espace auxiliaire \(\mathcal{O}(1)\).
+  \item Version récursive : espace auxiliaire \(\Theta(n)\) (pile d’appels de profondeur \(n\)).
+\end{itemize}
+
+Ainsi, même sans tableau explicite, la récursivité consomme de la mémoire.
+
+\paragraph{Améliorer l’espace de Merge Sort.}
+
+Dans l’implémentation naïve de \texttt{mergeSort}, on crée de nouveaux tableaux à chaque niveau récursif, ce qui mène
+à un espace auxiliaire total \(\mathcal{O}(n \log n)\). On peut l’améliorer en réutilisant un unique tableau temporaire :
+
+\begin{lstlisting}[language=Java]
+public class MergeSortOptimized {
+
+    public void sort(int[] arr) {
+        int[] temp = new int[arr.length];
+        sort(arr, temp, 0, arr.length - 1);
+    }
+
+    private void sort(int[] arr, int[] temp, int left, int right) {
+        if (left >= right) return;
+        int mid = (left + right) / 2;
+        sort(arr, temp, left, mid);
+        sort(arr, temp, mid + 1, right);
+        merge(arr, temp, left, mid, right);
+    }
+
+    private void merge(int[] arr, int[] temp,
+                       int left, int mid, int right) {
+        int i = left;
+        int j = mid + 1;
+        int k = left;
+
+        while (i <= mid && j <= right) {
+            if (arr[i] <= arr[j]) temp[k++] = arr[i++];
+            else                  temp[k++] = arr[j++];
+        }
+        while (i <= mid)   temp[k++] = arr[i++];
+        while (j <= right) temp[k++] = arr[j++];
+
+        for (int t = left; t <= right; t++) {
+            arr[t] = temp[t];
+        }
+    }
+}
+\end{lstlisting}
+
+On obtient ainsi une complexité spatiale auxiliaire \(\mathcal{O}(n)\) au lieu de \(\mathcal{O}(n \log n)\).
+
+\bigskip
+
+\noindent
+En général, la complexité temporelle est au moins de l’ordre de l’espace auxiliaire : manipuler \(k\) cellules mémoire
+demande au moins \(k\) opérations.
+
+%------------------------------------------------------------
+\section{Correction des algorithmes}
+\label{sec:algo-correctness}
+
+\subsection{Invariants de boucle}
+
+Un \emph{invariant de boucle} est une propriété vraie :
+
+\begin{enumerate}
+  \item avant la première itération (initialisation),
+  \item avant chaque itération (maintenance),
+  \item à la fin de la boucle (terminaison).
+\end{enumerate}
+
+Exemple : maximum d’un tableau.
+
+\begin{lstlisting}[language=Java]
+/**
+ * Maximum avec une boucle while.
+ */
+public static int maxWhile(int[] a) {
+    int m = a[0];
+    int i = 1;
+    // inv : m est le max de a[0..i-1]
+    while (i < a.length) {
+        if (a[i] > m) {
+            m = a[i];
+        }
+        i++;
+        // inv maintenu : m est le max de a[0..i-1]
+    }
+    // m est le max de a[0..a.length-1]
+    return m;
+}
+\end{lstlisting}
+
+Même idée avec une boucle \texttt{for} :
+
+\begin{lstlisting}[language=Java]
+public static int max(int[] a) {
+    int m = a[0];
+    // inv : m est le max de a[0..0]
+    for (int i = 1; i < a.length; i++) {
+        // inv : m est le max de a[0..i-1]
+        if (a[i] > m) {
+            m = a[i];
+        }
+        // inv : m est le max de a[0..i]
+    }
+    return m; // max global
+}
+\end{lstlisting}
+
+On prouve la correction en montrant :
+
+\begin{itemize}
+  \item \textbf{Initialisation} : l’invariant est vrai avant la première itération.
+  \item \textbf{Maintenance} : s’il est vrai au début d’une itération, il reste vrai après.
+  \item \textbf{Terminaison} : combiné à la condition de sortie, il implique la post-condition voulue.
+\end{itemize}
+
+\subsection{Preuve de correction récursive}
+
+Pour un algorithme récursif, on raisonne par induction.
+
+Exemple : maximum récursif d’un préfixe.
+
+\begin{lstlisting}[language=Java]
+/**
+ * Max de a[0..i].
+ */
+private static int maxRecur(int[] a, int i) {
+    if (i == 0) {
+        return a[0];
+    } else {
+        return Math.max(maxRecur(a, i - 1), a[i]);
+    }
+}
+\end{lstlisting}
+
+\begin{itemize}
+  \item \textbf{Base} : pour \(i = 0\), on renvoie \(a[0]\), correct.
+  \item \textbf{Induction} : on suppose correct pour \(i-1\). Alors
+        \(\max(a[0..i]) = \max(\max(a[0..i-1]), a[i])\), ce que calcule la fonction.
+\end{itemize}
+
+\paragraph{Exercices.}
+
+\begin{itemize}
+  \item Proposer un invariant pour l’algorithme de sous-tableau de somme maximale (\texttt{maxSubArray}) et le prouver.
+  \item Proposer un invariant pour la boucle externe de \texttt{bubbleSort} :
+\end{itemize}
+
+\begin{lstlisting}[language=Java]
+public static void bubbleSort(int[] array) {
+    int n = array.length;
+    for (int i = 0; i < n - 1; i++) {
+        // invariant ?
+        for (int j = 0; j < n - i - 1; j++) {
+            if (array[j] > array[j + 1]) {
+                int tmp = array[j];
+                array[j] = array[j + 1];
+                array[j + 1] = tmp;
+            }
+        }
+    }
+}
+\end{lstlisting}
+
+%------------------------------------------------------------
+\section{Types de données abstraits (ADT)}
+\label{sec:adt}
+
+Un \emph{type de données abstrait} (ADT) décrit un ensemble de valeurs et d’opérations \emph{sans} imposer la
+représentation interne.
+
+Exemple : \texttt{List<E>}.
+
+\begin{itemize}
+  \item Opérations typiques : \texttt{add}, \texttt{get}, \texttt{remove}, \texttt{size}, \dots
+  \item Implémentations possibles : \texttt{ArrayList}, \texttt{LinkedList}, \dots
+\end{itemize}
+
+Le contrat logique reste le même, même si les performances diffèrent.
+
+\subsection*{Génériques}
+
+\begin{lstlisting}[language=Java]
+List<String> fruits = new java.util.LinkedList<>();
+fruits.add("Apple");
+fruits.add("Banana");
+fruits.add("Cherry");
+fruits.remove("Banana");
+\end{lstlisting}
+
+Les génériques (\texttt{<T>}) permettent de paramétrer les types et évitent les cast dangereux.
+
+%------------------------------------------------------------
+\subsection{Stack ADT}
+\label{sec:stack-adt}
+
+Une pile (stack) suit le principe LIFO.
+
+\begin{lstlisting}[language=Java]
+public interface Stack<T> {
+    void push(T item);  // empile
+    T pop();            // dépile et renvoie
+    T peek();           // lit le sommet
+    boolean isEmpty();
+    int size();
+}
+\end{lstlisting}
+
+\subsubsection*{Implémentation chaînée}
+
+\begin{lstlisting}[language=Java]
+public class LinkedStack<T> implements Stack<T> {
+
+    private static class Node<T> {
+        T item;
+        Node<T> next;
+        Node(T item, Node<T> next) {
+            this.item = item;
+            this.next = next;
+        }
+    }
+
+    private Node<T> top;
+    private int size;
+
+    @Override
+    public void push(T item) {
+        top = new Node<>(item, top);
+        size++;
+    }
+
+    @Override
+    public T pop() {
+        if (isEmpty()) throw new RuntimeException("Stack is empty");
+        T item = top.item;
+        top = top.next;
+        size--;
+        return item;
+    }
+
+    @Override
+    public T peek() {
+        if (isEmpty()) throw new RuntimeException("Stack is empty");
+        return top.item;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return top == null;
+    }
+
+    @Override
+    public int size() {
+        return size;
+    }
+}
+\end{lstlisting}
+
+Toutes les opérations de pile sont en temps \(\mathcal{O}(1)\).
+
+\subsubsection*{Implémentation par tableau dynamique}
+
+\begin{lstlisting}[language=Java]
+public class DynamicArrayStack<T> implements Stack<T> {
+
+    private T[] array;
+    private int top; // index du sommet
+    @SuppressWarnings("unchecked")
+    public DynamicArrayStack(int initialCapacity) {
+        array = (T[]) new Object[initialCapacity];
+        top = -1;
+    }
+
+    @Override
+    public void push(T item) {
+        if (top == array.length - 1) {
+            resize(2 * array.length);
+        }
+        array[++top] = item;
+    }
+
+    @Override
+    public T pop() {
+        if (isEmpty()) throw new RuntimeException("Stack is empty");
+        T item = array[top];
+        array[top--] = null;
+        if (top > 0 && top == array.length / 4) {
+            resize(array.length / 2);
+        }
+        return item;
+    }
+
+    @Override
+    public T peek() {
+        if (isEmpty()) throw new RuntimeException("Stack is empty");
+        return array[top];
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return top == -1;
+    }
+
+    @Override
+    public int size() {
+        return top + 1;
+    }
+
+    private void resize(int newCapacity) {
+        @SuppressWarnings("unchecked")
+        T[] newArray = (T[]) new Object[newCapacity];
+        System.arraycopy(array, 0, newArray, 0, top + 1);
+        array = newArray;
+    }
+}
+\end{lstlisting}
+
+Les opérations sont \(\mathcal{O}(1)\) en temps amorti grâce au redimensionnement exponentiel.
+
+\subsubsection*{Évaluation d’expressions avec deux piles}
+
+On peut évaluer une expression entièrement parenthésée à l’aide :
+
+\begin{itemize}
+  \item d’une pile d’opérateurs (\texttt{ops}),
+  \item d’une pile de valeurs (\texttt{vals}).
+\end{itemize}
+
+Idée : à chaque \texttt{")"}, on dépile un opérateur et les deux dernières valeurs, on applique, et on réempile le
+résultat. La complexité est \(\mathcal{O}(n)\).
+
+L’invariant informel :
+
+\begin{itemize}
+  \item \texttt{vals} contient les valeurs (ou sous-résultats) des sous-expressions déjà complètement évaluées ;
+  \item \texttt{ops} contient les opérateurs en attente de leur opérande droit.
+\end{itemize}
+
+\paragraph{Exercice.} Écrire une version récursive qui évalue une expression parenthésée en s’appuyant sur la pile
+d’appels plutôt que sur des piles explicites.
+
+%------------------------------------------------------------
+\subsection{Arbres}
+\label{sec:trees}
+
+Les arbres permettent de représenter des données hiérarchiques : systèmes de fichiers, arbres généalogiques,
+expressions arithmétiques, etc.
+
+\subsubsection*{Arbre binaire simple}
+
+\begin{lstlisting}[language=Java]
+public class LinkedBinaryTree {
+
+    private Node root;
+
+    class Node {
+        int val;
+        Node left;
+        Node right;
+        Node(int val) { this.val = val; }
+    }
+
+    public static LinkedBinaryTree leaf(int val) {
+        LinkedBinaryTree t = new LinkedBinaryTree();
+        t.root = t.new Node(val);
+        return t;
+    }
+
+    public static LinkedBinaryTree combine(int val,
+                                           LinkedBinaryTree left,
+                                           LinkedBinaryTree right) {
+        LinkedBinaryTree t = new LinkedBinaryTree();
+        t.root = t.new Node(val);
+        t.root.left = left.root;
+        t.root.right = right.root;
+        return t;
+    }
+}
+\end{lstlisting}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=.5\linewidth]{chap4_imgs/chap4_p112_img1.png}
+  \caption{Exemple d’arbre binaire.}
+\end{figure}
+
+\paragraph{Parcours.}
+
+\begin{itemize}
+  \item Pré-ordre : noeud, gauche, droite.
+  \item En-ordre : gauche, noeud, droite.
+  \item Post-ordre : gauche, droite, noeud.
+\end{itemize}
+
+Chaque parcours visite chaque noeud une fois : \(\Theta(n)\).
+
+\subsubsection*{Arbre d’expressions binaires}
+
+On peut modéliser une expression comme un arbre binaire :
+
+\begin{lstlisting}[language=Java]
+public abstract class BinaryExpressionTree {
+
+    abstract int evaluate();
+    abstract String prettyPrint();
+
+    public BinaryExpressionTree mul(BinaryExpressionTree right) {
+        return new OperatorExpressionTree(this, right, '*');
+    }
+    public BinaryExpressionTree plus(BinaryExpressionTree right) {
+        return new OperatorExpressionTree(this, right, '+');
+    }
+    // etc.
+
+    private static class OperatorExpressionTree extends BinaryExpressionTree {
+        private final BinaryExpressionTree left;
+        private final BinaryExpressionTree right;
+        private final char op;
+
+        OperatorExpressionTree(BinaryExpressionTree left,
+                               BinaryExpressionTree right,
+                               char op) {
+            this.left = left;
+            this.right = right;
+            this.op = op;
+        }
+
+        @Override
+        int evaluate() {
+            int lv = left.evaluate();
+            int rv = right.evaluate();
+            return switch (op) {
+                case '+' -> lv + rv;
+                case '-' -> lv - rv;
+                case '*' -> lv * rv;
+                case '/' -> lv / rv;
+                default -> throw new IllegalArgumentException();
+            };
+        }
+
+        @Override
+        String prettyPrint() {
+            return "(" + left.prettyPrint() + op + right.prettyPrint() + ")";
+        }
+    }
+
+    private static class ValueExpressionTree extends BinaryExpressionTree {
+        private final int value;
+        ValueExpressionTree(int value) { this.value = value; }
+
+        @Override
+        int evaluate() { return value; }
+
+        @Override
+        String prettyPrint() { return Integer.toString(value); }
+    }
+
+    public static BinaryExpressionTree value(int v) {
+        return new ValueExpressionTree(v);
+    }
+}
+\end{lstlisting}
+
+\paragraph{Exercice.} Ajouter \texttt{rpnPrint()} qui affiche l’expression en notation polonaise inversée.
+
+\subsubsection*{Ensembles avec arbre binaire de recherche (BST)}
+
+On définit un ADT pour un ensemble d’entiers sans doublon :
+
+\begin{lstlisting}[language=Java]
+public interface IntSet {
+    void add(int val);
+    boolean contains(int val);
+}
+\end{lstlisting}
+
+Implémentation avec un \emph{binary search tree} (BST) :
+
+\begin{lstlisting}[language=Java]
+public class BinarySearchTree implements IntSet {
+
+    private class Node {
+        int val;
+        Node left, right;
+        Node(int val) { this.val = val; }
+    }
+
+    private Node root;
+
+    @Override
+    public void add(int val) {
+        root = addRec(root, val);
+    }
+
+    private Node addRec(Node current, int val) {
+        if (current == null) return new Node(val);
+        if (val < current.val) current.left = addRec(current.left, val);
+        else if (val > current.val) current.right = addRec(current.right, val);
+        // sinon déjà présent
+        return current;
+    }
+
+    @Override
+    public boolean contains(int val) {
+        return containsRec(root, val);
+    }
+
+    private boolean containsRec(Node current, int val) {
+        if (current == null) return false;
+        if (val == current.val) return true;
+        if (val < current.val) return containsRec(current.left, val);
+        else                    return containsRec(current.right, val);
+    }
+}
+\end{lstlisting}
+
+Si l’arbre reste équilibré, les opérations sont en \(\mathcal{O}(\log n)\).
+
+%------------------------------------------------------------
+\subsection{Maps}
+\label{sec:maps}
+
+Un \texttt{Map<K,V>} généralise le tableau : au lieu d’indices entiers, on a des \emph{clés} arbitraires.
+
+Exemple avec \texttt{Hashtable} :
+
+\begin{lstlisting}[language=Java]
+import java.util.Hashtable;
+import java.util.Map;
+
+public class MapExample {
+    public static void main(String[] args) {
+        Map<String,Integer> treeHeights = new Hashtable<>();
+        treeHeights.put("Oak", 20);
+        treeHeights.put("Pine", 25);
+        System.out.println(treeHeights.get("Oak"));
+    }
+}
+\end{lstlisting}
+
+Principe de la table de hachage :
+
+\begin{itemize}
+  \item une fonction de hachage associe à une clé un entier (hash code),
+  \item on ramène ce hash dans \([0, N-1]\) pour indexer un tableau,
+  \item en cas de collisions, on stocke une liste chaînée d’entrées à cette case.
+\end{itemize}
+
+Insertion et recherche ont une complexité moyenne \(\mathcal{O}(1)\) si le \emph{load factor} est maîtrisé.
+
+\begin{lstlisting}[language=Java]
+public class SimpleHashtable {
+
+    private static final int N = 10;
+
+    private static class Entry {
+        final String key;
+        Integer value;
+        Entry(String key, Integer value) {
+            this.key = key;
+            this.value = value;
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private java.util.LinkedList<Entry>[] table =
+        new java.util.LinkedList[N];
+
+    public SimpleHashtable() {
+        for (int i = 0; i < N; i++) {
+            table[i] = new java.util.LinkedList<>();
+        }
+    }
+
+    private int hash(String key) {
+        return Math.abs(key.hashCode()) % N;
+    }
+
+    public void put(String key, Integer value) {
+        int index = hash(key);
+        var bucket = table[index];
+        for (Entry e : bucket) {
+            if (e.key.equals(key)) {
+                e.value = value;
+                return;
+            }
+        }
+        bucket.add(new Entry(key, value));
+    }
+
+    public Integer get(String key) {
+        int index = hash(key);
+        var bucket = table[index];
+        for (Entry e : bucket) {
+            if (e.key.equals(key)) return e.value;
+        }
+        return null;
+    }
+}
+\end{lstlisting}
+
+%------------------------------------------------------------
+\section{Itérateurs}
+\label{sec:iterators}
+
+Un \emph{itérateur} est un objet qui parcourt une collection sans exposer sa représentation interne.
+
+Interface standard :
+
+\begin{lstlisting}[language=Java]
+public interface Iterator<E> {
+    boolean hasNext();
+    E next();
+    // remove() optionnel
+}
+\end{lstlisting}
+
+Exemple d’utilisation :
+
+\begin{lstlisting}[language=Java]
+ArrayList<String> list = new ArrayList<>();
+list.add("A"); list.add("B"); list.add("C");
+
+Iterator<String> it = list.iterator();
+while (it.hasNext()) {
+    String e = it.next();
+    System.out.println(e);
+}
+\end{lstlisting}
+
+L’interface \texttt{Iterable<T>} fournit la méthode \texttt{iterator()} et permet la boucle \texttt{for-each} :
+
+\begin{lstlisting}[language=Java]
+for (String e : list) {
+    System.out.println(e);
+}
+\end{lstlisting}
+
+\subsection{Implémenter ses propres itérateurs}
+\label{sec:custom-iterators}
+
+Pour rendre un ADT itérable, on le fait étendre \texttt{Iterable<T>} :
+
+\begin{lstlisting}[language=Java]
+public interface Stack<T> extends Iterable<T> {
+    void push(T item);
+    T pop();
+    T peek();
+    boolean isEmpty();
+    int size();
+}
+\end{lstlisting}
+
+\subsubsection*{Itérateur fail-fast pour \texttt{LinkedStack}}
+
+On suit la stratégie classique des collections Java : un compteur de modifications (\texttt{modCount}) est comparé à
+une copie figée dans l’itérateur.
+
+\begin{lstlisting}[language=Java]
+import java.util.Iterator;
+import java.util.ConcurrentModificationException;
+
+public class LinkedStack<T> implements Stack<T> {
+
+    private static class Node<T> {
+        T item;
+        Node<T> next;
+        Node(T item, Node<T> next) {
+            this.item = item;
+            this.next = next;
+        }
+    }
+
+    private Node<T> top;
+    private int size = 0;
+    private int modCount = 0;
+
+    @Override
+    public void push(T item) {
+        top = new Node<>(item, top);
+        size++;
+        modCount++;
+    }
+
+    @Override
+    public T pop() {
+        if (isEmpty()) throw new RuntimeException("Stack is empty");
+        T item = top.item;
+        top = top.next;
+        size--;
+        modCount++;
+        return item;
+    }
+
+    @Override
+    public T peek() {
+        if (isEmpty()) throw new RuntimeException("Stack is empty");
+        return top.item;
+    }
+
+    @Override
+    public boolean isEmpty() { return top == null; }
+
+    @Override
+    public int size() { return size; }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new LinkedStackIterator();
+    }
+
+    private class LinkedStackIterator implements Iterator<T> {
+
+        private Node<T> current = top;
+        private final int expectedModCount = modCount;
+
+        @Override
+        public boolean hasNext() {
+            if (expectedModCount != modCount) {
+                throw new ConcurrentModificationException();
+            }
+            return current != null;
+        }
+
+        @Override
+        public T next() {
+            if (expectedModCount != modCount) {
+                throw new ConcurrentModificationException();
+            }
+            if (current == null) {
+                throw new IllegalStateException("No more items");
+            }
+            T item = current.item;
+            current = current.next;
+            return item;
+        }
+    }
+}
+\end{lstlisting}
+
+Toute modification structurale de la pile après création de l’itérateur provoque une
+\texttt{ConcurrentModificationException} au prochain \texttt{hasNext()} / \texttt{next()}.
+
+% Fin du chapitre 4
+\chapter{Programmation parallèle}
+\label{chap:parallel}
+
+
+
+
+\end{document}
