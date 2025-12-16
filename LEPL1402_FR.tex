@@ -71,6 +71,13 @@ les parties suivantes du livre.
 
 \subsection{Installation d'IntelliJ}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{1.png}
+  \caption{}
+\end{figure}
+
+
 Vous avez peut-être déjà utilisé un environnement de développement intégré
 (IDE) pour écrire des programmes en Python. Dans ce cours, nous ferons la même
 chose pour programmer en Java : nous utiliserons la « Community Edition »
@@ -96,6 +103,13 @@ ordinateur sans IntelliJ, vous devrez télécharger manuellement le JDK depuis
 \url{https://openjdk.org/} et l'installer.
 
 \subsection{Création d'un nouveau projet}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{2.png}
+  \caption{}
+\end{figure}
+
 
 Démarrez IntelliJ. Une fenêtre s'ouvre et vous permet de créer un nouveau
 projet. Cliquez sur le bouton correspondant et vous devriez voir une fenêtre
@@ -134,6 +148,13 @@ pour lancer le programme. Une nouvelle vue apparaît en bas de la fenêtre avec
 la sortie du programme.
 
 \subsection{À quoi ressemblent les programmes Java ?}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{3.png}
+  \caption{}
+\end{figure}
+
 
 Voici le code source du programme d'exemple automatiquement créé par IntelliJ
 dans votre projet :
@@ -252,6 +273,13 @@ utilisant le nom de la classe, comme démontré avec
 \texttt{MyOtherClass.printHello()} dans l'exemple.
 
 \subsection{Types}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{4.png}
+  \caption{}
+\end{figure}
+
 
 Vous savez peut-être déjà que Python est un langage fortement typé. Cela
 signifie que toutes les « choses » en Python ont un type spécifique. Vous
@@ -416,6 +444,13 @@ de faire cela à la main en ligne de commande, sans IDE :
 
 \subsection{Types primitifs}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{5.png}
+  \caption{}
+\end{figure}
+
+
 Comme expliqué, Java exige que vous précisiez le type de toutes les variables
 (y compris les paramètres de méthodes) et les types de retour de toutes les
 méthodes. Java distingue les \emph{types primitifs} et les types complexes,
@@ -489,6 +524,13 @@ System.out.println(c); // affiche 'b'
 
 \subsection{Conversions de type (cast)}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{6.png}
+  \caption{}
+\end{figure}
+
+
 Java effectue des conversions automatiques entre valeurs de différents types si
 le type de destination est « assez grand » pour contenir le résultat. On parle
 de \emph{cast automatique}. C'est pourquoi les deux instructions suivantes sont
@@ -527,6 +569,13 @@ System.out.println("Radius of disk: " + radius);
 \end{lstlisting}
 
 \subsection{Qu'est-ce qu'une variable ? Modèle mental}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{7.png}
+  \caption{}
+\end{figure}
+
 
 Pour les variables de type primitif, vous pouvez imaginer que chaque fois que
 votre programme atteint une ligne où une variable est déclarée, la JVM réserve
@@ -577,6 +626,13 @@ public static void main(String[] args) {
 \end{lstlisting}
 
 \subsection{Variables de classe}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{8.png}
+  \caption{}
+\end{figure}
+
 
 Dans nos exemples, toutes les variables étaient des paramètres ou des variables
 locales. Ces variables ne « vivent » que pendant l'exécution de la méthode où
@@ -663,6 +719,13 @@ public class Main {
 
 \subsection{Tableaux}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{9.png}
+  \caption{}
+\end{figure}
+
+
 Si vous avez besoin d'un certain nombre de variables de même type primitif, il
 peut être utile d'utiliser un \emph{tableau} (\texttt{array}) plutôt que des
 variables séparées. Les tableaux sont similaires aux listes en Python, avec
@@ -692,6 +755,13 @@ La taille d'un tableau est fixe : on ne peut pas ajouter ou supprimer des
 \texttt{ArrayList}, plus flexible.
 
 \subsection{Modèle mental pour les tableaux}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{10.png}
+  \caption{}
+\end{figure}
+
 
 Une variable de type tableau ne contient pas directement les éléments ; elle
 contient une \emph{référence} vers les données du tableau. Lorsqu'on écrit :
@@ -730,6 +800,13 @@ public class Main {
 
 \subsection{Initialisation d'un tableau}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{11.png}
+  \caption{}
+\end{figure}
+
+
 On peut créer et initialiser un tableau en une seule étape :
 
 \begin{lstlisting}[language=Java]
@@ -746,6 +823,13 @@ a = new int[]{ 1, 9, 3, 4 };
 \end{lstlisting}
 
 \subsection{Tableaux multidimensionnels}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{12.png}
+  \caption{}
+\end{figure}
+
 
 Les tableaux peuvent avoir plusieurs dimensions. Par exemple, un tableau
 bidimensionnel peut représenter une matrice :
@@ -778,6 +862,13 @@ int[][] a = {
 
 \subsection{Tableaux partiellement initialisés}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{13.png}
+  \caption{}
+\end{figure}
+
+
 Il est possible de ne spécifier que la première dimension :
 
 \begin{lstlisting}[language=Java]
@@ -796,6 +887,13 @@ a[2] = new int[2]; // autorisé : pas obligé d'avoir la même taille
 
 \subsection{Tableaux et variables de classe}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{14.png}
+  \caption{}
+\end{figure}
+
+
 Les variables de type tableau peuvent aussi être des variables de classe :
 
 \begin{lstlisting}[language=Java]
@@ -813,6 +911,13 @@ public class Main {
 La valeur \texttt{null} représente une référence invalide.
 
 \subsection{Boucles \texttt{while}}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{15.png}
+  \caption{}
+\end{figure}
+
 
 La boucle \texttt{while} en Java est très proche de celle de Python :
 
@@ -833,6 +938,13 @@ toujours utiliser les accolades, même pour une seule instruction.
 
 \subsection{Boucles \texttt{for} simples}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{16.png}
+  \caption{}
+\end{figure}
+
+
 La forme simplifiée de \texttt{for} (\emph{for-each}) est pratique pour
 parcourir les éléments d'un tableau :
 
@@ -846,6 +958,13 @@ System.out.println("The sum is " + sum);
 \end{lstlisting}
 
 \subsection{Boucles \texttt{for} complexes}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{17.png}
+  \caption{}
+\end{figure}
+
 
 La forme complète donne un contrôle total :
 
@@ -871,6 +990,13 @@ System.out.println("The sum is " + sum);
 
 \subsection{Arrêter une boucle, sauter des itérations}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{18.png}
+  \caption{}
+\end{figure}
+
+
 \texttt{break} permet de sortir de la boucle, \texttt{continue} de passer
 directement à l'itération suivante :
 
@@ -886,6 +1012,13 @@ for (int i = 0; i < 10; i++) {
 À n'utiliser que s'ils rendent le code plus lisible.
 
 \subsection{Instructions \texttt{if/else}}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{19.png}
+  \caption{}
+\end{figure}
+
 
 L'instruction \texttt{if} fonctionne comme en Python. Exemple :
 
@@ -910,6 +1043,13 @@ Toujours penser aux accolades.
 
 \subsection{Opérateurs de comparaison et logiques}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{20.png}
+  \caption{}
+\end{figure}
+
+
 \begin{lstlisting}[language=Java]
 boolean b1 = 3 < 4;     // <, >, <=, >=, ==, !=
 boolean b2 = !b1;       // négation
@@ -918,6 +1058,13 @@ boolean b4 = b1 || b2;  // ou logique
 \end{lstlisting}
 
 \subsection{Instruction \texttt{switch}}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{21.png}
+  \caption{}
+\end{figure}
+
 
 Plutôt qu'une longue suite de \texttt{if/else if} :
 
@@ -941,6 +1088,13 @@ Cette syntaxe avec \texttt{->} nécessite Java~14 ou plus récent. Pour les
 versions plus anciennes, il faut utiliser \texttt{case} avec \texttt{break}.
 
 \subsection{Chaînes de caractères}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{22.png}
+  \caption{}
+\end{figure}
+
 
 Les variables contenant des chaînes ont le type \texttt{String}. On les
 concatène avec \texttt{+}, y compris avec des valeurs primitives :
@@ -972,9 +1126,23 @@ int i = Integer.parseInt("1234");
 
 \subsection{Modèle mental pour les chaînes}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{23.png}
+  \caption{}
+\end{figure}
+
+
 Comme les tableaux, les variables \texttt{String} contiennent des références.
 
 \subsection{Comparer des valeurs}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{24.png}
+  \caption{}
+\end{figure}
+
 
 Pour les types primitifs, \texttt{==} compare les valeurs. Pour les tableaux et
 les chaînes, \texttt{==} compare les références, pas le contenu :
@@ -1000,6 +1168,13 @@ Pour les tableaux, on utilise \texttt{Arrays.equals} de
 \texttt{java.util.Arrays}.
 
 \subsection{Énumérations}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{25.png}
+  \caption{}
+\end{figure}
+
 
 Les \texttt{enum} définissent un ensemble de constantes typées. On peut les
 utiliser avec \texttt{switch} ou \texttt{==}. Exemple (directions) :
@@ -1052,6 +1227,13 @@ En Java, il existe deux façons de sortir d'une méthode : utiliser l'instructio
 \texttt{return} ou lever une exception.
 
 \subsection{Lever une exception}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{26.png}
+  \caption{}
+\end{figure}
+
 
 Les exceptions permettent d'interrompre l'exécution normale lorsqu'une situation
 exceptionnelle survient. On utilise pour cela l'instruction \texttt{throw} en
@@ -1128,6 +1310,13 @@ public class Main {
 
 \subsection{Utiliser des sous-classes d'Exception}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{27.png}
+  \caption{}
+\end{figure}
+
+
 En créant des sous-classes de \texttt{Exception}, on fournit plus
 d'informations au code qui intercepte l'exception :
 
@@ -1199,6 +1388,13 @@ catch (Exception e) {
 
 \subsection{Exceptions contrôlées et non contrôlées}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{28.png}
+  \caption{}
+\end{figure}
+
+
 Les exceptions que nous avons levées ci-dessus sont \emph{contrôlées}
 (\emph{checked}) : le compilateur vérifie qu'elles sont soit interceptées, soit
 déclarées avec \texttt{throws}.
@@ -1234,6 +1430,13 @@ dérivent de \texttt{Throwable}.
 
 \subsection{Avons-nous besoin des exceptions ?}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{29.png}
+  \caption{}
+\end{figure}
+
+
 On pourrait réécrire \texttt{setBoss} sans exceptions :
 
 \begin{lstlisting}[language=Java]
@@ -1268,6 +1471,13 @@ le code, mais la logique peut parfois être plus explicite. Conclusion :
 utilisez les exceptions avec parcimonie.
 
 \subsection{Exceptions et opérations d'entrée/sortie}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{30.png}
+  \caption{}
+\end{figure}
+
 
 Le JDK fournit de nombreuses classes pour travailler avec des fichiers et
 communiquer sur Internet. Beaucoup de leurs méthodes peuvent lever
@@ -1340,6 +1550,13 @@ public class Main {
 
 \subsection{Créer vos propres objets}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{31.png}
+  \caption{}
+\end{figure}
+
+
 Jusqu’ici, nous avons surtout utilisé :
 
 \begin{itemize}
@@ -1381,6 +1598,13 @@ Chaque objet possède ses \emph{propres} variables d’instance. Si nous augment
 
 \subsection{Initialiser les objets}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{32.png}
+  \caption{}
+\end{figure}
+
+
 Par défaut, en Java :
 
 \begin{itemize}
@@ -1417,6 +1641,13 @@ Employee(String name, int salary) {
 
 \subsection{Modèle mental}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{33.png}
+  \caption{}
+\end{figure}
+
+
 Une variable de type classe ne \emph{contient} pas directement l’objet, mais une \emph{référence} vers celui-ci.
 
 \begin{lstlisting}[language=Java]
@@ -1439,6 +1670,13 @@ System.out.println(x == z); // true  : même référence
 
 \subsection{Travailler avec des objets}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{34.png}
+  \caption{}
+\end{figure}
+
+
 On peut créer des tableaux d’objets :
 
 \begin{lstlisting}[language=Java]
@@ -1453,6 +1691,13 @@ Chaque case du tableau est une \emph{référence} vers un \texttt{Employee}.
 Une référence non initialisée vaut \texttt{null}. Toute tentative d’utiliser une référence \texttt{null} provoque un \texttt{NullPointerException}.
 
 \subsection{Méthodes}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{35.png}
+  \caption{}
+\end{figure}
+
 
 On peut définir des méthodes \emph{statiques} externes :
 
@@ -1501,6 +1746,13 @@ public class Main {
 
 \subsection{Restreindre l’accès}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{36.png}
+  \caption{}
+\end{figure}
+
+
 Avec le code précédent, on peut toujours contourner la logique métier :
 
 \begin{lstlisting}[language=Java]
@@ -1546,6 +1798,13 @@ public class Main {
 \end{lstlisting}
 
 \subsection{Héritage}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{37.png}
+  \caption{}
+\end{figure}
+
 
 Supposons un jeu où les armes sont représentées par une classe :
 
@@ -1599,6 +1858,13 @@ Ici :
 
 \subsection{Le mot-clé \texttt{super}}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{38.png}
+  \caption{}
+\end{figure}
+
+
 \texttt{super} permet :
 
 \begin{itemize}
@@ -1610,10 +1876,24 @@ Il est utile lorsqu’on spécialise un comportement tout en réutilisant l’im
 
 \subsection{L’annotation \texttt{@Override}}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{39.png}
+  \caption{}
+\end{figure}
+
+
 \texttt{@Override} demande au compilateur de vérifier qu’une méthode redéfinit effectivement une méthode héritée.  
 Sans cette annotation, une simple faute de frappe créerait une nouvelle méthode au lieu d’écraser l’ancienne.
 
 \subsection{Étendre encore et encore\ldots{} (polymorphisme)}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{40.png}
+  \caption{}
+\end{figure}
+
 
 On peut enchaîner l’héritage (par exemple différentes sous-classes de \texttt{Weapon}).  
 Le \emph{polymorphisme} permet de manipuler des objets de sous-classes via une référence de la super-classe :
@@ -1627,6 +1907,13 @@ Le choix de la méthode est fait dynamiquement à l’exécution selon le type r
 
 \subsection{La hiérarchie de classes et \texttt{Object}}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{41.png}
+  \caption{}
+\end{figure}
+
+
 En Java, toute classe hérite (directement ou indirectement) de \texttt{Object}, qui fournit notamment :
 
 \begin{itemize}
@@ -1638,6 +1925,13 @@ En Java, toute classe hérite (directement ou indirectement) de \texttt{Object},
 Redéfinir correctement \texttt{toString()}, \texttt{equals()} et \texttt{hashCode()} est essentiel pour les collections.
 
 \subsection{\texttt{ArrayList}}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{42.png}
+  \caption{}
+\end{figure}
+
 
 \texttt{ArrayList<E>} est une implémentation dynamique de liste.
 
@@ -1657,6 +1951,13 @@ On utilise :
 
 \subsection{Boucles \texttt{for} sur \texttt{ArrayList}}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{43.png}
+  \caption{}
+\end{figure}
+
+
 \begin{lstlisting}[language=Java]
 // for classique
 for (int i = 0; i < names.size(); i++) {
@@ -1670,6 +1971,13 @@ for (String n : names) {
 \end{lstlisting}
 
 \subsection{Boxing et unboxing}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{44.png}
+  \caption{}
+\end{figure}
+
 
 Java convertit automatiquement entre types primitifs et leurs classes enveloppes :
 
@@ -1686,6 +1994,13 @@ int x = list.get(0);   // unboxing automatique
 
 \subsection{\texttt{ArrayList} et génériques}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{45.png}
+  \caption{}
+\end{figure}
+
+
 Les collections utilisent des \emph{génériques} pour indiquer le type des éléments :
 
 \begin{lstlisting}[language=Java]
@@ -1698,6 +2013,13 @@ Cela permet de détecter des erreurs de type à la compilation.
 
 \subsection{Surcharge de méthodes (paramètres différents)}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{46.png}
+  \caption{}
+\end{figure}
+
+
 Deux méthodes dans la même classe peuvent partager le même nom si leurs listes de paramètres sont différentes :
 
 \begin{lstlisting}[language=Java]
@@ -1709,13 +2031,34 @@ Le compilateur choisit la version appropriée selon les arguments.
 
 \subsection{Surcharge avec des types de sous-classes}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{47.png}
+  \caption{}
+\end{figure}
+
+
 Si plusieurs signatures correspondent, Java choisit celle dont les types de paramètres sont les plus spécifiques.
 
 \subsection{Surcharge et ``meilleure correspondance''}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{48.png}
+  \caption{}
+\end{figure}
+
+
 La résolution de surcharge suit des règles précises (conversion, promotion, etc.). Si l’ambiguïté est trop grande, le code ne compile pas.
 
 \subsection{Héritage multiple}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{49.png}
+  \caption{}
+\end{figure}
+
 
 Java \emph{n’autorise pas} l’héritage multiple de classes (une classe ne peut étendre qu’une seule autre classe), afin d’éviter des ambiguïtés.  
 La flexibilité supplémentaire se fait via :
@@ -1726,6 +2069,13 @@ La flexibilité supplémentaire se fait via :
 \end{itemize}
 
 \subsection{Le mot-clé \texttt{final}}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{50.png}
+  \caption{}
+\end{figure}
+
 
 \subsubsection{Paramètres \texttt{final}}
 
@@ -1759,6 +2109,13 @@ Une variable d’instance \texttt{final} est fixée une fois pour toutes (souven
 Pratique pour représenter l’\og identité\fg{} d’un objet (par exemple un numéro de registre national).
 
 \subsection{Paquets (\textit{packages})}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{51.png}
+  \caption{}
+\end{figure}
+
 \label{subsec:packages}
 
 Dans des projets plus grands, on place chaque classe dans son propre fichier \texttt{.java} et on les regroupe par \emph{paquets} :
@@ -1792,6 +2149,13 @@ La structure des répertoires doit refléter celle des paquets.
 Si aucun \texttt{package} n’est indiqué, la classe appartient au \og package sans nom\fg{}.
 
 \subsection{Utiliser plusieurs paquets}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{52.png}
+  \caption{}
+\end{figure}
+
 
 Les classes de paquets différents ne se voient pas automatiquement. Exemple :
 
@@ -1831,12 +2195,26 @@ Points importants :
 
 \subsection{Pourquoi les paquets sont-ils utiles ?}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{53.png}
+  \caption{}
+\end{figure}
+
+
 \begin{itemize}
   \item Ils permettent de contrôler la visibilité des classes et méthodes.
   \item Ils offrent des espaces de noms séparés : deux paquets peuvent contenir chacun une classe \texttt{ABC} sans conflit.
 \end{itemize}
 
 \subsection{Contrôle d’accès}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{54.png}
+  \caption{}
+\end{figure}
+
 \label{subsec:access-control}
 
 Récapitulatif :
@@ -2116,6 +2494,13 @@ Le \emph{design pattern Observer} permet à un objet (le sujet) de notifier auto
 
 \subsection{Pattern Observer sur des composants GUI}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{55.png}
+  \caption{}
+\end{figure}
+
+
 Les bibliothèques Swing/AWT utilisent ce principe. Exemple : un bouton qui affiche ``Thank you'' lorsqu’on clique :
 
 \begin{lstlisting}[language=Java]
@@ -2156,6 +2541,13 @@ public class AppWithActionListener {
 Le bouton appelle l’observateur lorsqu’un clic survient : \og Don’t call us, we will call you.\fg{}
 
 \subsection{Implémenter le pattern Observer}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{56.png}
+  \caption{}
+\end{figure}
+
 
 Exemple d’un compte bancaire observable :
 
@@ -2247,6 +2639,13 @@ Le code fourni (interfaces \texttt{SpellChecker}, \texttt{MessageObserver}, clas
 \label{sec:software-testing}
 
 \subsection{Qu'est-ce que le test logiciel ?}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{57.png}
+  \caption{}
+\end{figure}
+
 \label{subsec:what-is-testing}
 
 Selon la norme ANSI/IEEE 610.12-1990, le test est « le processus consistant à faire fonctionner un système ou un
@@ -2312,6 +2711,13 @@ Les exigences peuvent prendre des formes variées. On distingue en général deu
 \end{itemize}
 
 \subsection{Que peut-on tester ?}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{58.png}
+  \caption{}
+\end{figure}
+
 \label{subsec:what-can-be-tested}
 
 Les tests peuvent être effectués à différents niveaux.
@@ -2340,6 +2746,13 @@ tests unitaires ne remplacent pas les autres niveaux de tests, car certains prob
 plusieurs méthodes ou classes interagissent.
 
 \subsection{Comment planifier un test unitaire}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{59.png}
+  \caption{}
+\end{figure}
+
 \label{subsec:plan-unit-test}
 
 Nous testons un logiciel afin de vérifier qu'il produit les bons résultats (exigences fonctionnelles) de la bonne manière
@@ -2401,6 +2814,13 @@ le cas $n=1$ est déjà couvert dans un sous-domaine, il n'est pas nécessaire d
 \label{sec:test-coverage}
 
 \subsection{Tests en boîte noire et en boîte blanche}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{60.png}
+  \caption{}
+\end{figure}
+
 \label{subsec:black-white-box}
 
 Comme le domaine d'entrée d'un programme non trivial est immense, choisir de bons cas de test est un défi majeur.
@@ -2413,6 +2833,13 @@ Comme le domaine d'entrée d'un programme non trivial est immense, choisir de bo
 \end{itemize}
 
 \subsection{Graphe de flot de contrôle et couverture de nœuds}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{61.png}
+  \caption{}
+\end{figure}
+
 \label{subsec:cfg-node-coverage}
 
 Considérons une implémentation fautive de \texttt{min()} :
@@ -2444,6 +2871,13 @@ La \emph{couverture de nœuds} consiste à choisir des tests de sorte que chaque
 une fois. C'est un objectif important, mais pas suffisant.
 
 \subsection{Couverture des arêtes}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{62.png}
+  \caption{}
+\end{figure}
+
 \label{subsec:edge-coverage}
 
 Même avec 100\% de couverture de nœuds, certains bugs peuvent passer inaperçus. Prenons :
@@ -2466,6 +2900,13 @@ La \emph{couverture des arêtes} exige que chaque arête (transition) du CFG soi
 plus stricte que la couverture de nœuds, mais ne garantit toujours pas l'absence de bugs.
 
 \subsection{Couverture des chemins}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{63.png}
+  \caption{}
+\end{figure}
+
 \label{subsec:path-coverage}
 
 Considérons maintenant une méthode avec une boucle :
@@ -2495,6 +2936,13 @@ n'est pas réaliste. On se contente donc de choisir des chemins représentatifs 
 itération, plusieurs itérations).
 
 \subsection{Chemins « cachés »}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{64.png}
+  \caption{}
+\end{figure}
+
 \label{subsec:hidden-paths}
 
 Certains chemins d'exécution ne sont pas visibles directement dans le code source. Par exemple :
@@ -2516,6 +2964,13 @@ else
 Si votre objectif est une couverture « complète », il faut aussi prévoir un cas de test avec \texttt{b == 0}.
 
 \subsection{Outils de mesure de couverture}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{65.png}
+  \caption{}
+\end{figure}
+
 \label{subsec:coverage-tools}
 
 \texttt{JaCoCo} est un outil (et une bibliothèque) pour mesurer la couverture des tests de programmes Java.
@@ -2534,6 +2989,13 @@ Des outils similaires existent pour d'autres langages. Ils aident à vérifier s
 \label{sec:automated-unit-testing}
 
 \subsection{Écrire les tests comme un programme}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{66.png}
+  \caption{}
+\end{figure}
+
 \label{subsec:tests-as-programs}
 
 Les tests sont des tâches répétitives. En test unitaire, nous devons tester chaque nouvelle méthode que nous écrivons,
@@ -2573,6 +3035,13 @@ code. Certains développeurs vont plus loin et écrivent d'abord les tests, puis
 \emph{Test Driven Development} (TDD).
 
 \subsection{JUnit}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{67.png}
+  \caption{}
+\end{figure}
+
 \label{subsec:junit}
 
 En Java, la bibliothèque la plus connue pour écrire des tests unitaires automatisés est \texttt{JUnit}. Des outils
@@ -2642,6 +3111,13 @@ Attention : pour les objets, \texttt{assertEquals()} utilise la méthode \texttt
 l'égalité de références, il faut utiliser \texttt{assertSame()}.
 
 \subsection{Aspects pratiques des tests unitaires}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{68.png}
+  \caption{}
+\end{figure}
+
 \label{subsec:practical-unit-testing}
 
 L'idée des tests unitaires est d'organiser le programme en petites unités testables. En Java, les méthodes jouent ce
@@ -2792,6 +3268,13 @@ Sans surprise, le temps absolu dépend fortement de la machine utilisée. Le \em
 Question cruciale : pouvait-on le prévoir sans exécuter le code ? La réponse est \emph{oui}. Les travaux fondateurs d'Hartmanis et Stearns permettent d'analyser théoriquement un algorithme à partir de son (pseudo-)code, sans mesures d'exécution. Pour cela, il nous faut d'abord un modèle de calcul simple.
 
 \subsection{Le modèle RAM (\textit{Random Access Machine})}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{69.png}
+  \caption{}
+\end{figure}
+
 \label{subsec:ram-model}
 
 Le modèle RAM est une abstraction mathématique d'un ordinateur pour l'analyse d'algorithmes. Dans ce modèle, chaque opération ``simple'' (addition, soustraction, multiplication, division, comparaison, opérations binaires, suivi d'une référence, adressage direct en mémoire, etc.) prend un \emph{temps constant}. On suppose en particulier que l'accès mémoire (par exemple \texttt{values[i]}) s'effectue en temps constant, indépendamment de l'adresse. C'est l'idée de ``\emph{random access}'' : tout emplacement mémoire est accessible en le même temps.
@@ -2799,6 +3282,13 @@ Le modèle RAM est une abstraction mathématique d'un ordinateur pour l'analyse 
 Cette abstraction est raisonnable pour de nombreux cas pratiques (de la même façon que les lois de Newton constituent une bonne approximation de la relativité générale).
 
 \subsection{Meilleur cas et pire cas d'un algorithme}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{70.png}
+  \caption{}
+\end{figure}
+
 \label{subsec:best-worst}
 
 Des entrées de \emph{même taille} peuvent forcer un algorithme à effectuer plus ou moins d'étapes. Illustrons-le avec une recherche linéaire qui renvoie l'indice de la première occurrence d'une valeur cible (ou \texttt{-1} si elle est absente) :
@@ -2826,6 +3316,13 @@ Ici, le nombre d'étapes dépend fortement de la \emph{position} de la valeur ci
 La notation introduite ci-dessous nous permettra de caractériser rigoureusement ces scénarios.
 
 \subsection{Les classes \(\mathcal{O}\), \(\Omega\) et \(\Theta\)}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{71.png}
+  \caption{}
+\end{figure}
+
 \label{subsec:big-oh}
 
 Nous nous intéressons à la façon dont le temps d'exécution évolue quand la taille d'entrée \(n\) devient grande. Les \emph{notations asymptotiques} suivantes décrivent des \emph{classes de fonctions} et abstraient les constantes et les termes de plus bas degré :
@@ -2852,6 +3349,13 @@ Intuition : on ne s'intéresse pas aux petites constantes, mais au \emph{comport
 \(f(n) = c \cdot n^a + d \cdot n^b\) avec \(a \ge b \ge 0\) et \(c,d \ge 0\), alors \(f(n) \in \Theta(n^a)\), même si \(c\) est petit et \(d\) très grand. Autrement dit, on ne garde que le \emph{terme de plus haut degré} et on \emph{omet les constantes}.
 
 \subsection{Exemples pratiques d'algorithmes}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{72.png}
+  \caption{}
+\end{figure}
+
 \label{subsec:examples}
 
 Quelques classes de complexité courantes et exemples associés :
@@ -3253,6 +3757,13 @@ préciser ce que représente \(n\).
 
 \subsection{Complexité spatiale des algorithmes récursifs}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{73.png}
+  \caption{}
+\end{figure}
+
+
 Pour un algorithme récursif, l’espace auxiliaire inclut aussi la \emph{pile d’appels} : à chaque appel récursif, le contexte
 (local) est empilé.
 
@@ -3342,6 +3853,13 @@ demande au moins \(k\) opérations.
 
 \subsection{Invariants de boucle}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{74.png}
+  \caption{}
+\end{figure}
+
+
 Un \emph{invariant de boucle} est une propriété vraie :
 
 \begin{enumerate}
@@ -3398,6 +3916,13 @@ On prouve la correction en montrant :
 \end{itemize}
 
 \subsection{Preuve de correction récursive}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{75.png}
+  \caption{}
+\end{figure}
+
 
 Pour un algorithme récursif, on raisonne par induction.
 
@@ -3475,6 +4000,13 @@ Les génériques (\texttt{<T>}) permettent de paramétrer les types et évitent 
 
 %------------------------------------------------------------
 \subsection{Stack ADT}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{76.png}
+  \caption{}
+\end{figure}
+
 \label{sec:stack-adt}
 
 Une pile (stack) suit le principe LIFO.
@@ -3624,6 +4156,13 @@ d’appels plutôt que sur des piles explicites.
 
 %------------------------------------------------------------
 \subsection{Arbres}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{77.png}
+  \caption{}
+\end{figure}
+
 \label{sec:trees}
 
 Les arbres permettent de représenter des données hiérarchiques : systèmes de fichiers, arbres généalogiques,
@@ -3801,6 +4340,13 @@ Si l’arbre reste équilibré, les opérations sont en \(\mathcal{O}(\log n)\).
 
 %------------------------------------------------------------
 \subsection{Maps}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{78.png}
+  \caption{}
+\end{figure}
+
 \label{sec:maps}
 
 Un \texttt{Map<K,V>} généralise le tableau : au lieu d’indices entiers, on a des \emph{clés} arbitraires.
@@ -3920,6 +4466,13 @@ for (String e : list) {
 \end{lstlisting}
 
 \subsection{Implémenter ses propres itérateurs}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{79.png}
+  \caption{}
+\end{figure}
+
 \label{sec:custom-iterators}
 
 Pour rendre un ADT itérable, on le fait étendre \texttt{Iterable<T>} :
@@ -4138,6 +4691,13 @@ Cet extrait indique que pour créer un thread, nous devons d'abord définir une 
 
 
 \subsection{Utiliser un thread pour calculer le minimum}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{80.png}
+  \caption{}
+\end{figure}
+
 % :contentReference[oaicite:31]{index=31}
 
 Comme illustration, considérons la tâche consistant à calculer la valeur minimale d'un tableau de nombres à virgule flottante. Il est simple d'implémenter une méthode séquentielle pour effectuer ce calcul :
@@ -4233,6 +4793,13 @@ Autrement dit, l'appel \texttt{t.join()} est une forme de synchronisation entre 
 
 
 \subsection{Garder les interfaces utilisateur réactives}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{81.png}
+  \caption{}
+\end{figure}
+
 % :contentReference[oaicite:40]{index=40}
 
 L'exemple \texttt{MinComputation} crée un thread d'arrière-plan pour exécuter un calcul sur un tableau. Comme expliqué dans l'introduction, cette architecture logicielle peut avoir un intérêt pour garder l'interface utilisateur réactive pendant un long calcul. Pour illustrer cet intérêt, considérons une application GUI avec trois boutons utilisant Swing :
@@ -4338,6 +4905,13 @@ De cette manière, même lorsque le calcul est en cours d'exécution, il est tou
 
 
 \subsection{Accélérer le calcul}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{82.png}
+  \caption{}
+\end{figure}
+
 % :contentReference[oaicite:48]{index=48}
 
 Même si démarrer un thread d'arrière-plan peut être intéressant pour améliorer la réactivité d'une application (comme illustré ci-dessus), cela n'accélère pas le calcul. Par exemple, le temps nécessaire pour calculer la valeur minimale en utilisant \texttt{MinComputation} est toujours le même que l'implémentation purement séquentielle de la méthode \texttt{computeMinValue()}. Afin de réduire le temps de calcul, il est nécessaire de modifier l'algorithme séquentiel de sorte qu'il puisse exploiter plusieurs cœurs CPU.
@@ -4422,6 +4996,13 @@ Notez aussi que cette version n'intercepte pas la possible \texttt{InterruptedEx
 
 
 \subsection{Gérer les parties vides}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{83.png}
+  \caption{}
+\end{figure}
+
 % :contentReference[oaicite:57]{index=57}
 
 Même si l'implémentation de la section précédente fonctionne bien sur des tableaux contenant au moins 2 éléments, elle échoue si le tableau \texttt{values} est vide ou ne contient qu'un seul élément. En effet, dans ce cas, \texttt{values.length / 2 == 0}, ce qui déclenche la \texttt{IllegalArgumentException} dans le constructeur de \texttt{c1}. En outre, si \texttt{values.length == 0}, le constructeur de \texttt{c2} lèverait la même exception.
@@ -4587,6 +5168,13 @@ public static void main(String[] args) throws InterruptedException {
 
 
 \subsection{Résultats optionnels}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{84.png}
+  \caption{}
+\end{figure}
+
 % 
 
 La classe \texttt{MinMaxResult} a été précédemment introduite comme un moyen de gérer l'absence d'un résultat dans le cas d'une partie vide d'un tableau. Plus généralement, gérer l'absence d'une valeur est un patron courant dans les architectures logicielles. Pour cette raison, Java introduit la classe générique \texttt{Optional<T>} : \url{https://docs.oracle.com/javase/8/docs/api/java/util/Optional.html}
@@ -4726,6 +5314,13 @@ Les pools de threads sont un moyen efficace d’éviter la surcharge associée �
 
 \subsection{Pools de threads en Java}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{85.png}
+  \caption{}
+\end{figure}
+
+
 En Java, trois interfaces différentes sont généralement combinées pour créer un pool de threads :
 \begin{itemize}
     \item \texttt{java.util.concurrent.ExecutorService} implémente le pool de threads lui-même, y compris la file des requêtes et ses threads en arrière-plan : \texttt{https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ExecutorService.html}.
@@ -4777,6 +5372,13 @@ executor.shutdown();
 \end{lstlisting}
 
 \subsection{Pool de threads pour calculer le minimum et le maximum}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{86.png}
+  \caption{}
+\end{figure}
+
 
 Il est simple de transformer le runnable \texttt{MinMaxBlockComputation} qui a été défini ci-dessus en un callable :
 \begin{lstlisting}[language=Java]
@@ -4850,6 +5452,13 @@ La construction \texttt{throws} est nécessaire parce que la méthode \texttt{ge
 
 \subsection{Diviser le tableau en plusieurs blocs}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{87.png}
+  \caption{}
+\end{figure}
+
+
 Jusqu’ici, nous avons divisé le tableau \texttt{values} en 2 ou 4 blocs, parce que nous étions guidés par le nombre de cœurs CPU. En pratique, c’est une meilleure idée de diviser le tableau en blocs d’une taille fixe afin d’être agnostique du nombre sous-jacent de cœurs. Un pool de threads peut être utilisé dans cette situation pour gérer les calculs, tout en empêchant le nombre de threads de dépasser la capacité du CPU.
 
 À cette fin, nous pouvons créer une structure de données séparée (par ex., une pile ou une liste) qui garde la trace des calculs en attente en stockant les objets \texttt{Future<MinMaxResult>} :
@@ -4888,6 +5497,13 @@ public static void main(String[] args) throws InterruptedException, ExecutionExc
 Notez que l’index de fin du dernier bloc est traité spécifiquement, parce que \texttt{values.length} pourrait ne pas être un multiple entier de \texttt{blockSize}.
 
 \subsection{Calculer la moyenne d’un tableau}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{88.png}
+  \caption{}
+\end{figure}
+
 
 Jusqu’ici, ce chapitre a été presque entièrement consacré à la tâche de trouver les valeurs minimale et maximale dans un tableau. Nous avons expliqué comment l’introduction de la classe séparée \texttt{MinMaxResult} dédiée au stockage des résultats partiels conduit à une utilisation naturelle des pools de threads en implémentant l’interface \texttt{Callable<MinMaxResult>}. Une astuce importante était de définir la méthode \texttt{combine()} qui est responsable de la combinaison des résultats partiels obtenus depuis différentes parties du tableau.
 
@@ -4980,6 +5596,13 @@ Dans les solutions présentées jusqu’ici, la stratégie était de rendre \tex
 
 \subsection{Utiliser une variable partagée pour collecter les résultats partiels}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{89.png}
+  \caption{}
+\end{figure}
+
+
 Selon cette discussion, il devrait être possible de faire fusionner directement les résultats partiels par les threads dans une variable partagée, libérant le thread principal de cette tâche de combinaison. C’est une idée parfaitement valide, qui est implémentée dans le runnable suivant :
 \begin{lstlisting}[language=Java]
 class SharedMinMaxComputation implements Runnable {
@@ -5066,6 +5689,13 @@ public static void main(String[] args) throws InterruptedException, ExecutionExc
 \end{lstlisting}
 
 \subsection{Conditions de compétition, exclusion mutuelle et moniteurs}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{90.png}
+  \caption{}
+\end{figure}
+
 
 Il existe cependant un danger important dans l’utilisation de variables partagées ! Considérons le code suivant, dans lequel deux threads incrémentent le même compteur :
 \begin{lstlisting}[language=Java]
@@ -5212,6 +5842,13 @@ Enfin, notez que le mot-clé \texttt{synchronized} n’est que le plus basique d
 
 \subsection{Objet partagé pour calculer le minimum et le maximum}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{91.png}
+  \caption{}
+\end{figure}
+
+
 Nous appliquons maintenant l’exclusion mutuelle à notre exemple du calcul du minimum et du maximum en utilisant une variable partagée. Notez que dans la version qui utilise la variable de résultat partagée, la classe originale \texttt{MinMaxResult} a été remplacée par la classe \texttt{SharedMinMaxResult}. Cette dernière classe est exactement la même que \texttt{MinMaxResult}, mais avec l’ajout du mot-clé \texttt{synchronized} dans chacune de ses méthodes :
 \begin{lstlisting}[language=Java]
 class SharedMinMaxResult {
@@ -5326,6 +5963,13 @@ class SharedMinMaxResult {
 \end{lstlisting}
 
 \subsection{Application à la multiplication matricielle}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{92.png}
+  \caption{}
+\end{figure}
+
 
 L’algèbre linéaire est un domaine mathématique qui peut grandement bénéficier de la programmation parallèle. Cette section donne un exemple de la façon dont le multithreading peut être utilisé pour implémenter la multiplication matricielle.
 
@@ -5643,6 +6287,13 @@ Cette application Java crée un tableur avec 3 lignes et 3 colonnes qui sont rem
 
 \subsection{Classes imbriquées statiques}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{93.png}
+  \caption{}
+\end{figure}
+
+
 Nous nous intéressons maintenant à la tâche de trier continuellement les lignes selon les valeurs présentes dans les colonnes, à mesure que de nouvelles lignes sont ajoutées au tableur en utilisant la méthode \texttt{addRow()}.
 
 À cette fin, la classe \texttt{Spreadsheet} contient la variable membre \texttt{sortOnColumn} qui spécifie sur quelle colonne le tri doit être appliqué. Ce paramètre peut être fixé en utilisant la méthode setter \texttt{setSortOnColumn()}. Nous savons déjà que la tâche de trier les lignes peut être résolue par délégation à un comparateur dédié :
@@ -5707,6 +6358,13 @@ Fait important, les classes imbriquées statiques ont accès aux membres \texttt
 
 \subsection{Classes internes}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{94.png}
+  \caption{}
+\end{figure}
+
+
 Le code précédent a toutefois une redondance : La valeur de \texttt{sortOnColumn} doit être copiée manuellement dans une variable \texttt{column} privée de \texttt{RowComparator2} afin qu’elle puisse être utilisée dans la méthode \texttt{compare()}. Peut-on faire mieux ? La réponse est « oui », grâce au concept des classes imbriquées non statiques, qui sont formellement connues sous le nom de classes internes. Java permet d’écrire :
 
 \begin{lstlisting}[language=Java]
@@ -5737,6 +6395,13 @@ Notez que des classes internes avaient déjà été rencontrées dans ce cours l
 Il est tentant d’utiliser systématiquement des classes internes au lieu de classes imbriquées statiques. Mais faites attention au fait que les classes internes induisent un couplage beaucoup plus étroit avec leurs classes externes, ce qui peut rendre difficile la refactorisation de l’application, et ce qui peut rapidement mener à la soi-disant « odeur de code » Feature Envy (c.-à-d. l’opposé d’un bon patron de conception). N’utilisez une classe interne que lorsque vous avez besoin d’accéder aux membres d’instance de la classe externe. Utilisez une classe imbriquée statique lorsqu’il n’y a pas besoin d’accès direct à l’instance de la classe externe ou lorsque vous voulez un espace de noms plus clair et une meilleure organisation du code.
 
 \subsection{Sucre syntaxique}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{95.png}
+  \caption{}
+\end{figure}
+
 
 Le fait que \texttt{compare()} ait accès à \texttt{sortOnColumn} peut sembler magique. C’est en réalité un exemple de sucre syntaxique. Le sucre syntaxique désigne des fonctionnalités ou des constructions de langage qui n’introduisent pas de nouvelle fonctionnalité mais fournissent une manière plus pratique ou plus expressive d’écrire du code. Ces fonctionnalités rendent le code plus lisible ou plus concis sans changer fondamentalement son fonctionnement. En essence, le sucre syntaxique est un raccourci ou une syntaxe plus conviviale pour exprimer quelque chose qui pourrait être écrit d’une manière plus longue ou plus explicite.
 
@@ -5810,6 +6475,13 @@ Comme on peut le voir, le compilateur ajoute de manière transparente un nouvel 
 
 \subsection{Classes internes locales}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{96.png}
+  \caption{}
+\end{figure}
+
+
 Jusqu’ici, nous avons vu trois constructions différentes pour définir des classes :
 \begin{itemize}
 \item Les classes externes sont la manière par défaut de définir des classes, c.-à-d. séparément de toute autre classe.
@@ -5834,6 +6506,13 @@ private void sort() {
 Dans cette nouvelle version de la méthode \texttt{sort()}, le comparateur a été défini dans la portée de la méthode. La classe \texttt{RowComparator5} est entièrement locale à \texttt{sort()}, et ne peut pas être utilisée dans une autre méthode ou une autre classe, ce qui réduit encore le couplage.
 
 \subsection{Classes internes anonymes}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{97.png}
+  \caption{}
+\end{figure}
+
 
 Parce que les classes internes locales sont typiquement utilisées à un seul endroit de la méthode, il n’est généralement pas utile de donner un nom aux classes internes locales (dans l’exemple précédent, ce nom était \texttt{RowComparator5}). En conséquence, Java propose la construction de classe interne anonyme :
 
