@@ -23,14 +23,23 @@
   citecolor=blue
 }
 
+\definecolor{codebg}{RGB}{248,248,255}
+\definecolor{codeframe}{RGB}{200,200,200}
+\definecolor{codekeyword}{RGB}{0,102,204}
+\definecolor{codecomment}{RGB}{0,128,0}
+\definecolor{codestring}{RGB}{163,21,21}
+
 \lstset{
   basicstyle=\ttfamily\small,
-  keywordstyle=\bfseries,
-  commentstyle=\itshape,
-  stringstyle=\ttfamily,
+  keywordstyle=\color{codekeyword}\bfseries,
+  commentstyle=\color{codecomment}\itshape,
+  stringstyle=\color{codestring},
+  backgroundcolor=\color{codebg},
   showstringspaces=false,
   tabsize=2,
-  breaklines=true
+  breaklines=true,
+  frame=single,
+  rulecolor=\color{codeframe}
 }
 
 \title{Concepts de Programmation avec Java}
