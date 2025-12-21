@@ -71,11 +71,6 @@ les parties suivantes du livre.
 
 \subsection{Installation d'IntelliJ}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{1.png}
-  \caption{}
-\end{figure}
 
 
 Vous avez peut-être déjà utilisé un environnement de développement intégré
@@ -104,11 +99,6 @@ ordinateur sans IntelliJ, vous devrez télécharger manuellement le JDK depuis
 
 \subsection{Création d'un nouveau projet}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{2.png}
-  \caption{}
-\end{figure}
 
 
 Démarrez IntelliJ. Une fenêtre s'ouvre et vous permet de créer un nouveau
@@ -149,11 +139,6 @@ la sortie du programme.
 
 \subsection{À quoi ressemblent les programmes Java ?}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{3.png}
-  \caption{}
-\end{figure}
 
 
 Voici le code source du programme d'exemple automatiquement créé par IntelliJ
@@ -274,11 +259,6 @@ utilisant le nom de la classe, comme démontré avec
 
 \subsection{Types}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{4.png}
-  \caption{}
-\end{figure}
 
 
 Vous savez peut-être déjà que Python est un langage fortement typé. Cela
@@ -435,20 +415,15 @@ de faire cela à la main en ligne de commande, sans IDE :
 
 \begin{lstlisting}
 > javac Main.java   # javac est le compilateur, fourni avec le JDK.
-                    # Il génère le fichier Main.class
+                    # Il genere le fichier Main.class
 
-> java Main         # cette commande démarre la JVM avec votre classe Main
+> java Main         # cette commande demarre la JVM avec votre classe Main
 \end{lstlisting}
 
 \section{Bases}
 
 \subsection{Types primitifs}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{5.png}
-  \caption{}
-\end{figure}
 
 
 Comme expliqué, Java exige que vous précisiez le type de toutes les variables
@@ -487,7 +462,7 @@ domaine d'un type, des choses très étranges se produiront dans votre programme
 
 \begin{lstlisting}[language=Java]
 int a = 123456789;
-int b = a * 100000; // Ce résultat est trop grand pour le type int !
+int b = a * 100000; // Ce resultat est trop grand pour le type int !
 System.out.println(b); // Qu'obtenez-vous ici ?
 \end{lstlisting}
 
@@ -524,11 +499,6 @@ System.out.println(c); // affiche 'b'
 
 \subsection{Conversions de type (cast)}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{6.png}
-  \caption{}
-\end{figure}
 
 
 Java effectue des conversions automatiques entre valeurs de différents types si
@@ -570,11 +540,6 @@ System.out.println("Radius of disk: " + radius);
 
 \subsection{Qu'est-ce qu'une variable ? Modèle mental}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{7.png}
-  \caption{}
-\end{figure}
 
 
 Pour les variables de type primitif, vous pouvez imaginer que chaque fois que
@@ -621,17 +586,12 @@ public static void main(String[] args) {
     b = 3;
     int e = b * 3;   // OK
 
-    int f = c * 3;   // Erreur ! "c" n'a pas été initialisée.
+    int f = c * 3;   // Erreur ! "c" n'a pas ete initialisee.
 }
 \end{lstlisting}
 
 \subsection{Variables de classe}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{8.png}
-  \caption{}
-\end{figure}
 
 
 Dans nos exemples, toutes les variables étaient des paramètres ou des variables
@@ -648,7 +608,7 @@ public class Main {
     static int a = 3; // variable de classe
 
     static void increment() {
-        a += 5; // équivaut à a = a + 5
+        a += 5; // equivaut a a = a + 5
     }
 
     public static void main(String[] args) {
@@ -665,7 +625,7 @@ booléens. Ce code est donc accepté :
 \begin{lstlisting}[language=Java]
 public class Main {
 
-    static int a; // équivaut à a = 0
+    static int a; // equivaut a a = 0
 
     static void increment() {
         a += 5;
@@ -687,7 +647,7 @@ public class Main {
     static int a = 3;
 
     static void increment(int a) {
-        a += 5; // ici, on modifie le paramètre, pas la variable de classe
+        a += 5; // ici, on modifie le parametre, pas la variable de classe
     }
 
     public static void main(String[] args) {
@@ -719,11 +679,6 @@ public class Main {
 
 \subsection{Tableaux}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{9.png}
-  \caption{}
-\end{figure}
 
 
 Si vous avez besoin d'un certain nombre de variables de même type primitif, il
@@ -744,7 +699,7 @@ Les éléments d'un tableau sont automatiquement initialisés (à 0 pour
 \texttt{int}, etc.) :
 
 \begin{lstlisting}[language=Java]
-int[] a = new int[4]; // tous les éléments valent 0
+int[] a = new int[4]; // tous les elements valent 0
 a[2] = 5;
 int b = a[1] + a[2];
 System.out.println(b); // affiche 5
@@ -756,11 +711,6 @@ La taille d'un tableau est fixe : on ne peut pas ajouter ou supprimer des
 
 \subsection{Modèle mental pour les tableaux}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{10.png}
-  \caption{}
-\end{figure}
 
 
 Une variable de type tableau ne contient pas directement les éléments ; elle
@@ -800,11 +750,6 @@ public class Main {
 
 \subsection{Initialisation d'un tableau}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{11.png}
-  \caption{}
-\end{figure}
 
 
 On peut créer et initialiser un tableau en une seule étape :
@@ -824,11 +769,6 @@ a = new int[]{ 1, 9, 3, 4 };
 
 \subsection{Tableaux multidimensionnels}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{12.png}
-  \caption{}
-\end{figure}
 
 
 Les tableaux peuvent avoir plusieurs dimensions. Par exemple, un tableau
@@ -844,15 +784,15 @@ d'entiers de taille 5.
 
 \begin{lstlisting}[language=Java]
 int[][] a = new int[3][5];
-int[] b = a[0]; // b référence la première ligne (5 éléments)
+int[] b = a[0]; // b reference la premiere ligne (5 elements)
 b[3] = 7;
-System.out.println(a[0][3]); // même élément
+System.out.println(a[0][3]); // meme element
 \end{lstlisting}
 
 On peut aussi initialiser directement :
 
 \begin{lstlisting}[language=Java]
-// matrice identité 3x3
+// matrice identite 3x3
 int[][] a = {
     { 1, 0, 0 },
     { 0, 1, 0 },
@@ -862,11 +802,6 @@ int[][] a = {
 
 \subsection{Tableaux partiellement initialisés}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{13.png}
-  \caption{}
-\end{figure}
 
 
 Il est possible de ne spécifier que la première dimension :
@@ -882,16 +817,11 @@ initialise ensuite :
 int[][] a = new int[3][];
 a[0] = new int[5];
 a[1] = new int[5];
-a[2] = new int[2]; // autorisé : pas obligé d'avoir la même taille
+a[2] = new int[2]; // autorise : pas oblige d'avoir la meme taille
 \end{lstlisting}
 
 \subsection{Tableaux et variables de classe}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{14.png}
-  \caption{}
-\end{figure}
 
 
 Les variables de type tableau peuvent aussi être des variables de classe :
@@ -899,10 +829,10 @@ Les variables de type tableau peuvent aussi être des variables de classe :
 \begin{lstlisting}[language=Java]
 public class Main {
 
-    static int[] a; // initialisée automatiquement à null
+    static int[] a; // initialisee automatiquement a null
 
     public static void main(String[] args) {
-        // compile, mais lancera une erreur à l'exécution
+        // compile, mais lancera une erreur a l'execution
         System.out.println(a[2]);
     }
 }
@@ -912,11 +842,6 @@ La valeur \texttt{null} représente une référence invalide.
 
 \subsection{Boucles \texttt{while}}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{15.png}
-  \caption{}
-\end{figure}
 
 
 La boucle \texttt{while} en Java est très proche de celle de Python :
@@ -938,11 +863,6 @@ toujours utiliser les accolades, même pour une seule instruction.
 
 \subsection{Boucles \texttt{for} simples}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{16.png}
-  \caption{}
-\end{figure}
 
 
 La forme simplifiée de \texttt{for} (\emph{for-each}) est pratique pour
@@ -959,11 +879,6 @@ System.out.println("The sum is " + sum);
 
 \subsection{Boucles \texttt{for} complexes}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{17.png}
-  \caption{}
-\end{figure}
 
 
 La forme complète donne un contrôle total :
@@ -990,11 +905,6 @@ System.out.println("The sum is " + sum);
 
 \subsection{Arrêter une boucle, sauter des itérations}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{18.png}
-  \caption{}
-\end{figure}
 
 
 \texttt{break} permet de sortir de la boucle, \texttt{continue} de passer
@@ -1013,11 +923,6 @@ for (int i = 0; i < 10; i++) {
 
 \subsection{Instructions \texttt{if/else}}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{19.png}
-  \caption{}
-\end{figure}
 
 
 L'instruction \texttt{if} fonctionne comme en Python. Exemple :
@@ -1043,27 +948,17 @@ Toujours penser aux accolades.
 
 \subsection{Opérateurs de comparaison et logiques}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{20.png}
-  \caption{}
-\end{figure}
 
 
 \begin{lstlisting}[language=Java]
 boolean b1 = 3 < 4;     // <, >, <=, >=, ==, !=
-boolean b2 = !b1;       // négation
+boolean b2 = !b1;       // negation
 boolean b3 = b1 && b2;  // et logique
 boolean b4 = b1 || b2;  // ou logique
 \end{lstlisting}
 
 \subsection{Instruction \texttt{switch}}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{21.png}
-  \caption{}
-\end{figure}
 
 
 Plutôt qu'une longue suite de \texttt{if/else if} :
@@ -1089,11 +984,6 @@ versions plus anciennes, il faut utiliser \texttt{case} avec \texttt{break}.
 
 \subsection{Chaînes de caractères}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{22.png}
-  \caption{}
-\end{figure}
 
 
 Les variables contenant des chaînes ont le type \texttt{String}. On les
@@ -1126,22 +1016,12 @@ int i = Integer.parseInt("1234");
 
 \subsection{Modèle mental pour les chaînes}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{23.png}
-  \caption{}
-\end{figure}
 
 
 Comme les tableaux, les variables \texttt{String} contiennent des références.
 
 \subsection{Comparer des valeurs}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{24.png}
-  \caption{}
-\end{figure}
 
 
 Pour les types primitifs, \texttt{==} compare les valeurs. Pour les tableaux et
@@ -1169,11 +1049,6 @@ Pour les tableaux, on utilise \texttt{Arrays.equals} de
 
 \subsection{Énumérations}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{25.png}
-  \caption{}
-\end{figure}
 
 
 Les \texttt{enum} définissent un ensemble de constantes typées. On peut les
@@ -1228,11 +1103,6 @@ En Java, il existe deux façons de sortir d'une méthode : utiliser l'instructio
 
 \subsection{Lever une exception}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{26.png}
-  \caption{}
-\end{figure}
 
 
 Les exceptions permettent d'interrompre l'exécution normale lorsqu'une situation
@@ -1269,7 +1139,7 @@ public class Main {
 
         try {
             peter.setBoss(anna);  // OK
-            peter.setBoss(peter); // lève une exception
+            peter.setBoss(peter); // leve une exception
         }
         catch (Exception e) {
             System.out.println("An exception happened: " + e.getMessage());
@@ -1299,7 +1169,7 @@ public class Main {
 
         try {
             Employee[] team = { peter, anna };
-            setBossOfTeam(team, peter); // lèvera une exception
+            setBossOfTeam(team, peter); // levera une exception
         }
         catch (Exception e) {
             System.out.println("An exception happened: " + e.getMessage());
@@ -1310,11 +1180,6 @@ public class Main {
 
 \subsection{Utiliser des sous-classes d'Exception}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{27.png}
-  \caption{}
-\end{figure}
 
 
 En créant des sous-classes de \texttt{Exception}, on fournit plus
@@ -1358,7 +1223,7 @@ public class Main {
 
         try {
             peter.setBoss(anna);
-            peter.setBoss(null); // lève NoBossException
+            peter.setBoss(null); // leve NoBossException
         }
         catch (SelfBossException e) {
             System.out.println("SelfBossException happened: " + e.getMessage());
@@ -1388,11 +1253,6 @@ catch (Exception e) {
 
 \subsection{Exceptions contrôlées et non contrôlées}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{28.png}
-  \caption{}
-\end{figure}
 
 
 Les exceptions que nous avons levées ci-dessus sont \emph{contrôlées}
@@ -1430,11 +1290,6 @@ dérivent de \texttt{Throwable}.
 
 \subsection{Avons-nous besoin des exceptions ?}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{29.png}
-  \caption{}
-\end{figure}
 
 
 On pourrait réécrire \texttt{setBoss} sans exceptions :
@@ -1472,11 +1327,6 @@ utilisez les exceptions avec parcimonie.
 
 \subsection{Exceptions et opérations d'entrée/sortie}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{30.png}
-  \caption{}
-\end{figure}
 
 
 Le JDK fournit de nombreuses classes pour travailler avec des fichiers et
@@ -1550,11 +1400,6 @@ public class Main {
 
 \subsection{Créer vos propres objets}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{31.png}
-  \caption{}
-\end{figure}
 
 
 Jusqu’ici, nous avons surtout utilisé :
@@ -1598,11 +1443,6 @@ Chaque objet possède ses \emph{propres} variables d’instance. Si nous augment
 
 \subsection{Initialiser les objets}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{32.png}
-  \caption{}
-\end{figure}
 
 
 Par défaut, en Java :
@@ -1631,7 +1471,7 @@ Le mot-clé \texttt{this} désigne l’objet courant. Il permet aussi de disting
 \begin{lstlisting}[language=Java]
 Employee(String name, int salary) {
     // Mauvais :
-    // name = name;       // ne fait que réaffecter le paramètre à lui-même
+    // name = name;       // ne fait que reaffecter le parametre a lui-meme
 
     // Correct :
     this.name = name;
@@ -1641,11 +1481,6 @@ Employee(String name, int salary) {
 
 \subsection{Modèle mental}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{33.png}
-  \caption{}
-\end{figure}
 
 
 Une variable de type classe ne \emph{contient} pas directement l’objet, mais une \emph{référence} vers celui-ci.
@@ -1665,16 +1500,11 @@ Employee y = new Employee("Anna", 45000);
 Employee z = x;
 
 System.out.println(x == y); // false : objets distincts
-System.out.println(x == z); // true  : même référence
+System.out.println(x == z); // true  : meme reference
 \end{lstlisting}
 
 \subsection{Travailler avec des objets}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{34.png}
-  \caption{}
-\end{figure}
 
 
 On peut créer des tableaux d’objets :
@@ -1692,11 +1522,6 @@ Une référence non initialisée vaut \texttt{null}. Toute tentative d’utilise
 
 \subsection{Méthodes}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{35.png}
-  \caption{}
-\end{figure}
 
 
 On peut définir des méthodes \emph{statiques} externes :
@@ -1746,11 +1571,6 @@ public class Main {
 
 \subsection{Restreindre l’accès}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{36.png}
-  \caption{}
-\end{figure}
 
 
 Avec le code précédent, on peut toujours contourner la logique métier :
@@ -1799,11 +1619,6 @@ public class Main {
 
 \subsection{Héritage}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{37.png}
-  \caption{}
-\end{figure}
 
 
 Supposons un jeu où les armes sont représentées par une classe :
@@ -1858,11 +1673,6 @@ Ici :
 
 \subsection{Le mot-clé \texttt{super}}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{38.png}
-  \caption{}
-\end{figure}
 
 
 \texttt{super} permet :
@@ -1876,11 +1686,6 @@ Il est utile lorsqu’on spécialise un comportement tout en réutilisant l’im
 
 \subsection{L’annotation \texttt{@Override}}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{39.png}
-  \caption{}
-\end{figure}
 
 
 \texttt{@Override} demande au compilateur de vérifier qu’une méthode redéfinit effectivement une méthode héritée.  
@@ -1888,11 +1693,6 @@ Sans cette annotation, une simple faute de frappe créerait une nouvelle méthod
 
 \subsection{Étendre encore et encore\ldots{} (polymorphisme)}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{40.png}
-  \caption{}
-\end{figure}
 
 
 On peut enchaîner l’héritage (par exemple différentes sous-classes de \texttt{Weapon}).  
@@ -1907,11 +1707,6 @@ Le choix de la méthode est fait dynamiquement à l’exécution selon le type r
 
 \subsection{La hiérarchie de classes et \texttt{Object}}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{41.png}
-  \caption{}
-\end{figure}
 
 
 En Java, toute classe hérite (directement ou indirectement) de \texttt{Object}, qui fournit notamment :
@@ -1926,11 +1721,6 @@ Redéfinir correctement \texttt{toString()}, \texttt{equals()} et \texttt{hashCo
 
 \subsection{\texttt{ArrayList}}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{42.png}
-  \caption{}
-\end{figure}
 
 
 \texttt{ArrayList<E>} est une implémentation dynamique de liste.
@@ -1951,11 +1741,6 @@ On utilise :
 
 \subsection{Boucles \texttt{for} sur \texttt{ArrayList}}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{43.png}
-  \caption{}
-\end{figure}
 
 
 \begin{lstlisting}[language=Java]
@@ -1972,11 +1757,6 @@ for (String n : names) {
 
 \subsection{Boxing et unboxing}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{44.png}
-  \caption{}
-\end{figure}
 
 
 Java convertit automatiquement entre types primitifs et leurs classes enveloppes :
@@ -1994,11 +1774,6 @@ int x = list.get(0);   // unboxing automatique
 
 \subsection{\texttt{ArrayList} et génériques}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{45.png}
-  \caption{}
-\end{figure}
 
 
 Les collections utilisent des \emph{génériques} pour indiquer le type des éléments :
@@ -2013,11 +1788,6 @@ Cela permet de détecter des erreurs de type à la compilation.
 
 \subsection{Surcharge de méthodes (paramètres différents)}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{46.png}
-  \caption{}
-\end{figure}
 
 
 Deux méthodes dans la même classe peuvent partager le même nom si leurs listes de paramètres sont différentes :
@@ -2031,33 +1801,18 @@ Le compilateur choisit la version appropriée selon les arguments.
 
 \subsection{Surcharge avec des types de sous-classes}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{47.png}
-  \caption{}
-\end{figure}
 
 
 Si plusieurs signatures correspondent, Java choisit celle dont les types de paramètres sont les plus spécifiques.
 
 \subsection{Surcharge et ``meilleure correspondance''}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{48.png}
-  \caption{}
-\end{figure}
 
 
 La résolution de surcharge suit des règles précises (conversion, promotion, etc.). Si l’ambiguïté est trop grande, le code ne compile pas.
 
 \subsection{Héritage multiple}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{49.png}
-  \caption{}
-\end{figure}
 
 
 Java \emph{n’autorise pas} l’héritage multiple de classes (une classe ne peut étendre qu’une seule autre classe), afin d’éviter des ambiguïtés.  
@@ -2070,11 +1825,6 @@ La flexibilité supplémentaire se fait via :
 
 \subsection{Le mot-clé \texttt{final}}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{50.png}
-  \caption{}
-\end{figure}
 
 
 \subsubsection{Paramètres \texttt{final}}
@@ -2110,11 +1860,6 @@ Pratique pour représenter l’\og identité\fg{} d’un objet (par exemple un n
 
 \subsection{Paquets (\textit{packages})}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{51.png}
-  \caption{}
-\end{figure}
 
 \label{subsec:packages}
 
@@ -2150,11 +1895,6 @@ Si aucun \texttt{package} n’est indiqué, la classe appartient au \og package 
 
 \subsection{Utiliser plusieurs paquets}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{52.png}
-  \caption{}
-\end{figure}
 
 
 Les classes de paquets différents ne se voient pas automatiquement. Exemple :
@@ -2195,11 +1935,6 @@ Points importants :
 
 \subsection{Pourquoi les paquets sont-ils utiles ?}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{53.png}
-  \caption{}
-\end{figure}
 
 
 \begin{itemize}
@@ -2209,11 +1944,6 @@ Points importants :
 
 \subsection{Contrôle d’accès}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{54.png}
-  \caption{}
-\end{figure}
 
 \label{subsec:access-control}
 
@@ -2263,10 +1993,10 @@ public abstract class Shape {
         this.shapeName = name;
     }
 
-    // Méthode abstraite : chaque sous-classe fournit sa formule
+    // Methode abstraite : chaque sous-classe fournit sa formule
     public abstract double calculateArea();
 
-    // Méthode concrète commune
+    // Methode concrete commune
     public void displayShapeInfo() {
         System.out.println("The " + shapeName +
                            " has an area of: " + calculateArea());
@@ -2494,11 +2224,6 @@ Le \emph{design pattern Observer} permet à un objet (le sujet) de notifier auto
 
 \subsection{Pattern Observer sur des composants GUI}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{55.png}
-  \caption{}
-\end{figure}
 
 
 Les bibliothèques Swing/AWT utilisent ce principe. Exemple : un bouton qui affiche ``Thank you'' lorsqu’on clique :
@@ -2542,11 +2267,6 @@ Le bouton appelle l’observateur lorsqu’un clic survient : \og Don’t call u
 
 \subsection{Implémenter le pattern Observer}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{56.png}
-  \caption{}
-\end{figure}
 
 
 Exemple d’un compte bancaire observable :
@@ -2640,11 +2360,6 @@ Le code fourni (interfaces \texttt{SpellChecker}, \texttt{MessageObserver}, clas
 
 \subsection{Qu'est-ce que le test logiciel ?}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{57.png}
-  \caption{}
-\end{figure}
 
 \label{subsec:what-is-testing}
 
@@ -2657,7 +2372,7 @@ Comme exemple, supposons que nous ayons écrit une méthode qui calcule le quoti
 naturels $a$ et $b$ :
 
 \begin{lstlisting}[language=Java]
-// returns the quotient a / b
+// renvoie le quotient a / b
 static int division(int a, int b) {
     ...
 }
@@ -2712,11 +2427,6 @@ Les exigences peuvent prendre des formes variées. On distingue en général deu
 
 \subsection{Que peut-on tester ?}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{58.png}
-  \caption{}
-\end{figure}
 
 \label{subsec:what-can-be-tested}
 
@@ -2747,11 +2457,6 @@ plusieurs méthodes ou classes interagissent.
 
 \subsection{Comment planifier un test unitaire}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{59.png}
-  \caption{}
-\end{figure}
 
 \label{subsec:plan-unit-test}
 
@@ -2789,8 +2494,8 @@ Cela nous amène à une approche plus intelligente :
 Cette approche fonctionne aussi pour des méthodes plus complexes. Considérons :
 
 \begin{lstlisting}[language=Java]
-// returns a sorted array with the elements
-// of "a" in ascending order
+// renvoie un tableau trie avec les elements
+// de "a" en ordre croissant
 static int[] sortArray(int[] a) {
     ...
 }
@@ -2815,11 +2520,6 @@ le cas $n=1$ est déjà couvert dans un sous-domaine, il n'est pas nécessaire d
 
 \subsection{Tests en boîte noire et en boîte blanche}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{60.png}
-  \caption{}
-\end{figure}
 
 \label{subsec:black-white-box}
 
@@ -2834,24 +2534,19 @@ Comme le domaine d'entrée d'un programme non trivial est immense, choisir de bo
 
 \subsection{Graphe de flot de contrôle et couverture de nœuds}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{61.png}
-  \caption{}
-\end{figure}
 
 \label{subsec:cfg-node-coverage}
 
 Considérons une implémentation fautive de \texttt{min()} :
 
 \begin{lstlisting}[language=Java]
-// returns the minimum of "a" and "b"
+// renvoie le minimum de "a" et "b"
 static int min(int a, int b) {
     int m;
     if (a < b)
         m = a;
     else
-        m = a; // oops, cela devrait être "m = b"
+        m = a; // oups, cela devrait etre "m = b"
     return m;
 }
 \end{lstlisting}
@@ -2872,11 +2567,6 @@ une fois. C'est un objectif important, mais pas suffisant.
 
 \subsection{Couverture des arêtes}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{62.png}
-  \caption{}
-\end{figure}
 
 \label{subsec:edge-coverage}
 
@@ -2888,7 +2578,7 @@ static int min(int a, int b) {
     if (a < b) {
         m = a;
     }
-    // oops : on a oublié le "else" pour le cas a >= b
+    // oups : on a oublie le "else" pour le cas a >= b
     return m;
 }
 \end{lstlisting}
@@ -2901,23 +2591,18 @@ plus stricte que la couverture de nœuds, mais ne garantit toujours pas l'absenc
 
 \subsection{Couverture des chemins}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{63.png}
-  \caption{}
-\end{figure}
 
 \label{subsec:path-coverage}
 
 Considérons maintenant une méthode avec une boucle :
 
 \begin{lstlisting}[language=Java]
-// returns the sum of the values 1 to n
+// renvoie la somme des valeurs de 1 a n
 static int sum(int n) {
     int sum = 0;
     int i = 1;
     while (i <= n) {
-        sum = i;   // oops, devrait être: sum += i;
+        sum = i;   // oups, devrait etre: sum += i;
         i++;
     }
     return sum;
@@ -2937,11 +2622,6 @@ itération, plusieurs itérations).
 
 \subsection{Chemins « cachés »}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{64.png}
-  \caption{}
-\end{figure}
 
 \label{subsec:hidden-paths}
 
@@ -2965,11 +2645,6 @@ Si votre objectif est une couverture « complète », il faut aussi prévoir un 
 
 \subsection{Outils de mesure de couverture}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{65.png}
-  \caption{}
-\end{figure}
 
 \label{subsec:coverage-tools}
 
@@ -2990,11 +2665,6 @@ Des outils similaires existent pour d'autres langages. Ils aident à vérifier s
 
 \subsection{Écrire les tests comme un programme}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{66.png}
-  \caption{}
-\end{figure}
 
 \label{subsec:tests-as-programs}
 
@@ -3015,13 +2685,13 @@ class Main {
 Nous pouvons écrire un petit programme de test :
 
 \begin{lstlisting}[language=Java]
-// test case 1
+// cas de test 1
 int result1 = Main.min(3, 5);
 if (result1 != 3) {
     System.out.println("Test 1 failed: Minimum of 3 and 5 should be 3");
 }
 
-// test case 2
+// cas de test 2
 int result2 = Main.min(5, 3);
 if (result2 != 3) {
     System.out.println("Test 2 failed: Minimum of 5 and 3 should be 3");
@@ -3036,11 +2706,6 @@ code. Certains développeurs vont plus loin et écrivent d'abord les tests, puis
 
 \subsection{JUnit}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{67.png}
-  \caption{}
-\end{figure}
 
 \label{subsec:junit}
 
@@ -3112,11 +2777,6 @@ l'égalité de références, il faut utiliser \texttt{assertSame()}.
 
 \subsection{Aspects pratiques des tests unitaires}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{68.png}
-  \caption{}
-\end{figure}
 
 \label{subsec:practical-unit-testing}
 
@@ -3130,7 +2790,7 @@ class DifficultToTest {
     static int m(int v1) {
         // quelque chose de complexe utilisant v1 pour calculer v2
         int v2 = ...;
-        // quelque chose de complexe utilisant v2 pour calculer le résultat
+        // quelque chose de complexe utilisant v2 pour calculer le resultat
         int result = ...;
         return result;
     }
@@ -3144,13 +2804,13 @@ calculés. Il est plus simple de découper la méthode :
 class EasierToTest {
 
     static int m1(int v1) {
-        // calcule v2 à partir de v1
+        // calcule v2 a partir de v1
         int v2 = ...;
         return v2;
     }
 
     static int m2(int v2) {
-        // calcule le résultat à partir de v2
+        // calcule le resultat a partir de v2
         int result = ...;
         return result;
     }
@@ -3227,7 +2887,7 @@ La complexité temporelle fournit une estimation \emph{théorique} du temps néc
 Pour en dévoiler les rouages, commençons par une méthode très simple \texttt{sum()} qui calcule la somme de tous les éléments d'un tableau d'entiers passé en argument :
 
 \begin{lstlisting}[language=Java]
-// Sums all elements of the array
+// Calcule la somme de tous les elements du tableau
 public class Main {
     public static int sum(int[] values) {
         int total = 0;
@@ -3248,7 +2908,7 @@ public class Main {
         long startTime = System.currentTimeMillis();
         int totalSum = sum(values);
         long endTime   = System.currentTimeMillis();
-        long duration  = (endTime - startTime); // durée en millisecondes
+        long duration  = (endTime - startTime); // duree en millisecondes
         System.out.println("sum = " + totalSum + " in " + duration + " ms");
     }
 }
@@ -3256,12 +2916,7 @@ public class Main {
 
 Si l'on fait varier la taille du tableau \texttt{values}, on peut observer l'évolution du temps d'exécution en fonction de la taille de l'entrée et la tracer. Voici ce que l'on obtient sur un ordinateur portable standard :
 
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=.85\linewidth]{chap4_imgs/chap4_p88_img1.png}
-  \caption{Évolution des mesures de temps pour \texttt{sum} sur des tableaux de taille croissante.}
   \label{fig:sum-scaling}
-\end{figure}
 
 Sans surprise, le temps absolu dépend fortement de la machine utilisée. Le \emph{même} code, sur un autre ordinateur, produira des mesures différentes. Néanmoins, on remarque que l'évolution du temps est \emph{linéaire} par rapport à la taille du tableau (cf. la droite de tendance).
 
@@ -3269,11 +2924,6 @@ Question cruciale : pouvait-on le prévoir sans exécuter le code ? La réponse 
 
 \subsection{Le modèle RAM (\textit{Random Access Machine})}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{69.png}
-  \caption{}
-\end{figure}
 
 \label{subsec:ram-model}
 
@@ -3283,11 +2933,6 @@ Cette abstraction est raisonnable pour de nombreux cas pratiques (de la même fa
 
 \subsection{Meilleur cas et pire cas d'un algorithme}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{70.png}
-  \caption{}
-\end{figure}
 
 \label{subsec:best-worst}
 
@@ -3295,11 +2940,11 @@ Des entrées de \emph{même taille} peuvent forcer un algorithme à effectuer pl
 
 \begin{lstlisting}[language=Java]
 /**
- * Effectue une recherche linéaire dans un tableau.
+ * Effectue une recherche lineaire dans un tableau.
  *
- * @param arr le tableau d'entrée
- * @param x   la valeur recherchée
- * @return l'indice de la première occurrence de x, ou -1 si absente
+ * @param arr le tableau d'entree
+ * @param x   la valeur recherchee
+ * @return l'indice de la premiere occurrence de x, ou -1 si absente
  */
 public static int linearSearch(int[] arr, int x) {
     for (int i = 0; i < arr.length; i++) {
@@ -3317,11 +2962,6 @@ La notation introduite ci-dessous nous permettra de caractériser rigoureusement
 
 \subsection{Les classes \(\mathcal{O}\), \(\Omega\) et \(\Theta\)}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{71.png}
-  \caption{}
-\end{figure}
 
 \label{subsec:big-oh}
 
@@ -3350,11 +2990,6 @@ Intuition : on ne s'intéresse pas aux petites constantes, mais au \emph{comport
 
 \subsection{Exemples pratiques d'algorithmes}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{72.png}
-  \caption{}
-\end{figure}
 
 \label{subsec:examples}
 
@@ -3393,10 +3028,10 @@ Sur un tableau de \(16\) valeurs, le pire cas requiert au plus \(4\) essais (\(\
 public static int binarySearch(int[] arr, int x) {
     int left = 0, right = arr.length - 1;
     while (left <= right) {
-        int mid = left + (right - left) / 2; // éviter l'overflow
+        int mid = left + (right - left) / 2; // eviter l'overflow
         if (arr[mid] == x) return mid;
-        if (arr[mid] <  x) left  = mid + 1;   // ignorer la moitié gauche
-        else               right = mid - 1;   // ignorer la moitié droite
+        if (arr[mid] <  x) left  = mid + 1;   // ignorer la moitie gauche
+        else               right = mid - 1;   // ignorer la moitie droite
     }
     return -1; // absent
 }
@@ -3404,29 +3039,19 @@ public static int binarySearch(int[] arr, int x) {
 
 \textbf{Astuce :} \(\texttt{left + (right - left) / 2}\) est préférable à \(\texttt{(left + right) / 2}\) pour éviter un dépassement d'entier (\emph{overflow}) quand \texttt{left + right} dépasse \(2^{31}-1\). Avec des \emph{objets}, on utilisera \texttt{equals()} au lieu de \texttt{==}.
 
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=.85\linewidth]{chap4_imgs/chap4_p90_img1.png}
-  \caption{Illustration pas à pas de la recherche binaire (\(n=16\)).}
   \label{fig:binsearch-1}
-\end{figure}
 
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=.85\linewidth]{chap4_imgs/chap4_p91_img1.png}
-  \caption{Suite de l'illustration de la recherche binaire.}
   \label{fig:binsearch-2}
-\end{figure}
 
 \paragraph{Exemple \(\mathcal{O}(\log n)\) : nombre de bits.} Le nombre de bits nécessaires pour représenter un entier positif est \(\Theta(\log n)\). Exemple :
 
 \begin{lstlisting}[language=Java]
-// Renvoie le nombre de bits nécessaires pour représenter n (>0)
+// Renvoie le nombre de bits necessaires pour representer n (>0)
 public static int bitCount(int n) {
     int bitCount = 0;
     while (n > 0) {
         bitCount++;
-        n = n >> 1; // décalage à droite (division par 2)
+        n = n >> 1; // decalage a droite (division par 2)
     }
     return bitCount;
 }
@@ -3448,11 +3073,11 @@ linéaire est la recherche séquentielle :
 
 \begin{lstlisting}[language=Java]
 /**
- * Recherche linéaire d'une valeur dans un tableau.
+ * Recherche lineaire d'une valeur dans un tableau.
  *
- * @param arr le tableau d'entrée
- * @param x   la valeur recherchée
- * @return l'indice de la première occurrence de x, ou -1 si absente
+ * @param arr le tableau d'entree
+ * @param x   la valeur recherchee
+ * @return l'indice de la premiere occurrence de x, ou -1 si absente
  */
 public static int linearSearch(int[] arr, int x) {
     for (int i = 0; i < arr.length; i++) {
@@ -3500,7 +3125,7 @@ public class MergeSort {
     }
 
     public static void mergeSort(int[] values) {
-        if (values.length <= 1) { // tableau de taille 0 ou 1 : déjà trié
+        if (values.length <= 1) { // tableau de taille 0 ou 1 : deja trie
             return;
         }
 
@@ -3522,11 +3147,6 @@ public class MergeSort {
 Il y a \(\Theta(\log n)\) niveaux de découpe/fusion et chaque niveau traite \(\Theta(n)\) éléments : complexité
 \(\Theta(n \log n)\).
 
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=.7\linewidth]{chap4_imgs/chap4_p94_img1.png}
-  \caption{Illustration schématique du tri fusion.}
-\end{figure}
 
 \paragraph{Tri par insertion (\(\mathcal{O}(n^2)\)).}
 
@@ -3541,7 +3161,7 @@ public static void insertionSort(int[] arr) {
         int key = arr[i];
         int j = i - 1;
 
-        // Décale vers la droite les éléments > key
+        // Decale vers la droite les elements > key
         while (j >= 0 && arr[j] > key) {
             arr[j + 1] = arr[j];
             j--;
@@ -3560,7 +3180,7 @@ On teste si trois éléments quelconques d’un tableau somment à zéro :
 
 \begin{lstlisting}[language=Java]
 /**
- * Vérifie s'il existe un triplet d'éléments dont la somme vaut 0.
+ * Verifie s'il existe un triplet d'elements dont la somme vaut 0.
  */
 public static boolean checkTripleSum(int[] arr) {
     int n = arr.length;
@@ -3587,7 +3207,7 @@ Algorithme naïf : on énumère récursivement tous les sous-ensembles.
 
 \begin{lstlisting}[language=Java]
 /**
- * Vérifie s'il existe un sous-ensemble de arr qui somme à 0.
+ * Verifie s'il existe un sous-ensemble de arr qui somme a 0.
  */
 public static boolean hasZeroSumSubset(int[] arr) {
     return isSubsetSum(arr, 0, 0);
@@ -3633,7 +3253,7 @@ public class TravelingSalesman {
 
     public static Result solve(int[][] distanceMatrix) {
         boolean[] visited = new boolean[distanceMatrix.length];
-        visited[0] = true; // ville de départ fixée à 0
+        visited[0] = true; // ville de depart fixee a 0
 
         java.util.List<Integer> current = new java.util.ArrayList<>();
         current.add(0);
@@ -3682,7 +3302,7 @@ Déterminer la complexité temporelle (meilleur/pire cas) de :
 
 \begin{lstlisting}[language=Java]
 /**
- * Compte le nombre de bits nécessaires pour représenter n (> 0).
+ * Compte le nombre de bits necessaires pour representer n (> 0).
  */
 public static int bitCount(int n) {
     int bitCount = 0;
@@ -3757,11 +3377,6 @@ préciser ce que représente \(n\).
 
 \subsection{Complexité spatiale des algorithmes récursifs}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{73.png}
-  \caption{}
-\end{figure}
 
 
 Pour un algorithme récursif, l’espace auxiliaire inclut aussi la \emph{pile d’appels} : à chaque appel récursif, le contexte
@@ -3772,13 +3387,13 @@ Exemple : factorielle.
 \begin{lstlisting}[language=Java]
 public class Factorial {
 
-    // Version récursive
+    // Version recursive
     public static long factorialRec(int n) {
         if (n == 0) return 1L;
         return n * factorialRec(n - 1);
     }
 
-    // Version itérative
+    // Version iterative
     public static long factorialIter(int n) {
         long result = 1L;
         for (int i = 1; i <= n; i++) {
@@ -3853,11 +3468,6 @@ demande au moins \(k\) opérations.
 
 \subsection{Invariants de boucle}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{74.png}
-  \caption{}
-\end{figure}
 
 
 Un \emph{invariant de boucle} est une propriété vraie :
@@ -3917,11 +3527,6 @@ On prouve la correction en montrant :
 
 \subsection{Preuve de correction récursive}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{75.png}
-  \caption{}
-\end{figure}
 
 
 Pour un algorithme récursif, on raisonne par induction.
@@ -4001,11 +3606,6 @@ Les génériques (\texttt{<T>}) permettent de paramétrer les types et évitent 
 %------------------------------------------------------------
 \subsection{Stack ADT}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{76.png}
-  \caption{}
-\end{figure}
 
 \label{sec:stack-adt}
 
@@ -4014,7 +3614,7 @@ Une pile (stack) suit le principe LIFO.
 \begin{lstlisting}[language=Java]
 public interface Stack<T> {
     void push(T item);  // empile
-    T pop();            // dépile et renvoie
+    T pop();            // depile et renvoie
     T peek();           // lit le sommet
     boolean isEmpty();
     int size();
@@ -4157,11 +3757,6 @@ d’appels plutôt que sur des piles explicites.
 %------------------------------------------------------------
 \subsection{Arbres}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{77.png}
-  \caption{}
-\end{figure}
 
 \label{sec:trees}
 
@@ -4200,11 +3795,6 @@ public class LinkedBinaryTree {
 }
 \end{lstlisting}
 
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=.5\linewidth]{chap4_imgs/chap4_p112_img1.png}
-  \caption{Exemple d’arbre binaire.}
-\end{figure}
 
 \paragraph{Parcours.}
 
@@ -4318,7 +3908,7 @@ public class BinarySearchTree implements IntSet {
         if (current == null) return new Node(val);
         if (val < current.val) current.left = addRec(current.left, val);
         else if (val > current.val) current.right = addRec(current.right, val);
-        // sinon déjà présent
+        // sinon deja present
         return current;
     }
 
@@ -4341,11 +3931,6 @@ Si l’arbre reste équilibré, les opérations sont en \(\mathcal{O}(\log n)\).
 %------------------------------------------------------------
 \subsection{Maps}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{78.png}
-  \caption{}
-\end{figure}
 
 \label{sec:maps}
 
@@ -4467,11 +4052,6 @@ for (String e : list) {
 
 \subsection{Implémenter ses propres itérateurs}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{79.png}
-  \caption{}
-\end{figure}
 
 \label{sec:custom-iterators}
 
@@ -4613,9 +4193,6 @@ Cependant, bien que les GPU soient incroyablement puissants pour certains types 
 Par conséquent, dans ce cours, nous nous concentrerons uniquement sur la programmation parallèle sur CPU. Il est en effet essentiel de remarquer que, grâce à l'évolution matérielle, tout ordinateur grand public est aujourd'hui équipé de plusieurs cœurs CPU (même s'ils sont moins nombreux que les unités de traitement à l'intérieur d'un GPU), comme illustré par l'image suivante :
 % :contentReference[oaicite:10]{index=10}
 
-\begin{center}
-\includegraphics[width=0.9\linewidth]{figures/ch5_cpu_cores}
-\end{center}
 
 La programmation parallèle sur CPU cherche à exploiter les multiples cœurs CPU disponibles à l'intérieur d'un seul ordinateur afin d'exécuter simultanément plusieurs tâches ou portions d'une tâche unique.
 % :contentReference[oaicite:11]{index=11}
@@ -4636,9 +4213,6 @@ Le multiprocessing a deux inconvénients principaux. Premièrement, créer de no
 Cela motive l'introduction du concept de thread. Un thread désigne la plus petite unité d'exécution au sein d'un processus : un thread correspond à une séquence d'instructions qui peut être planifiée et exécutée indépendamment par un cœur CPU. Un seul processus peut exécuter plusieurs threads, comme illustré ci-dessous :
 % :contentReference[oaicite:16]{index=16}
 
-\begin{center}
-\includegraphics[width=0.9\linewidth]{figures/ch5_process_threads}
-\end{center}
 
 Dans cette image, les blocs bleus indiquent à quel moment les différents threads sont actifs (c.-à-d.\ exécutent quelque chose) à l'intérieur du processus. Un thread peut en effet « s'endormir » en attendant des données supplémentaires à traiter, en attendant une interaction utilisateur, ou en attendant le résultat d'un calcul effectué par un autre thread.
 % :contentReference[oaicite:17]{index=17}
@@ -4692,11 +4266,6 @@ Cet extrait indique que pour créer un thread, nous devons d'abord définir une 
 
 \subsection{Utiliser un thread pour calculer le minimum}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{80.png}
-  \caption{}
-\end{figure}
 
 % :contentReference[oaicite:31]{index=31}
 
@@ -4712,7 +4281,7 @@ static public void computeMinValue(float values[]) {
         for (int i = 1; i < values.length; i++) {
             if (values[i] < minValue) {
                 minValue = values[i];
-                // One could have written more compactly: minValue = Math.min(minValue, values[i]);
+                // On aurait pu ecrire plus compactement : minValue = Math.min(minValue, values[i]);
             }
         }
         System.out.println("Minimum value: " + minValue);
@@ -4744,7 +4313,7 @@ public static void main(String[] args) {
     float values[] = new float[] { -2, -5, 4 };
     Runnable r = new MinComputation(values);
     r.run();
-    // This prints: "Minimum value: -5.0"
+    // Affiche : "Minimum value: -5.0"
 }
 \end{lstlisting}
 
@@ -4754,13 +4323,13 @@ Dans cet exemple, aucun thread additionnel n'a été créé en dehors du thread 
 \begin{lstlisting}[language=Java]
 public static void main(String[] args) {
     float values[] = new float[] { -2, -5, 4 };
-    // First, create a thread that specifies the computation to be done
+    // D abord, creer un thread qui specifie le calcul a effectuer
     Thread t = new Thread(new MinComputation(values));
-    // Secondly, start the thread
+    // Ensuite, demarrer le thread
     t.start();
-    // At this point, the main thread can do other stuff.
+    // A ce stade, le thread principal peut faire autre chose.
     System.out.println("This is the main thread");
-    // Thirdly, wait for the thread to complete its computation
+    // Enfin, attendre que le thread termine son calcul
     try {
         t.join();
     } catch (InterruptedException e) {
@@ -4781,9 +4350,6 @@ Comme on peut le voir dans cet exemple, effectuer un calcul dans un thread d'arr
 Le diagramme de séquence suivant (librement inspiré d'UML) représente cette séquence d'appels :
 % 
 
-\begin{center}
-\includegraphics[width=0.9\linewidth]{figures/ch5_thread_sequence}
-\end{center}
 
 Dans ce diagramme, les bandes blanches indiquent les moments où les différents objets exécutent du code. On peut voir qu'entre les deux appels \texttt{t.start()} et \texttt{t.join()}, deux threads sont simultanément actifs : le thread principal et le thread de calcul. Notez qu'une fois que le thread principal appelle \texttt{t.join()}, il s'endort jusqu'à ce que le thread de calcul termine son travail.
 % :contentReference[oaicite:38]{index=38}
@@ -4794,20 +4360,12 @@ Autrement dit, l'appel \texttt{t.join()} est une forme de synchronisation entre 
 
 \subsection{Garder les interfaces utilisateur réactives}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{81.png}
-  \caption{}
-\end{figure}
 
 % :contentReference[oaicite:40]{index=40}
 
 L'exemple \texttt{MinComputation} crée un thread d'arrière-plan pour exécuter un calcul sur un tableau. Comme expliqué dans l'introduction, cette architecture logicielle peut avoir un intérêt pour garder l'interface utilisateur réactive pendant un long calcul. Pour illustrer cet intérêt, considérons une application GUI avec trois boutons utilisant Swing :
 % :contentReference[oaicite:41]{index=41}
 
-\begin{center}
-\includegraphics[width=0.7\linewidth]{figures/ch5_swing_buttons}
-\end{center}
 
 Le code source correspondant est :
 % 
@@ -4906,11 +4464,6 @@ De cette manière, même lorsque le calcul est en cours d'exécution, il est tou
 
 \subsection{Accélérer le calcul}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{82.png}
-  \caption{}
-\end{figure}
 
 % :contentReference[oaicite:48]{index=48}
 
@@ -4920,9 +4473,6 @@ Même si démarrer un thread d'arrière-plan peut être intéressant pour améli
 Pour des algorithmes travaillant sur un tableau, l'idée de base est de diviser le tableau en deux parties, puis de traiter chacune de ces parties par deux threads distincts :
 % 
 
-\begin{center}
-\includegraphics[width=0.85\linewidth]{figures/ch5_split_array_two_threads}
-\end{center}
 
 Une fois que les deux threads ont terminé leur travail, nous devons combiner leurs résultats pour obtenir le résultat final. Dans notre exemple, le minimum du tableau entier est le minimum des deux minimums calculés sur les deux parties.
 % :contentReference[oaicite:51]{index=51}
@@ -4997,11 +4547,6 @@ Notez aussi que cette version n'intercepte pas la possible \texttt{InterruptedEx
 
 \subsection{Gérer les parties vides}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{83.png}
-  \caption{}
-\end{figure}
 
 % :contentReference[oaicite:57]{index=57}
 
@@ -5037,7 +4582,7 @@ class MinMaxResult {
     }
 
     static public MinMaxResult empty() {
-        return new MinMaxResult(false /* not present */, 0 /* dummy min */, 0 /* dummy max */);
+        return new MinMaxResult(false /* absent */, 0 /* min factice */, 0 /* max factice */);
     }
 
     public boolean isPresent() {
@@ -5071,17 +4616,17 @@ class MinMaxResult {
     public void combine(MinMaxResult with) {
         if (with.isPresent) {
             if (isPresent) {
-                // Combine the results from two non-empty blocks
+                // Combiner les resultats de deux blocs non vides
                 minValue = Math.min(minValue, with.minValue);
                 maxValue = Math.max(maxValue, with.maxValue);
             } else {
-                // Replace the currently absent result by the provided result
+                // Remplacer le resultat absent par le resultat fourni
                 isPresent = true;
                 minValue = with.minValue;
                 maxValue = with.maxValue;
             }
         } else {
-            // Do nothing if the other result is absent
+            // Ne rien faire si l'autre resultat est absent
         }
     }
 }
@@ -5151,7 +4696,7 @@ Il est maintenant facile d'exécuter le calcul en utilisant deux threads d'une m
 \begin{lstlisting}[language=Java]
 public static void main(String[] args) throws InterruptedException {
     float values[] = new float[1024];
-    // Fill the array
+    // Remplir le tableau
     MinMaxBlockComputation c1 = new MinMaxBlockComputation(values, 0, values.length / 2);
     MinMaxBlockComputation c2 = new MinMaxBlockComputation(values, values.length / 2, values.length);
     Thread t1 = new Thread(c1);
@@ -5169,11 +4714,6 @@ public static void main(String[] args) throws InterruptedException {
 
 \subsection{Résultats optionnels}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{84.png}
-  \caption{}
-\end{figure}
 
 % 
 
@@ -5261,7 +4801,7 @@ Jusqu’ici, nous n’avons créé que deux threads, mais un CPU moderne aura ty
 \begin{lstlisting}[language=Java]
 public static void main(String[] args) throws InterruptedException {
     float values[] = new float[1024];
-    // Fill the array
+    // Remplir le tableau
 
     int blockSize = values.length / 4;
     MinMaxBlockComputation c1 = new MinMaxBlockComputation(values, 0, blockSize);
@@ -5303,10 +4843,6 @@ Nous pourrions continuer à ajouter davantage de threads de cette manière (par 
 
 Nous pouvons conclure que les threads n’améliorent la vitesse d’un programme que si les tâches des threads sont plus longues que la surcharge nécessaire pour les créer et les gérer. Ceci motive l’introduction des pools de threads. Un pool de threads est un groupe de threads qui sont prêts à travailler :
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.75\linewidth]{figures/ch5_thread_pool}
-\end{figure}
 
 Dans ce dessin, nous avons un pool de threads qui est constitué de 2 threads. Ces threads surveillent continuellement une file de tâches en attente. Dès qu’une tâche est mise dans la file et dès qu’un thread devient disponible, le thread disponible s’occupe de cette tâche. Une fois la tâche terminée, le thread informe l’appelant que le résultat de la tâche est disponible, puis il retourne à l’écoute de la file, en attendant qu’une nouvelle tâche soit traitée.
 
@@ -5314,11 +4850,6 @@ Les pools de threads sont un moyen efficace d’éviter la surcharge associée �
 
 \subsection{Pools de threads en Java}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{85.png}
-  \caption{}
-\end{figure}
 
 
 En Java, trois interfaces différentes sont généralement combinées pour créer un pool de threads :
@@ -5373,11 +4904,6 @@ executor.shutdown();
 
 \subsection{Pool de threads pour calculer le minimum et le maximum}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{86.png}
-  \caption{}
-\end{figure}
 
 
 Il est simple de transformer le runnable \texttt{MinMaxBlockComputation} qui a été défini ci-dessus en un callable :
@@ -5386,7 +4912,7 @@ class MinMaxBlockCallable implements Callable<MinMaxResult> {
     private float[] values;
     private int startIndex;
     private int endIndex;
-    // Removed member: MinMaxResult result;
+    // Membre supprime : MinMaxResult result;
 
     public MinMaxBlockCallable(float[] values,
                                int startIndex,
@@ -5423,25 +4949,25 @@ Les seules différences sont :
 Grâce à la classe \texttt{MinMaxBlockCallable} nouvellement définie, il est désormais possible d’utiliser un pool de threads :
 \begin{lstlisting}[language=Java]
 public static void main(String[] args) throws InterruptedException, ExecutionException {
-    // Create a thread pool with 4 threads (the thread pool could be shared with other methods)
+    // Creer un pool de threads avec 4 threads (le pool peut etre partage avec d'autres methodes)
     ExecutorService executor = Executors.newFixedThreadPool(4);
 
     float values[] = new float[1024];
-    // Fill the array
+    // Remplir le tableau
 
-    // Create two tasks that work on two distinct parts of the whole array
+    // Creer deux taches qui travaillent sur deux parties distinctes du tableau
     Future<MinMaxResult> partialResult1 =
         executor.submit(new MinMaxBlockCallable(values, 0, values.length / 2));
     Future<MinMaxResult> partialResult2 =
         executor.submit(new MinMaxBlockCallable(values, values.length / 2, values.length));
 
-    // Combine the partial results on the two parts to get the final result
+    // Combiner les resultats partiels pour obtenir le resultat final
     MinMaxResult finalResult = MinMaxResult.empty();
-    finalResult.combine(partialResult1.get()); // This call blocks the main thread until the first part is processed
-    finalResult.combine(partialResult2.get()); // This call blocks the main thread until the second part is processed
+    finalResult.combine(partialResult1.get()); // Cet appel bloque le thread principal jusqu'a la fin du premier bloc
+    finalResult.combine(partialResult2.get()); // Cet appel bloque le thread principal jusqu'a la fin du second bloc
     finalResult.print();
 
-    // Do not forget to shut down the thread pool
+    // Ne pas oublier d'arreter le pool de threads
     executor.shutdown();
 }
 \end{lstlisting}
@@ -5452,11 +4978,6 @@ La construction \texttt{throws} est nécessaire parce que la méthode \texttt{ge
 
 \subsection{Diviser le tableau en plusieurs blocs}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{87.png}
-  \caption{}
-\end{figure}
 
 
 Jusqu’ici, nous avons divisé le tableau \texttt{values} en 2 ou 4 blocs, parce que nous étions guidés par le nombre de cœurs CPU. En pratique, c’est une meilleure idée de diviser le tableau en blocs d’une taille fixe afin d’être agnostique du nombre sous-jacent de cœurs. Un pool de threads peut être utilisé dans cette situation pour gérer les calculs, tout en empêchant le nombre de threads de dépasser la capacité du CPU.
@@ -5467,7 +4988,7 @@ public static void main(String[] args) throws InterruptedException, ExecutionExc
     ExecutorService executor = Executors.newFixedThreadPool(4);
 
     float values[] = new float[1024];
-    // Fill the array
+    // Remplir le tableau
 
     int blockSize = 128;
     Stack<Future<MinMaxResult>> pendingComputations = new Stack<>();
@@ -5498,11 +5019,6 @@ Notez que l’index de fin du dernier bloc est traité spécifiquement, parce qu
 
 \subsection{Calculer la moyenne d’un tableau}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{88.png}
-  \caption{}
-\end{figure}
 
 
 Jusqu’ici, ce chapitre a été presque entièrement consacré à la tâche de trouver les valeurs minimale et maximale dans un tableau. Nous avons expliqué comment l’introduction de la classe séparée \texttt{MinMaxResult} dédiée au stockage des résultats partiels conduit à une utilisation naturelle des pools de threads en implémentant l’interface \texttt{Callable<MinMaxResult>}. Une astuce importante était de définir la méthode \texttt{combine()} qui est responsable de la combinaison des résultats partiels obtenus depuis différentes parties du tableau.
@@ -5514,7 +5030,7 @@ La première chose est de définir une classe qui stocke le résultat partiel su
 La solution consiste à stocker la somme et le nombre d’éléments dans une classe dédiée :
 \begin{lstlisting}[language=Java]
 class MeanResult {
-    private double sum; // We use doubles as we might be summing a large number of floats
+    private double sum; // On utilise des doubles car on peut sommer beaucoup de floats
     private int count;
 
     public MeanResult() {
@@ -5596,11 +5112,6 @@ Dans les solutions présentées jusqu’ici, la stratégie était de rendre \tex
 
 \subsection{Utiliser une variable partagée pour collecter les résultats partiels}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{89.png}
-  \caption{}
-\end{figure}
 
 
 Selon cette discussion, il devrait être possible de faire fusionner directement les résultats partiels par les threads dans une variable partagée, libérant le thread principal de cette tâche de combinaison. C’est une idée parfaitement valide, qui est implémentée dans le runnable suivant :
@@ -5640,7 +5151,7 @@ class SharedMinMaxComputation implements Runnable {
 \begin{lstlisting}[language=Java]
 public static void main(String[] args) throws InterruptedException {
     float values[] = new float[1024];
-    // Fill the array
+    // Remplir le tableau
 
     SharedMinMaxResult result = SharedMinMaxResult.empty();
 
@@ -5656,7 +5167,7 @@ public static void main(String[] args) throws InterruptedException {
     t1.join();
     t2.join();
 
-    // No more call to "combine()" here!
+    // Plus d'appel a "combine()" ici !
     result.print();
 }
 \end{lstlisting}
@@ -5669,7 +5180,7 @@ C’est pourquoi l’interface standard \texttt{ExecutorService} qui implémente
 \begin{lstlisting}[language=Java]
 public static void main(String[] args) throws InterruptedException, ExecutionException {
     float values[] = new float[1024];
-    // Fill the array
+    // Remplir le tableau
 
     ExecutorService executor = Executors.newFixedThreadPool(4);
 
@@ -5681,7 +5192,7 @@ public static void main(String[] args) throws InterruptedException, ExecutionExc
     Future future1 = executor.submit(c1);
     Future future2 = executor.submit(c2);
 
-    future1.get(); // The "Future" does not convey any result, so we just wait here
+    future1.get(); // Le "Future" ne transporte aucun resultat, on attend ici
     future2.get();
 
     executor.shutdown();
@@ -5690,17 +5201,12 @@ public static void main(String[] args) throws InterruptedException, ExecutionExc
 
 \subsection{Conditions de compétition, exclusion mutuelle et moniteurs}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{90.png}
-  \caption{}
-\end{figure}
 
 
 Il existe cependant un danger important dans l’utilisation de variables partagées ! Considérons le code suivant, dans lequel deux threads incrémentent le même compteur :
 \begin{lstlisting}[language=Java]
 public class BadCounter {
-    private static int counter = 0; // Both threads use the same counter
+    private static int counter = 0; // Les deux threads utilisent le meme compteur
 
     private static void incrementCounter() {
         counter++;
@@ -5741,10 +5247,6 @@ C’est à cause des conditions de compétition. La ligne \texttt{counter++} cor
 
 Cette décomposition implique que la séquence suivante d’instructions de bas niveau peut se produire :
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.75\linewidth]{figures/ch5_race_condition}
-\end{figure}
 
 Dans une telle séquence, le premier thread écraserait la modification faite par le second thread sur \texttt{counter} : Il y a une interférence entre les deux threads ! Les conditions de compétition dépendent de la façon dont les instructions sont distribuées et ordonnées entre les différents cœurs CPU.
 
@@ -5776,7 +5278,7 @@ public class Visibility {
     private static class MyRunnable implements Runnable {
         public void run() {
             while (!ready) {
-                // Wait for "ready" to become "true"
+                // Attendre que "ready" devienne "true"
             }
             System.out.println(name);
         }
@@ -5819,7 +5321,7 @@ public class FixedVisibility {
     private static class MyRunnable implements Runnable {
         public void run() {
             while (!isReady()) {
-                // Wait for "ready" to become "true"
+                // Attendre que "ready" devienne "true"
             }
             System.out.println(getName());
         }
@@ -5842,11 +5344,6 @@ Enfin, notez que le mot-clé \texttt{synchronized} n’est que le plus basique d
 
 \subsection{Objet partagé pour calculer le minimum et le maximum}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{91.png}
-  \caption{}
-\end{figure}
 
 
 Nous appliquons maintenant l’exclusion mutuelle à notre exemple du calcul du minimum et du maximum en utilisant une variable partagée. Notez que dans la version qui utilise la variable de résultat partagée, la classe originale \texttt{MinMaxResult} a été remplacée par la classe \texttt{SharedMinMaxResult}. Cette dernière classe est exactement la même que \texttt{MinMaxResult}, mais avec l’ajout du mot-clé \texttt{synchronized} dans chacune de ses méthodes :
@@ -5870,7 +5367,7 @@ class SharedMinMaxResult {
     }
 
     static public SharedMinMaxResult empty() {
-        return new SharedMinMaxResult(false /* not present */, 0 /* dummy min */, 0 /* dummy max */);
+        return new SharedMinMaxResult(false /* absent */, 0 /* min factice */, 0 /* max factice */);
     }
 
     public synchronized boolean isPresent() {
@@ -5904,17 +5401,17 @@ class SharedMinMaxResult {
     public synchronized void combine(SharedMinMaxResult with) {
         if (with.isPresent) {
             if (isPresent) {
-                // Combine the results from two non-empty blocks
+                // Combiner les resultats de deux blocs non vides
                 minValue = Math.min(minValue, with.minValue);
                 maxValue = Math.max(maxValue, with.maxValue);
             } else {
-                // Replace the currently absent result by the provided result
+                // Remplacer le resultat absent par le resultat fourni
                 isPresent = true;
                 minValue = with.minValue;
                 maxValue = with.maxValue;
             }
         } else {
-            // Do nothing if the other result is absent
+            // Ne rien faire si l'autre resultat est absent
         }
     }
 }
@@ -5964,11 +5461,6 @@ class SharedMinMaxResult {
 
 \subsection{Application à la multiplication matricielle}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{92.png}
-  \caption{}
-\end{figure}
 
 
 L’algèbre linéaire est un domaine mathématique qui peut grandement bénéficier de la programmation parallèle. Cette section donne un exemple de la façon dont le multithreading peut être utilisé pour implémenter la multiplication matricielle.
@@ -6001,7 +5493,7 @@ public class SynchronizedMatrix {
     }
 
     public synchronized int getColumns() {
-        // "values[0]" is guaranteed to exist, because "columns > 0" in the constructor
+        // "values[0]" existe forcement, car "columns > 0" dans le constructeur
         return values[0].length;
     }
 
@@ -6027,7 +5519,7 @@ Nous nous intéressons à la tâche de calculer le produit $C \in \mathbb{R}^{m 
 public static void main(String args[]) {
     SynchronizedMatrix a = new SynchronizedMatrix(..., ...);
     SynchronizedMatrix b = new SynchronizedMatrix(..., ...);
-    // Fill a and b
+    // Remplir a et b
 
     SynchronizedMatrix c = new SynchronizedMatrix(a.getRows(), b.getColumns());
 
@@ -6107,7 +5599,7 @@ Le pool de threads serait alors utilisé comme suit :
 public static void main(String args[]) throws ExecutionException, InterruptedException {
     SynchronizedMatrix a = new SynchronizedMatrix(. .);
     SynchronizedMatrix b = new SynchronizedMatrix(. .);
-    // Fill a and b
+    // Remplir a et b
 
     ExecutorService executor = Executors.newFixedThreadPool(10);
     Stack<Future<ProductAtCellResult>> pendingComputations = new Stack<>();
@@ -6169,7 +5661,7 @@ Grâce à la classe \texttt{StoreProductAtCell}, la multiplication matricielle p
 public static void main(String args[]) throws ExecutionException, InterruptedException {
     SynchronizedMatrix a = new SynchronizedMatrix(. .);
     SynchronizedMatrix b = new SynchronizedMatrix(. .);
-    // Fill a and b
+    // Remplir a et b
 
     ExecutorService executor = Executors.newFixedThreadPool(10);
     Stack<Future> pendingComputations = new Stack<>();
@@ -6287,11 +5779,6 @@ Cette application Java crée un tableur avec 3 lignes et 3 colonnes qui sont rem
 
 \subsection{Classes imbriquées statiques}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{93.png}
-  \caption{}
-\end{figure}
 
 
 Nous nous intéressons maintenant à la tâche de trier continuellement les lignes selon les valeurs présentes dans les colonnes, à mesure que de nouvelles lignes sont ajoutées au tableur en utilisant la méthode \texttt{addRow()}.
@@ -6358,11 +5845,6 @@ Fait important, les classes imbriquées statiques ont accès aux membres \texttt
 
 \subsection{Classes internes}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{94.png}
-  \caption{}
-\end{figure}
 
 
 Le code précédent a toutefois une redondance : La valeur de \texttt{sortOnColumn} doit être copiée manuellement dans une variable \texttt{column} privée de \texttt{RowComparator2} afin qu’elle puisse être utilisée dans la méthode \texttt{compare()}. Peut-on faire mieux ? La réponse est « oui », grâce au concept des classes imbriquées non statiques, qui sont formellement connues sous le nom de classes internes. Java permet d’écrire :
@@ -6396,11 +5878,6 @@ Il est tentant d’utiliser systématiquement des classes internes au lieu de cl
 
 \subsection{Sucre syntaxique}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{95.png}
-  \caption{}
-\end{figure}
 
 
 Le fait que \texttt{compare()} ait accès à \texttt{sortOnColumn} peut sembler magique. C’est en réalité un exemple de sucre syntaxique. Le sucre syntaxique désigne des fonctionnalités ou des constructions de langage qui n’introduisent pas de nouvelle fonctionnalité mais fournissent une manière plus pratique ou plus expressive d’écrire du code. Ces fonctionnalités rendent le code plus lisible ou plus concis sans changer fondamentalement son fonctionnement. En essence, le sucre syntaxique est un raccourci ou une syntaxe plus conviviale pour exprimer quelque chose qui pourrait être écrit d’une manière plus longue ou plus explicite.
@@ -6475,11 +5952,6 @@ Comme on peut le voir, le compilateur ajoute de manière transparente un nouvel 
 
 \subsection{Classes internes locales}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{96.png}
-  \caption{}
-\end{figure}
 
 
 Jusqu’ici, nous avons vu trois constructions différentes pour définir des classes :
@@ -6507,11 +5979,6 @@ Dans cette nouvelle version de la méthode \texttt{sort()}, le comparateur a ét
 
 \subsection{Classes internes anonymes}
 
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{97.png}
-  \caption{}
-\end{figure}
 
 
 Parce que les classes internes locales sont typiquement utilisées à un seul endroit de la méthode, il n’est généralement pas utile de donner un nom aux classes internes locales (dans l’exemple précédent, ce nom était \texttt{RowComparator5}). En conséquence, Java propose la construction de classe interne anonyme :
@@ -7024,10 +6491,7 @@ Contrairement aux collections Java telles que \texttt{List}, \texttt{Set} ou \te
 
 En programmation par flux, les calculs à appliquer aux objets individuels d'un flux sont déclarés sous la forme d'une chaîne d'opérations simples appelée un \emph{pipeline de flux}. Les expressions lambda sont en général utilisées pour exprimer ces opérations de manière concise. Un pipeline de flux peut être représenté comme suit~:
 
-\begin{figure}[h]
-\centering
 % (Schéma du pipeline de flux dans le document original)
-\end{figure}
 
 Dans cette figure~:
 \begin{enumerate}
@@ -7057,11 +6521,11 @@ public class Miles {
   static public void main(String args[]) {
     List<String> miles = List.of("15", "", "", "3.5", "");
     List<String> kilometers = miles.stream()
-      .filter(s -> !s.isEmpty())           // Ignorer les chaînes vides
-      .map(s -> Float.parseFloat(s))       // De chaîne vers float
-      .map(x -> x * 1609.344f)             // De miles vers mètres
-      .map(x -> x / 1000.0f)               // De mètres vers kilomètres
-      .map(x -> String.valueOf(x))         // De float vers chaîne
+      .filter(s -> !s.isEmpty())           // Ignorer les chaines vides
+      .map(s -> Float.parseFloat(s))       // De chaine vers float
+      .map(x -> x * 1609.344f)             // De miles vers metres
+      .map(x -> x / 1000.0f)               // De metres vers kilometres
+      .map(x -> String.valueOf(x))         // De float vers chaine
       .collect(Collectors.toList());       // Construire la liste
   }
 }
@@ -7280,7 +6744,7 @@ C'est un exemple qui utilise un opérateur unaire, car les deux flux partagent l
 \begin{lstlisting}[language=Java]
 Stream<String> stream = Stream.of("Bonjour", "Hello");
 Stream<Integer> lengths = stream.map(s -> s.length()); // Cette fonction unaire va de String vers Integer
-// Notez que nous aurions pu écrire : stream.map(String::length);
+// Notez que nous aurions pu ecrire : stream.map(String::length);
 \end{lstlisting}
 
 La méthode \texttt{map()} supporte évidemment les classes définies par l'utilisateur. Par exemple, il est possible d'extraire les valeurs d'un flux d'objets \texttt{Account} (comme introduit dans la section précédente) sous forme d'un flux d'entiers~:
@@ -7288,7 +6752,7 @@ La méthode \texttt{map()} supporte évidemment les classes définies par l'util
 \begin{lstlisting}[language=Java]
 Stream<Account> accounts = Stream.of(new Account(100), new Account(200));
 Stream<Integer> values = accounts.map(i -> i.getValue()); // => [100, 200]
-// Notez que nous aurions pu écrire : accounts.map(Account::getValue);
+// Notez que nous aurions pu ecrire : accounts.map(Account::getValue);
 \end{lstlisting}
 
 Fait intéressant, la méthode \texttt{map()} peut aussi être utilisée pour créer des objets en appelant leur constructeur sur les éléments du flux d'entrée. Par exemple~:
@@ -7296,7 +6760,7 @@ Fait intéressant, la méthode \texttt{map()} peut aussi être utilisée pour cr
 \begin{lstlisting}[language=Java]
 Stream<Integer> values = Stream.of(100, 300, 600);
 Stream<Account> accounts = values.map(x -> new Account(x));
-// Notez que nous aurions pu écrire : values.map(Account::new);
+// Notez que nous aurions pu ecrire : values.map(Account::new);
 \end{lstlisting}
 
 \paragraph{Filter}
@@ -7504,7 +6968,7 @@ Cependant, c'est faux~! Le code ci-dessus n'affiche rien. En effet, comme écrit
 \begin{lstlisting}[language=Java]
 Stream<Integer> s1 = Stream.of(1, 2, 3, 4, 5);
 Stream<Integer> s2 = s1.map(i -> { System.out.println(i); return i + 1; });
-Object[] a = s2.toArray(); // <- ici, tous les éléments du flux sont nécessaires
+Object[] a = s2.toArray(); // <- ici, tous les elements du flux sont necessaires
 \end{lstlisting}
 
 Ce code affichera effectivement tous les éléments sur la console~! Maintenant, considérons l'exemple suivant~:
@@ -7512,7 +6976,7 @@ Ce code affichera effectivement tous les éléments sur la console~! Maintenant,
 \begin{lstlisting}[language=Java]
 Stream<Integer> s1 = Stream.of(1, 2, 3, 4, 5);
 Stream<Integer> s2 = s1.map(i -> { System.out.println(i); return i + 1; });
-Object[] a = s2.limit(2).toArray(); // <- ici, seuls les deux premiers éléments du flux sont nécessaires
+Object[] a = s2.limit(2).toArray(); // <- ici, seuls les deux premiers elements du flux sont necessaires
 \end{lstlisting}
 
 Ce code n'affichera que 1 et 2 sur la console~! C'est parce que la méthode \texttt{limit()} arrête tout traitement supplémentaire de son flux d'entrée dès que le nombre maximal d'éléments est atteint. Cela explique aussi pourquoi des flux infinis peuvent être représentés à l'aide des flux Java.
@@ -7579,11 +7043,11 @@ Par exemple, la conversion entre miles et kilomètres aurait pu être implément
 
 \begin{lstlisting}[language=Java]
 List<String> kilometers = miles.stream()
-  .filter(s -> !s.isEmpty())                 // Ignorer les chaînes vides
-  .mapToDouble(s -> Double.parseDouble(s))   // (*) De chaîne vers double
-  .map(x -> x * 1609.344)                    // De miles vers mètres
-  .map(x -> x / 1000.0)                      // De mètres vers kilomètres
-  .mapToObj(x -> String.valueOf(x))          // (*) De double vers chaîne
+  .filter(s -> !s.isEmpty())                 // Ignorer les chaines vides
+  .mapToDouble(s -> Double.parseDouble(s))   // (*) De chaine vers double
+  .map(x -> x * 1609.344)                    // De miles vers metres
+  .map(x -> x / 1000.0)                      // De metres vers kilometres
+  .mapToObj(x -> String.valueOf(x))          // (*) De double vers chaine
   .collect(Collectors.toList());             // Construire la liste
 \end{lstlisting}
 
@@ -7663,10 +7127,7 @@ Nous savons déjà que l'interface standard \texttt{List<T>} offre les méthodes
 
 L'idée de base est similaire à la structure de données abstraite des listes chaînées. Elle consiste à créer la hiérarchie de classes suivante~:
 
-\begin{figure}[h]
-\centering
 % (Schéma de la hiérarchie Nil/Cons/ImmutableList dans le document original)
-\end{figure}
 
 Dans cette hiérarchie~:
 \begin{itemize}
@@ -7678,10 +7139,7 @@ Dans cette hiérarchie~:
 
 Cette hiérarchie de classes stockerait la liste immuable contenant les valeurs entières 10, 20 et 30 comme suit~:
 
-\begin{figure}[h]
-\centering
 % (Schéma de la représentation de [10,20,30] dans le document original)
-\end{figure}
 
 Voici le code Java correspondant pour définir cette hiérarchie~:
 
@@ -7711,16 +7169,16 @@ public static final class Cons<T> implements ImmutableList<T> {
 Et notre liste immuable exemple contenant 10, 20 et 30 peut ensuite être construite depuis son dernier élément jusqu'à son premier élément~:
 
 \begin{lstlisting}[language=Java]
-// Create the terminal node that represent the empty list
+// Creer le noeud terminal qui represente la liste vide
 ImmutableList<Integer> empty = new Nil<Integer>();
 
-// Create the node containing "30" that represents the list: [ 30 ]
+// Creer le noeud contenant "30" qui represente la liste : [ 30 ]
 ImmutableList<Integer> list1 = new Cons<Integer>(30, empty);
 
-// Create the node containing "20" that represents the list: [ 20, 30 ]
+// Creer le noeud contenant "20" qui represente la liste : [ 20, 30 ]
 ImmutableList<Integer> list2 = new Cons<Integer>(20, list1);
 
-// Create the node containing "10" that represents the list: [ 10, 20, 30 ]
+// Creer le noeud contenant "10" qui represente la liste : [ 10, 20, 30 ]
 ImmutableList<Integer> myList = new Cons<Integer>(10, list2);
 \end{lstlisting}
 
@@ -7803,7 +7261,7 @@ public static final class Cons<T> implements ImmutableList<T> {
 
   // ...
   public ImmutableList<T> map(UnaryOperator<T> operator) {
-    // Create a new list with the transformed current value, followed by the transformed tail of the list
+    // Creer une nouvelle liste avec la valeur courante transformee, suivie de la queue transformee
     return new Cons<T>(operator.apply(value), next.map(operator));
   }
 
